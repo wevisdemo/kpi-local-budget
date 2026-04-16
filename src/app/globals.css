@@ -1,4 +1,16 @@
 @import "tailwindcss";
+@import "@wevisdemo/ui/styles/index.css";
+
+@theme {
+  --color-gray-*: initial;
+  --color-pink-*: initial;
+  --color-orange-*: initial;
+  --color-blue-*: initial;
+  --color-teal-*: initial;
+  --color-yellow-*: initial;
+  --color-green-*: initial;
+  --color-purple-*: initial;
+}
 
 :root {
   --background: #ffffff;
@@ -10,6 +22,65 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  --color-gray-10: #f5f5f5;
+  --color-gray-20: #dadada;
+  --color-gray-30: #a6a6a6;
+  --color-gray-40: #757575;
+  --color-gray-50: #484848;
+  --color-gray-20-80: rgba(218, 218, 218, 0.8);
+
+  --color-pink-10: #fedfff;
+  --color-pink-20: #fac4fc;
+  --color-pink-30: #ff75fa;
+  --color-pink-40: #ec00e5;
+  --color-pink-50: #93008e;
+
+  --color-orange-10: #ffc099;
+  --color-orange-20: #ff8000;
+  --color-orange-30: #e84600;
+  --color-orange-40: #9a1a00;
+  --color-orange-50: #700000;
+
+  --color-blue-10: #aeddff;
+  --color-blue-20: #75c5ff;
+  --color-blue-30: #0095ff;
+  --color-blue-40: #00459f;
+  --color-blue-50: #00166f;
+
+  --color-teal-10: #c5fff2;
+  --color-teal-20: #39e7e4;
+  --color-teal-30: #00aebb;
+  --color-teal-40: #00636a;
+  --color-teal-50: #004045;
+
+  --color-yellow-10: #f7ffe9;
+  --color-yellow-20: #e8ff8c;
+  --color-yellow-30: #ffaf03;
+  --color-yellow-40: #bd6e00;
+  --color-yellow-50: #6c4100;
+
+  --color-magenta-10: #ffbee2;
+  --color-magenta-20: #ff80b3;
+  --color-magenta-30: #ff1170;
+  --color-magenta-40: #950052;
+  --color-magenta-50: #660038;
+
+  --color-green-10: #b2ffd3;
+  --color-green-20: #00ff88;
+  --color-green-30: #00d370;
+  --color-green-40: #008f3c;
+  --color-green-50: #186041;
+  --color-green-10-80: rgba(178, 255, 211, 0.8);
+
+  --color-purple-10: #cac9ff;
+  --color-purple-20: #9b99f6;
+  --color-purple-30: #6d59df;
+  --color-purple-40: #551ad4;
+  --color-purple-50: #35009f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +94,79 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Main Category Colors */
+.maincategory__education {
+  background: #ff8000;
+}
+.maincategory__health {
+  background: #00aebb;
+}
+.maincategory__infrastructure {
+  background: #bd6e00;
+}
+.maincategory__environment {
+  background: #008f3c;
+}
+.maincategory__safety {
+  background: #00636a;
+}
+.maincategory__welfare {
+  background: #93008e;
+}
+.maincategory__culture {
+  background: #ec00e5;
+}
+.maincategory__governance {
+  background: #6d59df;
+}
+.maincategory__economy {
+  background: #e84600;
+}
+.maincategory__job {
+  background: #0095ff;
+}
+.maincategory__tourism {
+  background: #ff1170;
+}
+
+/* Input Status Colors */
+.input__exist {
+  background: rgba(218, 218, 218, 0.8);
+}
+.input__propose {
+  background: rgba(178, 255, 211, 0.8);
+}
+
+/* Strategy Colors */
+.Strategy__1 {
+  background: #ff1170;
+}
+.Strategy__2 {
+  background: #00aebb;
+}
+.Strategy__3 {
+  background: #008f3c;
+}
+.Strategy__4 {
+  background: #ff8000;
+}
+.Strategy__5 {
+  background: #6d59df;
+}
+.Strategy__6 {
+  background: #0095ff;
+}
+.Strategy__7 {
+  background: #ec00e5;
+}
+.Strategy__8 {
+  background: #00636a;
+}
+.Strategy__9 {
+  background: #e84600;
+}
+.Strategy__10 {
+  background: #93008e;
 }
