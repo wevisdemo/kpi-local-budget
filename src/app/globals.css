@@ -96,6 +96,19 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.wv_navbar__menu--mobile {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.wv_navbar__menu--mobile svg {
+  fill: #000 !important;
+}
+
+.wv_navbar__menu--mobile .wv_nav-button {
+  color: #000000 !important;
+}
+
 /* Main Category Colors */
 .maincategory__education {
   background: #ff8000;

@@ -4,7 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:bangkhuwat": "NEXT_PUBLIC_SITE=bangkhuwat next dev",
+    "dev:site2": "NEXT_PUBLIC_SITE=site2 next dev",
+    "dev:site3": "NEXT_PUBLIC_SITE=site3 next dev",
+    "dev:site4": "NEXT_PUBLIC_SITE=site4 next dev",
+    "dev:site5": "NEXT_PUBLIC_SITE=site5 next dev",
     "build": "next build",
+    "build:bangkhuwat": "NEXT_PUBLIC_SITE=bangkhuwat next build",
+    "build:site2": "NEXT_PUBLIC_SITE=site2 next build",
+    "build:site3": "NEXT_PUBLIC_SITE=site3 next build",
+    "build:site4": "NEXT_PUBLIC_SITE=site4 next build",
+    "build:site5": "NEXT_PUBLIC_SITE=site5 next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -12,7 +22,8 @@
     "@wevisdemo/ui": "^8.1.0",
     "next": "16.2.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
