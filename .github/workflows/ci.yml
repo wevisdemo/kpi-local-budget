@@ -50,6 +50,7 @@ jobs:
         env:
           BASE_PATH: /kpi-local-budget
           NEXT_PUBLIC_BASE_PATH: /kpi-local-budget
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main'
