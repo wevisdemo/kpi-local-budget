@@ -16,7 +16,7 @@ export default function CategoryStep({
     <section className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
       {categories.map((category) => {
         const isSelected = selectedCategoryId === category.id;
-
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
         return (
           <button
             key={category.id}
@@ -28,7 +28,7 @@ export default function CategoryStep({
               className={`absolute inset-0 flex items-center justify-center z-10 overflow-hidden maincategory__${category.id} p-5 rounded-xl  `}
             >
               <Image
-                src={`/img/${category.id}.png`}
+                src={`${basePath}/img/${category.id}.png`}
                 alt={category.title}
                 width={100}
                 height={100}
