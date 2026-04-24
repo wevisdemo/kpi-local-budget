@@ -50,7 +50,7 @@ export default function CreateIdeaContent() {
                 คุณอยากเห็น{currentSite.subtext} พัฒนาในเรื่องไหน ?
               </h1>
               <p className="wv-b4 wv-ibmplexlooped text-gray-40 text-center">
-                ทุกไอเดียที่คุณ 'ปั้น' จะถูกรวบรวมและพัฒนาโดยทีมงาน
+                ทุกไอเดียที่คุณ &apos;ปั้น&apos; จะถูกรวบรวมและพัฒนาโดยทีมงาน
                 เพื่อเปลี่ยนเป็นนโยบายสาธารณะที่ใช้งานได้จริงในชุมชนเรา
               </p>
             </div>
