@@ -32,6 +32,7 @@ export default function ReviewStep({
   onTurnstileVerify,
 }: ReviewStepProps) {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   // console.log("turnstileSiteKey:", turnstileSiteKey);
   return (
     <div className="flex flex-col gap-3">
@@ -45,7 +46,7 @@ export default function ReviewStep({
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundBlendMode: "color-burn",
-            backgroundImage: `url(/img/${categoryId}.png)`,
+            backgroundImage: `url(${basePath}/img/${categoryId}.png)`,
           }}
         >
           <p className="wv-b5 wv-bold wv-ibmplexlooped">{categoryTitle}</p>
