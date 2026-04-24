@@ -42,7 +42,6 @@ function groupByProject(projects: Project[]): Project[] {
       groups.set(key, { ...project });
       continue;
     }
-    // console.log("existing", existing, "project", project);
 
     groups.set(key, {
       ...existing,

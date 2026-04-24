@@ -49,7 +49,6 @@ export default function ProjectCard({
   likes = 0,
   type = "exist",
 }: ProjectCardProps) {
-  // console.log(project);
   const [expanded, setExpanded] = useState(false);
   const budgets = BUDGET_YEARS.map(({ year, key }) => ({
     year,
@@ -57,7 +56,6 @@ export default function ProjectCard({
   }));
   const totalBudget = budgets.reduce((sum, item) => sum + item.value, 0);
   const maxBudget = Math.max(...budgets.map((item) => item.value), 0);
-  // console.log(project);
   return (
     <article className="rounded-[10px] border-2 border-blue-20 bg-white p-4 wv-ibmplexlooped">
       <header className="flex items-start justify-between gap-3">
