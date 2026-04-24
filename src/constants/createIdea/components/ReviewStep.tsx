@@ -1,5 +1,4 @@
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import type { Ref } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const CATEGORY_BORDER_COLORS: Record<string, string> = {
   education: "#ff8000",
@@ -22,7 +21,6 @@ interface ReviewStepProps {
   proposeCount?: number;
   supportCount?: number;
   onTurnstileVerify: (token: string) => void;
-  turnstileRef?: Ref<TurnstileInstance | undefined>;
 }
 
 export default function ReviewStep({
@@ -32,11 +30,9 @@ export default function ReviewStep({
   proposeCount = 0,
   supportCount = 0,
   onTurnstileVerify,
-  turnstileRef,
 }: ReviewStepProps) {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   // console.log("turnstileSiteKey:", turnstileSiteKey);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   return (
     <div className="flex flex-col gap-3">
       <section
@@ -49,7 +45,7 @@ export default function ReviewStep({
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundBlendMode: "color-burn",
-            backgroundImage: `url(${basePath}/img/${categoryId}.png)`,
+            backgroundImage: `url(/img/${categoryId}.png)`,
           }}
         >
           <p className="wv-b5 wv-bold wv-ibmplexlooped">{categoryTitle}</p>
@@ -82,9 +78,13 @@ export default function ReviewStep({
         </div>
       </section>
       <Turnstile
-        ref={turnstileRef}
         siteKey={turnstileSiteKey ?? ""}
         onSuccess={onTurnstileVerify}
+        // options={{
+        //   // execution: "execute",
+        //   appearance: "always",
+        //   retry: "never", // ไม่ retry PAT
+        // }}
       />
     </div>
   );

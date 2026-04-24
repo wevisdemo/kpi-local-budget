@@ -28,7 +28,6 @@ export default function CreateIdeaContent() {
     isStepValid,
     isSubmitting,
     submitError,
-    turnstileRef,
     setIdeaTitle,
     setIdeaBudget,
     setCustomProblemLabel,
@@ -137,7 +136,6 @@ export default function CreateIdeaContent() {
               proposeCount={ideaTitle ? 1 : 0}
               supportCount={supportCount}
               onTurnstileVerify={setTurnstileToken}
-              turnstileRef={turnstileRef}
             />
           )}
 
