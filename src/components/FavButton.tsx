@@ -63,9 +63,10 @@ export default function FavButton({
     onChange?.(next);
   };
 
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const iconSrc = isSelected
-    ? "/icon/heart-pink-check.svg"
-    : "/icon/heart-pink.svg";
+    ? `${basePath}/icon/heart-pink-check.svg`
+    : `${basePath}/icon/heart-pink.svg`;
 
   return (
     <button

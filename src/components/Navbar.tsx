@@ -209,7 +209,7 @@ function WvNavButton({
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <WvNavbar dark logoAddonPlus logoAddonSrc="/img/logo.svg">
+    <WvNavbar dark logoAddonPlus logoAddonSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/img/logo.svg`}>
       <WvNavButton dark active={pathname === "/"} href="/">
         หน้าหลัก
       </WvNavButton>
