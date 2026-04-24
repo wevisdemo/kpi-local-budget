@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { ideaCategories } from "../data";
 import { PROPOSE_NEW_PROBLEM, type CreateIdeaStep } from "../types";
 import { getProject } from "@/src/lib/getProject";
@@ -19,7 +20,6 @@ import {
 import type { Project } from "@/src/services/type";
 import { useCookieConsentStore } from "@/src/stores/useCookieConsentStore";
 import { useFavoritesStore } from "@/src/stores/useFavoritesStore";
-import { useTurnstile } from "@/src/components/TurnstileProvider";
 
 export function useCreateIdea() {
   const [step, setStep] = useState<CreateIdeaStep>(1);
@@ -33,6 +33,22 @@ export function useCreateIdea() {
   const [ideaBudget, setIdeaBudget] = useState("");
   const [customProblemLabel, setCustomProblemLabel] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
+
+  const consumeTurnstileToken = async (): Promise<string> => {
+    const widget = turnstileRef.current;
+    if (!widget) {
+      throw new Error("ระบบตรวจสอบความปลอดภัยยังไม่พร้อม");
+    }
+
+    const token = await widget.getResponsePromise();
+    if (!token) {
+      throw new Error("ไม่ได้รับ Turnstile token");
+    }
+
+    widget.reset();
+    return token;
+  };
   const [projects, setProjects] = useState<Project[]>([]);
   const [proposedGoals, setProposedGoals] = useState<Project[]>([]);
   const [proposedProjects, setProposedProjects] = useState<Project[]>([]);
@@ -41,7 +57,6 @@ export function useCreateIdea() {
 
   const consentId = useCookieConsentStore((state) => state.consentId);
   const favorites = useFavoritesStore((state) => state.favorites);
-  const { getToken } = useTurnstile();
 
   useEffect(() => {
     let cancelled = false;
@@ -224,7 +239,7 @@ export function useCreateIdea() {
           goal: effectiveProblemLabel || "",
           project: ideaTitle || "",
         },
-        await getToken(),
+        await consumeTurnstileToken(),
       );
       if (ideaTitle) {
         const createdProject = await submitProject(
@@ -237,7 +252,7 @@ export function useCreateIdea() {
             vote_count: 0,
             hidden: false,
           },
-          await getToken(),
+          await consumeTurnstileToken(),
         );
         if (isProposingNewProblem) {
           const createdGoal = await submitGoal(
@@ -249,14 +264,14 @@ export function useCreateIdea() {
               vote_count: 0,
               hidden: false,
             },
-            await getToken(),
+            await consumeTurnstileToken(),
           );
 
           if (createdGoal?.Id && createdProject?.Id) {
             await linkProjectToGoal(
               createdGoal.Id,
               createdProject.Id,
-              await getToken(),
+              await consumeTurnstileToken(),
             );
             if (selectedCategory?.title) {
               const category = await findCategoryByTitle(
@@ -266,12 +281,12 @@ export function useCreateIdea() {
                 await linkProjectToCategory(
                   category.Id,
                   createdProject.Id,
-                  await getToken(),
+                  await consumeTurnstileToken(),
                 );
                 await linkGoalToCategory(
                   category.Id,
                   createdGoal.Id,
-                  await getToken(),
+                  await consumeTurnstileToken(),
                 );
               }
             }
@@ -282,14 +297,14 @@ export function useCreateIdea() {
             await linkProjectToCategory(
               category.Id,
               createdProject.Id,
-              await getToken(),
+              await consumeTurnstileToken(),
             );
           }
           if (effectiveProblemLabelId && createdProject?.Id) {
             await linkProjectToGoal(
               effectiveProblemLabelId,
               createdProject.Id,
-              await getToken(),
+              await consumeTurnstileToken(),
             );
           }
         }
@@ -315,6 +330,7 @@ export function useCreateIdea() {
     setIdeaBudget("");
     setCustomProblemLabel("");
     setTurnstileToken(null);
+    turnstileRef.current?.reset();
   };
 
   const handleSelectCategory = (categoryId: string) => {
@@ -340,6 +356,7 @@ export function useCreateIdea() {
     isStepValid,
     isSubmitting,
     submitError,
+    turnstileRef,
     setIdeaTitle,
     setIdeaBudget,
     setCustomProblemLabel,

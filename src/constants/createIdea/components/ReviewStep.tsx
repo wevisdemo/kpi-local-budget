@@ -1,4 +1,5 @@
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import type { Ref } from "react";
 
 const CATEGORY_BORDER_COLORS: Record<string, string> = {
   education: "#ff8000",
@@ -21,6 +22,7 @@ interface ReviewStepProps {
   proposeCount?: number;
   supportCount?: number;
   onTurnstileVerify: (token: string) => void;
+  turnstileRef?: Ref<TurnstileInstance | undefined>;
 }
 
 export default function ReviewStep({
@@ -30,7 +32,10 @@ export default function ReviewStep({
   proposeCount = 0,
   supportCount = 0,
   onTurnstileVerify,
+  turnstileRef,
 }: ReviewStepProps) {
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  // console.log("turnstileSiteKey:", turnstileSiteKey);
   return (
     <div className="flex flex-col gap-3">
       <section
@@ -76,7 +81,8 @@ export default function ReviewStep({
         </div>
       </section>
       <Turnstile
-        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+        ref={turnstileRef}
+        siteKey={turnstileSiteKey ?? ""}
         onSuccess={onTurnstileVerify}
       />
     </div>
