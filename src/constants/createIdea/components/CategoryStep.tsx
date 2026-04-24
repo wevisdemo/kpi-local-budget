@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { IdeaCategory } from "../types";
 
 interface CategoryStepProps {
@@ -21,9 +22,20 @@ export default function CategoryStep({
             key={category.id}
             type="button"
             onClick={() => onSelectCategory(category.id)}
-            className={`maincategory__${category.id} rounded-xl border p-4 text-left transition text-white md:h-[192.5px] h-[161.6666717529297px]`}
+            className={`relative maincategory__${category.id} rounded-xl border p-4 text-left transition text-white md:h-[192.5px] h-[161.6666717529297px]`}
           >
-            <p className="wv-b3 wv-bold wv-ibmplexlooped text-center">
+            <div
+              className={`absolute inset-0 flex items-center justify-center z-10 overflow-hidden maincategory__${category.id} p-5 rounded-xl  `}
+            >
+              <Image
+                src={`/img/${category.id}.png`}
+                alt={category.title}
+                width={100}
+                height={100}
+                className="object-contain w-full h-full mix-blend-color-burn"
+              />
+            </div>
+            <p className="relative wv-b3 wv-bold wv-ibmplexlooped text-center z-20 ">
               {category.title}
             </p>
             {/* <p

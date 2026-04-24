@@ -37,7 +37,15 @@ export default function ReviewStep({
         className="overflow-hidden rounded-[10px] border-2"
         style={{ borderColor: CATEGORY_BORDER_COLORS[categoryId] }}
       >
-        <header className={`maincategory__${categoryId} p-4 text-white`}>
+        <header
+          className={`maincategory__${categoryId} p-4 text-white `}
+          style={{
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundBlendMode: "color-burn",
+            backgroundImage: `url(/img/${categoryId}.png)`,
+          }}
+        >
           <p className="wv-b5 wv-bold wv-ibmplexlooped">{categoryTitle}</p>
         </header>
         <div className="flex items-start justify-between gap-5 bg-white px-5 py-4">

@@ -5,6 +5,7 @@ import { useState, type ButtonHTMLAttributes } from "react";
 import { useFavoritesStore } from "../stores/useFavoritesStore";
 import type { Project } from "../services/type";
 import { addFavProject, removeFavProject } from "../services/submitTransaction";
+import { useTurnstile } from "./TurnstileProvider";
 
 interface FavButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -32,8 +33,10 @@ export default function FavButton({
     id ? !!state.favorites[id] : false,
   );
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+  const { getToken } = useTurnstile();
 
   const [internalSelected, setInternalSelected] = useState(defaultSelected);
+  const [isBusy, setIsBusy] = useState(false);
 
   const isControlled = selected !== undefined;
   const useStore = !isControlled && !!id;
@@ -46,21 +49,39 @@ export default function FavButton({
 
   const displayCount = !isControlled && isSelected ? count + 1 : count;
 
-  const handleClick = () => {
-    if (project?.project_id) {
-      if (isSelected) {
-        removeFavProject(project.project_id, project.vote_count ?? 0);
-      } else {
-        addFavProject(project.project_id, displayCount ?? 0);
-      }
-    }
+  const handleClick = async () => {
+    if (isBusy) return;
+
     const next = !isSelected;
+
     if (useStore && id) {
       toggleFavorite(id);
     } else if (!isControlled) {
       setInternalSelected(next);
     }
     onChange?.(next);
+
+    if (!project?.project_id) return;
+
+    setIsBusy(true);
+    try {
+      const token = await getToken();
+      if (isSelected) {
+        await removeFavProject(project.project_id, project.vote_count ?? 0, token);
+      } else {
+        await addFavProject(project.project_id, displayCount ?? 0, token);
+      }
+    } catch (error) {
+      console.error("Failed to update favorite", error);
+      if (useStore && id) {
+        toggleFavorite(id);
+      } else if (!isControlled) {
+        setInternalSelected(!next);
+      }
+      onChange?.(!next);
+    } finally {
+      setIsBusy(false);
+    }
   };
 
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -73,6 +94,7 @@ export default function FavButton({
       type="button"
       onClick={handleClick}
       aria-pressed={isSelected}
+      disabled={isBusy || rest.disabled}
       className={[
         "group inline-flex flex-col items-center  cursor-pointer",
         className,

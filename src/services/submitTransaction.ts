@@ -39,21 +39,23 @@ export function formatTransactionTimestamp(date: Date = new Date()): string {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
+function turnstileHeaders(turnstileToken: string): HeadersInit {
+  if (!turnstileToken) {
+    throw new Error("Missing Turnstile token");
+  }
+  return {
+    "Content-Type": "application/json",
+    "cf-turnstile-response": turnstileToken,
+  };
+}
+
 export async function submitTransaction(
   payload: SubmitTransactionPayload,
+  turnstileToken: string,
 ): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-
   const response = await fetch(TRANSACTION_ENDPOINT, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
-    },
+    headers: turnstileHeaders(turnstileToken),
     body: JSON.stringify(payload),
   });
 
@@ -72,19 +74,11 @@ export interface SubmitProjectResponse {
 
 export async function submitProject(
   payload: SubmitProjectPayload,
+  turnstileToken: string,
 ): Promise<SubmitProjectResponse> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-
   const response = await fetch(PROJECT_ENDPOINT, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
-    },
+    headers: turnstileHeaders(turnstileToken),
     body: JSON.stringify(payload),
   });
 
@@ -122,21 +116,13 @@ export async function findCategoryByTitle(
 export async function linkProjectToCategory(
   categoryId: string | number,
   projectId: string | number,
+  turnstileToken: string,
 ): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-
   const response = await fetch(
     `${CATEGORY_ENDPOINT}/${categoryId}/hm/project_count/${projectId}`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "cf-turnstile-response": turnstileSiteKey,
-      },
+      headers: turnstileHeaders(turnstileToken),
     },
   );
 
@@ -151,21 +137,13 @@ export async function linkProjectToCategory(
 export async function linkGoalToCategory(
   categoryId: string | number,
   goalId: string | number,
+  turnstileToken: string,
 ): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-
   const response = await fetch(
     `${CATEGORY_ENDPOINT}/${categoryId}/hm/goal_count/${goalId}`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "cf-turnstile-response": turnstileSiteKey,
-      },
+      headers: turnstileHeaders(turnstileToken),
     },
   );
 
@@ -184,19 +162,11 @@ export interface SubmitGoalResponse {
 
 export async function submitGoal(
   payload: SubmitGoalPayload,
+  turnstileToken: string,
 ): Promise<SubmitGoalResponse> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-
   const response = await fetch(GOAL_ENDPOINT, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
-    },
+    headers: turnstileHeaders(turnstileToken),
     body: JSON.stringify(payload),
   });
 
@@ -288,21 +258,13 @@ export async function getProjectsByGoal(
 export async function linkProjectToGoal(
   goalId: string | number,
   projectId: string | number,
+  turnstileToken: string,
 ): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-
   const response = await fetch(
     `${GOAL_ENDPOINT}/${goalId}/hm/project_count/${projectId}`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "cf-turnstile-response": turnstileSiteKey,
-      },
+      headers: turnstileHeaders(turnstileToken),
     },
   );
 
@@ -317,18 +279,11 @@ export async function linkProjectToGoal(
 export async function addFavProject(
   projectId: string | number,
   vote_count: number,
+  turnstileToken: string,
 ): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
   const response = await fetch(`${PROJECT_ENDPOINT}/${projectId}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
-    },
+    headers: turnstileHeaders(turnstileToken),
     body: JSON.stringify({ vote_count: Number(vote_count) + 1 }),
   });
 
@@ -341,18 +296,11 @@ export async function addFavProject(
 export async function removeFavProject(
   projectId: string | number,
   vote_count: number,
+  turnstileToken: string,
 ): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
   const response = await fetch(`${PROJECT_ENDPOINT}/${projectId}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
-    },
+    headers: turnstileHeaders(turnstileToken),
     body: JSON.stringify({ vote_count: vote_count }),
   });
 

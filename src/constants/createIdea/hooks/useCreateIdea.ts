@@ -19,6 +19,7 @@ import {
 import type { Project } from "@/src/services/type";
 import { useCookieConsentStore } from "@/src/stores/useCookieConsentStore";
 import { useFavoritesStore } from "@/src/stores/useFavoritesStore";
+import { useTurnstile } from "@/src/components/TurnstileProvider";
 
 export function useCreateIdea() {
   const [step, setStep] = useState<CreateIdeaStep>(1);
@@ -40,6 +41,7 @@ export function useCreateIdea() {
 
   const consentId = useCookieConsentStore((state) => state.consentId);
   const favorites = useFavoritesStore((state) => state.favorites);
+  const { getToken } = useTurnstile();
 
   useEffect(() => {
     let cancelled = false;
@@ -215,51 +217,80 @@ export function useCreateIdea() {
 
     try {
       const timestamp = formatTransactionTimestamp();
-      await submitTransaction({
-        user_id: consentId ?? "",
-        timestamp,
-        goal: effectiveProblemLabel || "",
-        project: ideaTitle || "",
-      });
-      if (ideaTitle) {
-        const createdProject = await submitProject({
-          project: ideaTitle,
-          budget: Number(ideaBudget) || 0,
-          goal: effectiveProblemLabel,
-          creator_id: consentId ?? "",
+      await submitTransaction(
+        {
+          user_id: consentId ?? "",
           timestamp,
-          vote_count: 0,
-          hidden: false,
-        });
-        if (isProposingNewProblem) {
-          const createdGoal = await submitGoal({
+          goal: effectiveProblemLabel || "",
+          project: ideaTitle || "",
+        },
+        await getToken(),
+      );
+      if (ideaTitle) {
+        const createdProject = await submitProject(
+          {
+            project: ideaTitle,
+            budget: Number(ideaBudget) || 0,
             goal: effectiveProblemLabel,
-            category: selectedCategory?.title ?? "",
             creator_id: consentId ?? "",
             timestamp,
             vote_count: 0,
             hidden: false,
-          });
+          },
+          await getToken(),
+        );
+        if (isProposingNewProblem) {
+          const createdGoal = await submitGoal(
+            {
+              goal: effectiveProblemLabel,
+              category: selectedCategory?.title ?? "",
+              creator_id: consentId ?? "",
+              timestamp,
+              vote_count: 0,
+              hidden: false,
+            },
+            await getToken(),
+          );
 
           if (createdGoal?.Id && createdProject?.Id) {
-            await linkProjectToGoal(createdGoal.Id, createdProject.Id);
+            await linkProjectToGoal(
+              createdGoal.Id,
+              createdProject.Id,
+              await getToken(),
+            );
             if (selectedCategory?.title) {
               const category = await findCategoryByTitle(
                 selectedCategory.title,
               );
               if (category?.Id) {
-                await linkProjectToCategory(category.Id, createdProject.Id);
-                await linkGoalToCategory(category.Id, createdGoal.Id);
+                await linkProjectToCategory(
+                  category.Id,
+                  createdProject.Id,
+                  await getToken(),
+                );
+                await linkGoalToCategory(
+                  category.Id,
+                  createdGoal.Id,
+                  await getToken(),
+                );
               }
             }
           }
         } else if (selectedCategory?.title && createdProject?.Id) {
           const category = await findCategoryByTitle(selectedCategory.title);
           if (category?.Id) {
-            await linkProjectToCategory(category.Id, createdProject.Id);
+            await linkProjectToCategory(
+              category.Id,
+              createdProject.Id,
+              await getToken(),
+            );
           }
           if (effectiveProblemLabelId && createdProject?.Id) {
-            await linkProjectToGoal(effectiveProblemLabelId, createdProject.Id);
+            await linkProjectToGoal(
+              effectiveProblemLabelId,
+              createdProject.Id,
+              await getToken(),
+            );
           }
         }
         setStep(5);
