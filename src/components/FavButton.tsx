@@ -1,0 +1,94 @@
+"use client";
+
+import Image from "next/image";
+import { useState, type ButtonHTMLAttributes } from "react";
+import { useFavoritesStore } from "../stores/useFavoritesStore";
+import type { Project } from "../services/type";
+import { addFavProject, removeFavProject } from "../services/submitTransaction";
+
+interface FavButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "onChange"
+> {
+  project?: Project;
+  id?: string;
+  count?: number;
+  selected?: boolean;
+  defaultSelected?: boolean;
+  onChange?: (selected: boolean) => void;
+}
+
+export default function FavButton({
+  id,
+  count = 0,
+  selected,
+  project,
+  defaultSelected = false,
+  onChange,
+  className = "",
+  ...rest
+}: FavButtonProps) {
+  const storeSelected = useFavoritesStore((state) =>
+    id ? !!state.favorites[id] : false,
+  );
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+
+  const [internalSelected, setInternalSelected] = useState(defaultSelected);
+
+  const isControlled = selected !== undefined;
+  const useStore = !isControlled && !!id;
+
+  const isSelected = isControlled
+    ? selected
+    : useStore
+      ? storeSelected
+      : internalSelected;
+
+  const displayCount = !isControlled && isSelected ? count + 1 : count;
+
+  const handleClick = () => {
+    if (project?.project_id) {
+      if (isSelected) {
+        removeFavProject(project.project_id, project.vote_count ?? 0);
+      } else {
+        addFavProject(project.project_id, displayCount ?? 0);
+      }
+    }
+    const next = !isSelected;
+    if (useStore && id) {
+      toggleFavorite(id);
+    } else if (!isControlled) {
+      setInternalSelected(next);
+    }
+    onChange?.(next);
+  };
+
+  const iconSrc = isSelected
+    ? "/icon/heart-pink-check.svg"
+    : "/icon/heart-pink.svg";
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-pressed={isSelected}
+      className={[
+        "group inline-flex flex-col items-center  cursor-pointer",
+        className,
+      ].join(" ")}
+      {...rest}
+    >
+      <Image
+        src={iconSrc}
+        alt=""
+        width={24}
+        height={24}
+        aria-hidden="true"
+        className="transition-transform group-hover:scale-110"
+      />
+      <span className="wv-b5 wv-bold leading-none text-pink-30 wv-ibmplexlooped">
+        {displayCount}
+      </span>
+    </button>
+  );
+}

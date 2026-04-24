@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { ComponentProps } from "react";
 import type WvCookieConsent from "@wevisdemo/ui/react/cookie-consent";
 
@@ -21,14 +22,26 @@ const generateConsentId = () => {
   return `consent-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
-export const useCookieConsentStore = create<CookieConsentState>((set) => ({
-  consentId: null,
-  selectedOptions: null,
-  acceptedAt: null,
-  setCookieConsent: (selectedOptions) =>
-    set({
-      consentId: generateConsentId(),
-      selectedOptions,
-      acceptedAt: new Date().toISOString(),
+export const useCookieConsentStore = create<CookieConsentState>()(
+  persist(
+    (set, get) => ({
+      consentId: null,
+      selectedOptions: null,
+      acceptedAt: null,
+      setCookieConsent: (selectedOptions) =>
+        set({
+          consentId: get().consentId ?? generateConsentId(),
+          selectedOptions,
+          acceptedAt: get().acceptedAt ?? new Date().toISOString(),
+        }),
     }),
-}));
+    {
+      name: "kpi-local.cookie-consent",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);
+
+export const hasFunctionalityConsent = (
+  selectedOptions: CookieSelections | null,
+) => !!selectedOptions?.Functionality;

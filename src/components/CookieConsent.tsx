@@ -13,6 +13,7 @@ export default function CookieConsent() {
     <WvCookieConsent
       policyUrl="https://punchup.world"
       cookieOptions={[...cookieOptions]}
+      daysToExpire={30}
       onAccept={(option) => {
         setCookieConsent(option);
 
