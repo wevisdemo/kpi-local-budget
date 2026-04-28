@@ -9,12 +9,8 @@ import {
   formatTransactionTimestamp,
   getGoalsByCategory,
   getProjectsByGoal,
-  linkGoalToCategory,
-  linkProjectToCategory,
-  linkProjectToGoal,
-  submitGoal,
-  submitProject,
-  submitTransaction,
+  submitBatch,
+  type BatchRequest,
 } from "@/src/services/submitTransaction";
 import type { Project } from "@/src/services/type";
 import { useCookieConsentStore } from "@/src/stores/useCookieConsentStore";
@@ -184,7 +180,9 @@ export function useCreateIdea() {
 
   const isStepValid =
     (step === 1 && Boolean(selectedCategoryId)) ||
-    (step === 2 && Boolean(selectedProblemId)) ||
+    (step === 2 &&
+      Boolean(selectedProblemId) &&
+      (!isProposingNewProblem || Boolean(customProblemLabel.trim()))) ||
     step === 3 ||
     (step === 4 && Boolean(turnstileToken)) ||
     step === 5;
@@ -215,86 +213,117 @@ export function useCreateIdea() {
 
     try {
       const timestamp = formatTransactionTimestamp();
-      await submitTransaction(
+      const token = turnstileToken ?? "";
+      const userId = consentId ?? "";
+
+      const category = selectedCategory?.title
+        ? await findCategoryByTitle(selectedCategory.title)
+        : null;
+      const categoryId = category?.Id;
+
+      const createRequests: BatchRequest[] = [
         {
-          user_id: consentId ?? "",
-          timestamp,
-          goal: effectiveProblemLabel || "",
-          project: ideaTitle || "",
+          path: "/Transaction",
+          method: "POST",
+          body: {
+            user_id: userId,
+            timestamp,
+            goal: effectiveProblemLabel || "",
+            project: ideaTitle || "",
+          },
         },
-        turnstileToken ?? "",
-      );
+      ];
+
+      let projectRequestIndex: number | null = null;
+      let goalRequestIndex: number | null = null;
+
       if (ideaTitle) {
-        const createdProject = await submitProject(
-          {
+        projectRequestIndex = createRequests.length;
+        createRequests.push({
+          path: "/Project",
+          method: "POST",
+          body: {
             project: ideaTitle,
             budget: Number(ideaBudget) || 0,
             goal: effectiveProblemLabel,
-            creator_id: consentId ?? "",
+            creator_id: userId,
             timestamp,
             vote_count: 0,
             hidden: false,
           },
-          turnstileToken ?? "",
-        );
+        });
+
         if (isProposingNewProblem) {
-          const createdGoal = await submitGoal(
-            {
+          goalRequestIndex = createRequests.length;
+          createRequests.push({
+            path: "/Goal",
+            method: "POST",
+            body: {
               goal: effectiveProblemLabel,
               category: selectedCategory?.title ?? "",
-              creator_id: consentId ?? "",
+              creator_id: userId,
               timestamp,
               vote_count: 0,
               hidden: false,
             },
-            turnstileToken ?? "",
-          );
+          });
+        }
+      }
 
-          if (createdGoal?.Id && createdProject?.Id) {
-            await linkProjectToGoal(
-              createdGoal.Id,
-              createdProject.Id,
-              turnstileToken ?? "",
-            );
-            if (selectedCategory?.title) {
-              const category = await findCategoryByTitle(
-                selectedCategory.title,
-              );
-              if (category?.Id) {
-                await linkProjectToCategory(
-                  category.Id,
-                  createdProject.Id,
-                  turnstileToken ?? "",
-                );
-                await linkGoalToCategory(
-                  category.Id,
-                  createdGoal.Id,
-                  turnstileToken ?? "",
-                );
-              }
+      const createResults = await submitBatch(createRequests, token);
+
+      const extractId = (index: number | null): string | null => {
+        if (index == null) return null;
+        const body = createResults[index]?.body as
+          | { Id?: string | number }
+          | undefined;
+        return body?.Id != null ? String(body.Id) : null;
+      };
+
+      const projectId = extractId(projectRequestIndex);
+      const goalId = extractId(goalRequestIndex);
+
+      const linkRequests: BatchRequest[] = [];
+
+      if (ideaTitle && projectId) {
+        if (isProposingNewProblem) {
+          if (goalId) {
+            linkRequests.push({
+              path: `/Goal/${goalId}/hm/project_count/${projectId}`,
+              method: "POST",
+            });
+          }
+
+          if (categoryId != null) {
+            linkRequests.push({
+              path: `/Category/${categoryId}/hm/project_count/${projectId}`,
+              method: "POST",
+            });
+            if (goalId) {
+              linkRequests.push({
+                path: `/Category/${categoryId}/hm/goal_count/${goalId}`,
+                method: "POST",
+              });
             }
           }
-        } else if (selectedCategory?.title && createdProject?.Id) {
-          const category = await findCategoryByTitle(selectedCategory.title);
-          if (category?.Id) {
-            await linkProjectToCategory(
-              category.Id,
-              createdProject.Id,
-              turnstileToken ?? "",
-            );
-          }
-          if (effectiveProblemLabelId && createdProject?.Id) {
-            await linkProjectToGoal(
-              effectiveProblemLabelId,
-              createdProject.Id,
-              turnstileToken ?? "",
-            );
+        } else if (categoryId != null) {
+          linkRequests.push({
+            path: `/Category/${categoryId}/hm/project_count/${projectId}`,
+            method: "POST",
+          });
+          if (effectiveProblemLabelId) {
+            linkRequests.push({
+              path: `/Goal/${effectiveProblemLabelId}/hm/project_count/${projectId}`,
+              method: "POST",
+            });
           }
         }
-        setStep(5);
-      } else {
-        setStep(5);
       }
+
+      if (linkRequests.length > 0) {
+        await submitBatch(linkRequests, token);
+      }
+      setStep(5);
     } catch (error) {
       console.error("Failed to submit idea", error);
       setSubmitError(
@@ -350,3 +379,9 @@ export function useCreateIdea() {
     resetFlow,
   };
 }
+// if (effectiveProblemLabelId) {
+//   requests.push({
+//     path: `/Goal/${effectiveProblemLabelId}/hm/project_count/${projectRef}`,
+//     method: "POST",
+//   });
+// }

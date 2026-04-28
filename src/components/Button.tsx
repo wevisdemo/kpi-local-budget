@@ -28,13 +28,13 @@ const variantClasses: Record<
 > = {
   primary: {
     dark: {
-      base: "bg-gray-50 text-white border border-transparent",
+      base: "bg-gray-50 text-white border-2 border-transparent",
       hover: "hover:bg-black",
       disabled:
         "disabled:bg-gray-30 disabled:text-gray-40 disabled:border-transparent",
     },
     light: {
-      base: "bg-white text-black border border-transparent",
+      base: "bg-white text-black border-2 border-transparent",
       hover: "hover:bg-gray-20",
       disabled:
         "disabled:bg-gray-40 disabled:text-gray-30 disabled:border-transparent",
@@ -42,16 +42,16 @@ const variantClasses: Record<
   },
   secondary: {
     dark: {
-      base: "bg-transparent text-black border border-black",
+      base: "bg-transparent text-gray-50 border-2 border-gray-50",
       hover: "hover:bg-gray-10",
       disabled:
         "disabled:bg-transparent disabled:text-gray-30 disabled:border-gray-20",
     },
     light: {
-      base: "bg-black text-white border border-white",
+      base: "bg-transparent text-white border-2 border-white",
       hover: "hover:bg-gray-50",
       disabled:
-        "disabled:bg-black disabled:text-gray-40 disabled:border-gray-40",
+        "disabled:bg-black disabled:text-gray-40 disabled:border-gray-50",
     },
   },
 };

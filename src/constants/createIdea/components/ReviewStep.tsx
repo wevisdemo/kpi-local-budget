@@ -45,7 +45,6 @@ export default function ReviewStep({
           style={{
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundBlendMode: "color-burn",
             backgroundImage: `url(${basePath}/img/${categoryId}.png)`,
           }}
         >

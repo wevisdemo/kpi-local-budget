@@ -20,9 +20,7 @@ export default function CreateIdeaContent() {
     ideaTitle,
     ideaBudget,
     availableProblems,
-    isProposingNewProblem,
     effectiveProblemLabel,
-    effectiveProblemLabelId,
     matchedProjects,
     supportCount,
     isStepValid,
@@ -41,7 +39,7 @@ export default function CreateIdeaContent() {
   } = useCreateIdea();
 
   return (
-    <div className="w-full bg-yellow-10">
+    <div className="w-full bg-yellow-10 min-h-screen">
       <div className="max-w-[1040px] mx-auto py-20 px-5 lg:px-0">
         {step < 5 && (
           <div className="flex flex-col gap-[20px]">
@@ -111,7 +109,10 @@ export default function CreateIdeaContent() {
               categoryTitle={selectedCategory?.title ?? ""}
               problems={availableProblems}
               selectedProblemId={selectedProblemId}
+              customProblemLabel={effectiveProblemLabel}
               onSelectProblem={setSelectedProblemId}
+              onChangeCustomProblemLabel={setCustomProblemLabel}
+              onConfirmCustomProblem={goNext}
             />
           )}
 
@@ -123,8 +124,6 @@ export default function CreateIdeaContent() {
               onChangeTitle={setIdeaTitle}
               onChangeBudget={setIdeaBudget}
               matchedProjects={matchedProjects}
-              isProposingProblem={isProposingNewProblem}
-              onChangeProblemLabel={setCustomProblemLabel}
             />
           )}
 

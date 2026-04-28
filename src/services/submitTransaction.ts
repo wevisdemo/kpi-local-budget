@@ -3,6 +3,63 @@ const TRANSACTION_ENDPOINT =
 const PROJECT_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Project";
 const GOAL_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Goal";
 const CATEGORY_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Category";
+const BATCH_ENDPOINT = "https://tornjak.punchup.world/batch/kpi-local/";
+
+export interface BatchRequest {
+  path: string;
+  method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
+  body?: unknown;
+}
+
+export interface BatchResponse<T = unknown> {
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  body: T;
+}
+
+export async function submitBatch(
+  requests: BatchRequest[],
+  token: string,
+): Promise<BatchResponse[]> {
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  if (!turnstileSiteKey) {
+    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
+  }
+
+  const response = await fetch(BATCH_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "cf-turnstile-response": token,
+      "cf-turnstile-cache-ms": "10000",
+    },
+    body: JSON.stringify(requests),
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`Failed to submit batch (${response.status}): ${text}`);
+  }
+
+  const results = (await response.json()) as BatchResponse[];
+
+  results.forEach((result, index) => {
+    if (result.status >= 400) {
+      const request = requests[index];
+      const detail =
+        typeof result.body === "string"
+          ? result.body
+          : JSON.stringify(result.body);
+      throw new Error(
+        `Batch request ${index} (${request.method} ${request.path}) failed (${result.status}): ${detail}`,
+      );
+    }
+  });
+
+  return results;
+}
 
 export interface SubmitTransactionPayload {
   user_id: string;

@@ -111,37 +111,48 @@ body {
 
 /* Main Category Colors */
 .maincategory__education {
-  background: #ff8000;
+  --maincategory-color: #ff8000;
+  background: var(--maincategory-color);
 }
 .maincategory__health {
-  background: #00aebb;
+  --maincategory-color: #00aebb;
+  background: var(--maincategory-color);
 }
 .maincategory__infrastructure {
-  background: #bd6e00;
+  --maincategory-color: #bd6e00;
+  background: var(--maincategory-color);
 }
 .maincategory__environment {
-  background: #008f3c;
+  --maincategory-color: #008f3c;
+  background: var(--maincategory-color);
 }
 .maincategory__safety {
-  background: #00636a;
+  --maincategory-color: #00636a;
+  background: var(--maincategory-color);
 }
 .maincategory__welfare {
-  background: #93008e;
+  --maincategory-color: #93008e;
+  background: var(--maincategory-color);
 }
 .maincategory__culture {
-  background: #ec00e5;
+  --maincategory-color: #ec00e5;
+  background: var(--maincategory-color);
 }
 .maincategory__governance {
-  background: #6d59df;
+  --maincategory-color: #6d59df;
+  background: var(--maincategory-color);
 }
 .maincategory__economy {
-  background: #e84600;
+  --maincategory-color: #e84600;
+  background: var(--maincategory-color);
 }
 .maincategory__job {
-  background: #0095ff;
+  --maincategory-color: #0095ff;
+  background: var(--maincategory-color);
 }
 .maincategory__tourism {
-  background: #ff1170;
+  --maincategory-color: #ff1170;
+  background: var(--maincategory-color);
 }
 
 

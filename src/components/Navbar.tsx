@@ -196,7 +196,7 @@ function WvNavButton({
   const pathname = usePathname();
   return (
     <Link
-      className={`wv_nav-button wv-ibmplex wv-b7 ${
+      className={`wv_nav-button wv-ibmplex wv-b6 ${
         dark ? "wv_nav-button--white" : "wv_nav-button--black"
       } ${active ? "wv_nav-button--active" : ""}`}
       href={href}
@@ -209,7 +209,11 @@ function WvNavButton({
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <WvNavbar dark logoAddonPlus logoAddonSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/img/logo.svg`}>
+    <WvNavbar
+      dark
+      logoAddonPlus
+      logoAddonSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/img/logo.svg`}
+    >
       <WvNavButton dark active={pathname === "/"} href="/">
         หน้าหลัก
       </WvNavButton>

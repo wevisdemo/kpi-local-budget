@@ -22,20 +22,20 @@ export default function CategoryStep({
             key={category.id}
             type="button"
             onClick={() => onSelectCategory(category.id)}
-            className={`relative maincategory__${category.id} rounded-xl border p-4 text-left transition text-white md:h-[192.5px] h-[161.6666717529297px]`}
+            className={`relative maincategory__${category.id} rounded-xl border p-4 text-left transition text-white md:h-[192.5px] h-[161.6666717529297px] ${isSelected ? "border-zinc-900 border-2" : ""}`}
           >
             <div
-              className={`absolute inset-0 flex items-center justify-center z-10 overflow-hidden maincategory__${category.id} p-5 rounded-xl  `}
+              className={`absolute inset-0 flex items-center justify-center z-10 overflow-hidden maincategory__${category.id}  rounded-xl  `}
             >
               <Image
                 src={`${basePath}/img/${category.id}.png`}
                 alt={category.title}
                 width={100}
                 height={100}
-                className="object-contain w-full h-full mix-blend-color-burn"
+                className={`object-contain w-full h-full `}
               />
             </div>
-            <p className="relative wv-b3 wv-bold wv-ibmplexlooped text-center z-20 ">
+            <p className="relative wv-b2 wv-bold wv-ibmplexlooped text-center z-20 ">
               {category.title}
             </p>
             {/* <p

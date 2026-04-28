@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const IDEA_MAX_LENGTH = 150;
-const PROBLEM_MAX_LENGTH = 150;
 
 type ProjectFilter = "existing" | "proposed";
 
@@ -15,8 +14,6 @@ interface IdeaDetailStepProps {
   onChangeTitle: (value: string) => void;
   onChangeBudget: (value: string) => void;
   matchedProjects: Project[];
-  isProposingProblem?: boolean;
-  onChangeProblemLabel?: (value: string) => void;
 }
 
 function formatBudget(value: string) {
@@ -60,8 +57,6 @@ export default function IdeaDetailStep({
   onChangeTitle,
   onChangeBudget,
   matchedProjects,
-  isProposingProblem = false,
-  onChangeProblemLabel,
 }: IdeaDetailStepProps) {
   const handleTitleChange = (value: string) => {
     if (value.length > IDEA_MAX_LENGTH) {
@@ -71,27 +66,20 @@ export default function IdeaDetailStep({
     onChangeTitle(value);
   };
 
-  const handleProblemLabelChange = (value: string) => {
-    if (!onChangeProblemLabel) return;
-    if (value.length > PROBLEM_MAX_LENGTH) {
-      onChangeProblemLabel(value.slice(0, PROBLEM_MAX_LENGTH));
-      return;
-    }
-    onChangeProblemLabel(value);
-  };
-
   const handleBudgetChange = (value: string) => {
     const digitsOnly = value.replace(/[^0-9]/g, "");
     onChangeBudget(digitsOnly);
   };
-
-  const [activeFilter, setActiveFilter] = useState<ProjectFilter>("existing");
 
   const existingProjects = groupByProject(
     matchedProjects.filter((project) => project.type !== "propose"),
   );
   const proposedProjects = matchedProjects.filter(
     (project) => project.type === "propose",
+  );
+
+  const [activeFilter, setActiveFilter] = useState<ProjectFilter>(
+    existingProjects.length > 0 ? "existing" : "proposed",
   );
 
   const visibleProjects =
@@ -101,25 +89,9 @@ export default function IdeaDetailStep({
     <section className="space-y-4">
       <div className="rounded-[14px] border-2 border-teal-30 bg-white px-5 py-4">
         <p className="wv-b4 wv-ibmplexlooped text-gray-50">เพื่อให้..</p>
-        {isProposingProblem ? (
-          <div>
-            <DottedInput
-              value={problemLabel}
-              onChange={(value) => handleProblemLabelChange(value)}
-              maxLength={PROBLEM_MAX_LENGTH}
-              title={true}
-            />
-            <div className="mt-1 flex justify-end">
-              <span className="wv-ibmplexlooped text-xs text-gray-40">
-                {problemLabel.length}/{PROBLEM_MAX_LENGTH} ตัวอักษร
-              </span>
-            </div>
-          </div>
-        ) : (
-          <p className="wv-b3 wv-bold wv-ibmplexlooped mt-1 text-[#00AEBB]">
-            {problemLabel || "-"}
-          </p>
-        )}
+        <p className="wv-b3 wv-bold wv-ibmplexlooped mt-1 text-[#00AEBB]">
+          {problemLabel || "-"}
+        </p>
 
         <div className="">
           <label className="block">
@@ -138,7 +110,6 @@ export default function IdeaDetailStep({
             </span>
           </div>
         </div>
-
         <div className="mt-3">
           <label className="block">
             <span className="wv-b4 wv-ibmplexlooped text-gray-50">
@@ -209,7 +180,7 @@ export default function IdeaDetailStep({
   );
 }
 
-const DOT_CHAR = ".";
+const DOT_CHAR = "_";
 const DOT_COUNT = 200;
 
 interface DottedInputProps {
