@@ -9,7 +9,7 @@ const ExploreIdea = () => {
     <div className="w-full bg-yellow-10 min-h-screen">
       <div className="max-w-[1040px] mx-auto py-20 px-5 lg:px-0 flex flex-col gap-2.5">
         <h1 className="wv-h5 wv-ibmplexlooped wv-bold text-black ">
-          สำรวจเพื่อ 'สนับสนุนไอเดีย' จากเพื่อนในท้องถิ่นคุณ
+          สำรวจเพื่อ &apos;สนับสนุนไอเดีย&apos; จากเพื่อนในท้องถิ่นคุณ
         </h1>
         <p className="wv-b4 wv-ibmplexlooped text-gray-50 ">
           ประชาชนอยากเห็นแผนพัฒนาท้องถิ่นสำหรับ 5 ปีข้างหน้าแบบไหน
