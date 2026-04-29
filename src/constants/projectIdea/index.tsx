@@ -144,7 +144,7 @@ const ProjectIdea = () => {
             className="w-fit"
             rightIcon={null}
             onClick={() => {
-              router.push(`/explore-idea`);
+              router.push(`${basePath}/explore-idea`);
             }}
           >
             ภาพรวมไอเดีย

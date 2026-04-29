@@ -74,7 +74,7 @@ const Card = ({
         </div>
         <div className="">
           <a
-            href={`/explore-idea/project?category=${category.title}`}
+            href={`${basePath}/explore-idea/project?category=${category.title}`}
             className="wv-b6 wv-bold text-gray-30 wv-ibmplexlooped underline hover:text-black"
           >
             {projectCount} โครงการ
@@ -117,7 +117,7 @@ const Card = ({
                 type="button"
                 onClick={() =>
                   router.push(
-                    `/explore-idea/project?category=${category.title}&goal=${item.goal}`,
+                    `${basePath}/explore-idea/project?category=${category.title}&goal=${item.goal}`,
                   )
                 }
                 className="wv-b6 wv-ibmplexlooped cursor-pointer text-gray-50 underline hover:text-black"
