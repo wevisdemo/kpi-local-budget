@@ -49,7 +49,7 @@ const variantClasses: Record<
     },
     light: {
       base: "bg-transparent text-white border-2 border-white",
-      hover: "hover:bg-gray-50",
+      hover: "hover:border-gray-30 hover:text-gray-20",
       disabled:
         "disabled:bg-black disabled:text-gray-40 disabled:border-gray-50",
     },

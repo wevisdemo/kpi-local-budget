@@ -1,3 +1,14 @@
+export interface Goal {
+  Id?: string | number;
+  goal?: string;
+  category?: string;
+  creator_id?: string;
+  timestamp?: string;
+  vote_count?: number;
+  hidden?: boolean;
+  project_count?: number;
+}
+
 export interface Project {
   project_id?: string;
   strategy?: string;
@@ -17,4 +28,23 @@ export interface Project {
   category_ai?: string;
   type?: string;
   vote_count?: number;
+}
+
+export interface Transaction {
+  Id?: string | number;
+  user_id?: string;
+  timestamp?: string;
+  goal?: string;
+  project?: string;
+}
+
+export interface ProjectNocoDb {
+  Id?: string;
+  project?: string;
+  budget?: number;
+  goal?: string;
+  creator_id?: string;
+  timestamp?: string;
+  vote_count?: number;
+  hidden?: boolean;
 }

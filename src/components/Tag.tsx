@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-type TagVariant = "exist" | "propose";
+export type TagVariant = "exist" | "propose";
 type TagSize = "big" | "small";
 
 interface TagProps extends HTMLAttributes<HTMLSpanElement> {
@@ -19,8 +19,8 @@ const variantClasses: Record<TagVariant, string> = {
 };
 
 const sizeClasses: Record<TagSize, string> = {
-  big: "px-5 py-2 wv-b4",
-  small: "px-3.5 py-1.5 wv-b5",
+  big: "px-2.5 py-0.5 wv-b6",
+  small: "px-2.5 py-0.5 wv-b6",
 };
 
 export default function Tag({
