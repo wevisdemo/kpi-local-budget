@@ -222,16 +222,16 @@ export function useCreateIdea() {
       const categoryId = category?.Id;
 
       const createRequests: BatchRequest[] = [
-        {
-          path: "/Transaction",
-          method: "POST",
-          body: {
-            user_id: userId,
-            timestamp,
-            goal: effectiveProblemLabel || "",
-            project: ideaTitle || "",
-          },
-        },
+        // {
+        //   path: "/Transaction",
+        //   method: "POST",
+        //   body: {
+        //     user_id: userId,
+        //     timestamp,
+        //     goal: effectiveProblemLabel || "",
+        //     project: ideaTitle || "",
+        //   },
+        // },
       ];
 
       let projectRequestIndex: number | null = null;

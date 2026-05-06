@@ -4,18 +4,13 @@ import React, { useEffect, useState } from "react";
 
 import { ideaCategories } from "../createIdea/data";
 import Card from "./component/Card";
-import type { Goal, ProjectNocoDb, Transaction } from "@/src/services/type";
-import {
-  getGoals,
-  getProjects,
-  getTransactions,
-} from "@/src/services/exploreIdea";
+import type { Goal, ProjectNocoDb } from "@/src/services/type";
+import { getGoals, getProjects } from "@/src/services/exploreIdea";
 import { IdeaCategory } from "../createIdea/types";
 import Image from "next/image";
 
 const ExploreIdea = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [projects, setProjects] = useState<ProjectNocoDb[]>([]);
   const [activeCategory, setActiveCategory] = useState<IdeaCategory | null>(
     null,
@@ -32,14 +27,6 @@ const ExploreIdea = () => {
         console.error("Failed to load goals", error);
         setGoals([]);
       });
-    getTransactions()
-      .then((data) => {
-        setTransactions(Array.isArray(data) ? data : []);
-      })
-      .catch((error) => {
-        console.error("Failed to load transactions", error);
-        setTransactions([]);
-      });
     getProjects()
       .then((data) => {
         setProjects(Array.isArray(data) ? data : []);
@@ -50,10 +37,13 @@ const ExploreIdea = () => {
       });
   }, []);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const projectsWithCreator = projects.filter(
+    (project): project is ProjectNocoDb & { creator_id: string } =>
+      Boolean(project.creator_id),
+  );
+  const totalAnswers = projectsWithCreator.length;
   const totalPeople = new Set(
-    transactions
-      .map((transaction) => transaction.user_id)
-      .filter((userId): userId is string => Boolean(userId)),
+    projectsWithCreator.map((project) => project.creator_id),
   ).size;
   const totalProposedGoals = goals.filter((goal) =>
     Boolean(goal.creator_id),
@@ -90,7 +80,7 @@ const ExploreIdea = () => {
               <div className="wv-ibmplexlooped text-black">
                 <p className="wv-b4 ">ผู้ตอบแบบสำรวจ</p>
                 <p className="wv-h6 wv-bold">{totalPeople} คน</p>
-                <p className="wv-b5">ตอบทั้งหมด {transactions.length} ครั้ง</p>
+                <p className="wv-b5">ตอบทั้งหมด {totalAnswers} ครั้ง</p>
               </div>
               <Image
                 src={`${basePath}/icon/people-icon.svg`}

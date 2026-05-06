@@ -3,9 +3,16 @@
 import Image from "next/image";
 import { useEffect, useState, type ButtonHTMLAttributes } from "react";
 import { useFavoritesStore } from "../stores/useFavoritesStore";
-import type { Goal } from "../services/type";
+import type { Goal, Transaction } from "../services/type";
 import { addFavGoal, removeFavGoal } from "../services/exploreIdea";
 import Button from "./Button";
+import {
+  addFavProjectTransaction,
+  formatTransactionTimestamp,
+  getTransactionsByUserId,
+  removeFavProjectTransaction,
+} from "../services/submitTransaction";
+import { useCookieConsentStore } from "../stores/useCookieConsentStore";
 
 interface FavButtonGoalProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -36,6 +43,21 @@ export default function FavButtonGoal({
 
   const [internalSelected, setInternalSelected] = useState(defaultSelected);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const timestamp = formatTransactionTimestamp();
+  const consentId = useCookieConsentStore((state) => state.consentId);
+  const [token, setToken] = useState<string | null>(null);
+  const userId = consentId ?? "";
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const goalTransaction = transactions.find(
+    (transaction) => transaction.goal === goal?.goal,
+  );
+
+  useEffect(() => {
+    if (userId) {
+      getTransactionsByUserId(userId).then(setTransactions);
+    }
+  }, []);
 
   const isControlled = selected !== undefined;
   const useStore = !isControlled && !!id;
@@ -52,8 +74,16 @@ export default function FavButtonGoal({
     if (goal?.Id) {
       if (isSelected) {
         removeFavGoal(goal.Id, goal.vote_count ?? 0);
+        removeFavProjectTransaction(token ?? "", goalTransaction?.Id ?? "");
       } else {
         addFavGoal(goal.Id, Number(goal.vote_count ?? 0) + 1);
+        addFavProjectTransaction(
+          token ?? "",
+          goal.goal ?? "",
+          "",
+          userId ?? "",
+          timestamp,
+        );
       }
     }
     const next = !isSelected;
