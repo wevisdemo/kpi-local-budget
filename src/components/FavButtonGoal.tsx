@@ -13,6 +13,7 @@ import {
   removeFavProjectTransaction,
 } from "../services/submitTransaction";
 import { useCookieConsentStore } from "../stores/useCookieConsentStore";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 interface FavButtonGoalProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -54,10 +55,10 @@ export default function FavButtonGoal({
   );
 
   useEffect(() => {
-    if (userId) {
+    if (confirmOpen && userId) {
       getTransactionsByUserId(userId).then(setTransactions);
     }
-  }, []);
+  }, [confirmOpen]);
 
   const isControlled = selected !== undefined;
   const useStore = !isControlled && !!id;
@@ -204,7 +205,10 @@ export default function FavButtonGoal({
                 <p className="wv-bold">‘{goal?.goal ?? "-"}’</p>
               </span>
             </div>
-
+            <Turnstile
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
+              onSuccess={(token) => setToken(token)}
+            />
             <div className="mt-6 flex justify-center gap-3">
               <Button
                 variant="secondary"

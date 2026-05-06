@@ -57,10 +57,10 @@ export default function FavButton({
   );
 
   useEffect(() => {
-    if (userId) {
+    if (confirmOpen && userId) {
       getTransactionsByUserId(userId).then(setTransactions);
     }
-  }, []);
+  }, [confirmOpen]);
 
   const handleClick = () => {
     setConfirmOpen(true);
