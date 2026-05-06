@@ -23,7 +23,9 @@ const ProjectIdea = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [projectsSheet, setProjectsSheet] = useState<Project[]>([]);
-  const [isGoalsLoading, setIsGoalsLoading] = useState(true);
+  const [loadedCategory, setLoadedCategory] = useState<string | null>(null);
+
+  const isGoalsLoading = !!category && loadedCategory !== category;
 
   const IdeaCategory = ideaCategories.find((item) => item.title === category);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -35,11 +37,9 @@ const ProjectIdea = () => {
 
   useEffect(() => {
     if (!category) {
-      setIsGoalsLoading(false);
       return;
     }
-    setIsGoalsLoading(true);
-    getGoalsByCategory(category ?? "")
+    getGoalsByCategory(category)
       .then((data) => {
         setGoals(Array.isArray(data) ? data : []);
       })
@@ -48,9 +48,9 @@ const ProjectIdea = () => {
         setGoals([]);
       })
       .finally(() => {
-        setIsGoalsLoading(false);
+        setLoadedCategory(category);
       });
-    getProjectsByCategory(category ?? "")
+    getProjectsByCategory(category)
       .then((data) => {
         setProjects(Array.isArray(data) ? data : []);
       })
