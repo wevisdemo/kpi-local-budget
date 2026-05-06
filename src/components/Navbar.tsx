@@ -37,7 +37,7 @@ function WvNavbar({
 
   return (
     <div
-      className={`wv_navbar ${dark ? "wv_navbar--black" : "wv_navbar--white"}`}
+      className={`wv_navbar ${dark ? "wv_navbar--black" : "wv_navbar--white"} z-10`}
     >
       <div className="wv_navbar__logo">
         <a

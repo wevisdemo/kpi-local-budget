@@ -1,4 +1,6 @@
 const GOAL_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Goal";
+const GOAL_ENDPOINT_SORT =
+  "https://tornjak.punchup.world/kpi-local/Goal?sort=-vote_count";
 const TRANSACTION_ENDPOINT =
   "https://tornjak.punchup.world/kpi-local/Transaction";
 const PROJECT_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Project";
@@ -6,7 +8,7 @@ import { ProjectRecord } from "./submitTransaction";
 import type { Goal, ProjectNocoDb, Transaction } from "./type";
 
 export async function getGoals(): Promise<Goal[]> {
-  const response = await fetch(GOAL_ENDPOINT);
+  const response = await fetch(GOAL_ENDPOINT_SORT);
 
   if (!response.ok) {
     const text = await response.text().catch(() => "");

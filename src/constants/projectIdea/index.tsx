@@ -23,6 +23,7 @@ const ProjectIdea = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [projectsSheet, setProjectsSheet] = useState<Project[]>([]);
+  const [isGoalsLoading, setIsGoalsLoading] = useState(true);
 
   const IdeaCategory = ideaCategories.find((item) => item.title === category);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -33,7 +34,11 @@ const ProjectIdea = () => {
   );
 
   useEffect(() => {
-    if (!category) return;
+    if (!category) {
+      setIsGoalsLoading(false);
+      return;
+    }
+    setIsGoalsLoading(true);
     getGoalsByCategory(category ?? "")
       .then((data) => {
         setGoals(Array.isArray(data) ? data : []);
@@ -41,6 +46,9 @@ const ProjectIdea = () => {
       .catch((error) => {
         console.error("Failed to load goals", error);
         setGoals([]);
+      })
+      .finally(() => {
+        setIsGoalsLoading(false);
       });
     getProjectsByCategory(category ?? "")
       .then((data) => {
@@ -122,64 +130,98 @@ const ProjectIdea = () => {
     const query = params.toString();
     router.push(query ? `?${query}` : "?");
   };
+  if (isGoalsLoading) {
+    return null;
+  }
+
   return (
-    <div
-      className={`relative w-full maincategory__${IdeaCategory?.id} min-h-screen`}
-    >
-      <div className="relative max-w-[1040px] mx-auto py-20 px-5 lg:px-0 flex flex-col gap-2.5">
-        <div className="absolute top-[40px] left-0 w-full h-full lg:top-[60px] z-0 pointer-events-none">
-          <Image
-            src={`${basePath}/img/${IdeaCategory?.id}.png`}
-            alt={IdeaCategory?.title ?? ""}
-            width={100}
-            height={100}
-            className="max-w-[600px] w-full mx-auto"
-          />
-        </div>
-        <div className="relative z-10 flex flex-col gap-2.5">
-          <Button
-            variant="secondary"
-            size="small"
-            theme="light"
-            className="w-fit"
-            rightIcon={null}
-            onClick={() => {
-              router.push(`${basePath}/explore-idea`);
-            }}
-          >
-            ภาพรวมไอเดีย
-          </Button>
-          <p className="wv-h6 wv-bold text-white wv-ibmplexlooped">
-            {IdeaCategory?.title}
-          </p>
-          <div className="flex flex-col gap-[3px]">
-            <p className="wv-b5 wv-bold wv-ibmplexlooped text-white">
-              เป้าหมาย
-            </p>
-            <Dropdown
-              options={goalOptions}
-              value={goal}
-              onChange={handleGoalChange}
-            />
+    <>
+      {goals.length > 0 ? (
+        <div
+          className={`relative w-full maincategory__${IdeaCategory?.id} min-h-screen`}
+        >
+          <div className="relative max-w-[1040px] mx-auto py-20 px-5 lg:px-0 flex flex-col gap-2.5">
+            <div className="absolute top-[40px] left-0 w-full h-full lg:top-[60px] z-0 pointer-events-none">
+              <Image
+                src={`${basePath}/img/${IdeaCategory?.id}.png`}
+                alt={IdeaCategory?.title ?? ""}
+                width={100}
+                height={100}
+                className="max-w-[600px] w-full mx-auto"
+              />
+            </div>
+            <div className="relative z-10 flex flex-col gap-2.5">
+              <Button
+                variant="secondary"
+                size="small"
+                theme="light"
+                className="w-fit"
+                rightIcon={null}
+                onClick={() => {
+                  router.push(`${basePath}/explore-idea`);
+                }}
+              >
+                ภาพรวมไอเดีย
+              </Button>
+              <p className="wv-h6 wv-bold text-white wv-ibmplexlooped">
+                {IdeaCategory?.title}
+              </p>
+              <div className="flex flex-col gap-[3px]">
+                <p className="wv-b5 wv-bold wv-ibmplexlooped text-white">
+                  เป้าหมาย
+                </p>
+                <Dropdown
+                  options={goalOptions}
+                  value={goal}
+                  onChange={handleGoalChange}
+                />
+              </div>
+              <div className="flex flex-col ">
+                <p className="wv-b3 wv-bold text-white wv-ibmplexlooped">
+                  {combinedProjects.length || projectCount} โครงการ
+                </p>
+                <p className="wv-b5 text-white wv-ibmplexlooped">
+                  เรียงตามจำนวนคนสนับสนุน
+                </p>
+              </div>
+              {combinedProjects.map((project) => (
+                <ProjectCardIdea
+                  key={project.project_id}
+                  project={project}
+                  likes={project.vote_count ?? 0}
+                />
+              ))}
+            </div>
           </div>
-          <div className="flex flex-col ">
-            <p className="wv-b3 wv-bold text-white wv-ibmplexlooped">
-              {combinedProjects.length || projectCount} โครงการ
-            </p>
-            <p className="wv-b5 text-white wv-ibmplexlooped">
-              เรียงตามจำนวนคนสนับสนุน
-            </p>
-          </div>
-          {combinedProjects.map((project) => (
-            <ProjectCardIdea
-              key={project.project_id}
-              project={project}
-              likes={project.vote_count ?? 0}
-            />
-          ))}
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className={`relative w-full bg-yellow-10 min-h-screen`}>
+          <div className="relative max-w-[1040px] mx-auto py-20 px-5 lg:px-0 flex flex-col gap-2.5">
+            <p className="wv-h5 wv-ibmplexlooped text-black wv-bold ">
+              สำรวจเพื่อ &apos;สนับสนุนไอเดีย&apos; จากเพื่อนในท้องถิ่นคุณ
+            </p>
+            <div className="flex flex-col gap-2.5 mt-20 text-center items-center justify-center">
+              <p className="wv-h5 wv-ibmplexlooped text-gray-50">
+                ยังไม่มีไอเดีย
+              </p>
+              <p className="wv-b4 wv-ibmplexlooped text-gray-50">เสนอได้ที่</p>
+              <Button
+                variant="primary"
+                size="big"
+                theme="dark"
+                className="w-fit"
+                leftIcon={null}
+                onClick={() => {
+                  router.push(`${basePath}/create-idea`);
+                }}
+              >
+                ปั้นไอเดีย
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
