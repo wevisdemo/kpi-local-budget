@@ -15,6 +15,52 @@ import { Project } from "@/src/services/type";
 import { getProject } from "@/src/lib/getProject";
 import ProjectCardIdea from "@/src/components/ProjectCardIdea";
 
+const buildCombinedProjects = (
+  projects: ProjectRecord[],
+  projectsSheet: Project[],
+  category: string | null,
+  goal: string | null,
+): Project[] => {
+  const existing: Project[] = projectsSheet
+    .filter((item) => !category || item.category_ai === category)
+    .map((item) => ({ ...item, type: "exist" }));
+
+  const proposed: Project[] = projects.map((item) => {
+    const sheetMatch = projectsSheet.find(
+      (sheet) => sheet.project && sheet.project === item.project,
+    );
+    const type: Project["type"] =
+      item.creator_id != null ? "propose" : "exist";
+
+    if (sheetMatch) {
+      return {
+        ...sheetMatch,
+        project_id: item.Id != null ? String(item.Id) : sheetMatch.project_id,
+        vote_count: Number(item.vote_count ?? 0),
+        type,
+      };
+    }
+
+    return {
+      project_id: item.Id != null ? String(item.Id) : undefined,
+      project: item.project,
+      goal_ai: item.goal,
+      budget_70: Number(item.budget),
+      vote_count: Number(item.vote_count ?? 0),
+      type,
+    };
+  });
+
+  const all = [...existing, ...proposed];
+
+  if (!goal) return all;
+
+  return all.filter((item) => {
+    const goalText = item.goal_ai ?? item.goal_original ?? "";
+    return goalText === goal;
+  });
+};
+
 const ProjectIdea = () => {
   const searchParams = useSearchParams();
   const category = searchParams.get("category");
@@ -88,46 +134,12 @@ const ProjectIdea = () => {
     [goals],
   );
 
-  const combinedProjects = useMemo<Project[]>(() => {
-    const existing: Project[] = projectsSheet
-      .filter((item) => !category || item.category_ai === category)
-      .map((item) => ({ ...item, type: "exist" }));
-
-    const proposed: Project[] = projects.map((item) => {
-      const sheetMatch = projectsSheet.find(
-        (sheet) => sheet.project && sheet.project === item.project,
-      );
-      const type: Project["type"] =
-        item.creator_id != null ? "propose" : "exist";
-
-      if (sheetMatch) {
-        return {
-          ...sheetMatch,
-          project_id: item.Id != null ? String(item.Id) : sheetMatch.project_id,
-          vote_count: Number(item.vote_count ?? 0),
-          type,
-        };
-      }
-
-      return {
-        project_id: item.Id != null ? String(item.Id) : undefined,
-        project: item.project,
-        goal_ai: item.goal,
-        budget_70: Number(item.budget),
-        vote_count: Number(item.vote_count ?? 0),
-        type,
-      };
-    });
-
-    const all = [...existing, ...proposed];
-
-    if (!goal) return all;
-
-    return all.filter((item) => {
-      const goalText = item.goal_ai ?? item.goal_original ?? "";
-      return goalText === goal;
-    });
-  }, [projects, projectsSheet, category, goal]);
+  const combinedProjects = buildCombinedProjects(
+    projects,
+    projectsSheet,
+    category,
+    goal,
+  );
 
   const handleGoalChange = (nextGoal: string | null) => {
     const params = new URLSearchParams(searchParams.toString());
