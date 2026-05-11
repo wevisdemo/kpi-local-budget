@@ -56,8 +56,8 @@ export default function ProblemStep({
             ยังไม่มีเป้าหมายในประเด็นนี้
           </p>
         ) : (
-          problems
-            .sort((a, b) => (a.type === "propose" ? 1 : -1))
+          [...problems]
+            .sort((a) => (a.type === "propose" ? 1 : -1))
             .map((problem, index) => {
               const goal = problem.goal_ai?.trim() ?? "";
               const isSelected = selectedProblemId === goal;
