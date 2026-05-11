@@ -2,6 +2,7 @@ import ProjectCard from "@/src/components/ProjectCard";
 import type { Project } from "@/src/services/type";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { CATEGORY_BORDER_COLORS } from "./ReviewStep";
 
 const IDEA_MAX_LENGTH = 150;
 
@@ -14,6 +15,7 @@ interface IdeaDetailStepProps {
   onChangeTitle: (value: string) => void;
   onChangeBudget: (value: string) => void;
   matchedProjects: Project[];
+  categoryId: string;
 }
 
 function formatBudget(value: string) {
@@ -57,6 +59,7 @@ export default function IdeaDetailStep({
   onChangeTitle,
   onChangeBudget,
   matchedProjects,
+  categoryId,
 }: IdeaDetailStepProps) {
   const handleTitleChange = (value: string) => {
     if (value.length > IDEA_MAX_LENGTH) {
@@ -87,9 +90,15 @@ export default function IdeaDetailStep({
 
   return (
     <section className="space-y-4">
-      <div className="rounded-[14px] border-2 border-teal-30 bg-white px-5 py-4">
+      <div
+        className="rounded-[14px] border-2 bg-white px-5 py-4"
+        style={{ borderColor: CATEGORY_BORDER_COLORS[categoryId] }}
+      >
         <p className="wv-b4 wv-ibmplexlooped text-gray-50">เพื่อให้..</p>
-        <p className="wv-b3 wv-bold wv-ibmplexlooped mt-1 text-[#00AEBB]">
+        <p
+          className="wv-b3 wv-bold wv-ibmplexlooped mt-1"
+          style={{ color: CATEGORY_BORDER_COLORS[categoryId] }}
+        >
           {problemLabel || "-"}
         </p>
 
@@ -120,7 +129,7 @@ export default function IdeaDetailStep({
               <DottedInput
                 value={formatBudget(budget)}
                 onChange={handleBudgetChange}
-                align="right"
+                align="left"
                 inputMode="numeric"
                 className="flex-1"
               />
@@ -167,6 +176,7 @@ export default function IdeaDetailStep({
                 project={project}
                 type={activeFilter === "existing" ? "exist" : "propose"}
                 likes={project.vote_count ?? 0}
+                categoryId={categoryId}
               />
             ))}
           </div>

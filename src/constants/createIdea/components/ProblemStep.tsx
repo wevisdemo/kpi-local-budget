@@ -2,6 +2,7 @@ import Tag from "@/src/components/Tag";
 import type { Project } from "@/src/services/type";
 import { PROPOSE_NEW_PROBLEM } from "../types";
 import Button from "@/src/components/Button";
+import { CATEGORY_BORDER_COLORS } from "./ReviewStep";
 
 const PROBLEM_MAX_LENGTH = 50;
 
@@ -91,9 +92,13 @@ export default function ProblemStep({
           <button
             type="button"
             onClick={handleSelectPropose}
-            className="w-full rounded-[10px] border-2 border-dashed border-teal-30/60 bg-transparent p-5 text-left transition hover:border-teal-30"
+            className="w-full rounded-[10px] border-2 border-dashed bg-transparent p-5 text-left transition"
+            style={{ borderColor: CATEGORY_BORDER_COLORS[categoryId] }}
           >
-            <p className="wv-b3 wv-bold wv-ibmplexlooped text-teal-30">
+            <p
+              className="wv-b3 wv-bold wv-ibmplexlooped"
+              style={{ color: CATEGORY_BORDER_COLORS[categoryId] }}
+            >
               + เสนอเป้าหมายใหม่
             </p>
             <p className="wv-b5 wv-ibmplexlooped mt-1 text-gray-40">

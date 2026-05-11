@@ -126,6 +126,7 @@ export default function CreateIdeaContent() {
               onChangeTitle={setIdeaTitle}
               onChangeBudget={setIdeaBudget}
               matchedProjects={matchedProjects}
+              categoryId={selectedCategoryId ?? ""}
             />
           )}
 

@@ -1,6 +1,6 @@
 import { Turnstile } from "@marsidev/react-turnstile";
 
-const CATEGORY_BORDER_COLORS: Record<string, string> = {
+export const CATEGORY_BORDER_COLORS: Record<string, string> = {
   education: "#ff8000",
   health: "#00aebb",
   infrastructure: "#bd6e00",

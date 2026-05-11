@@ -229,7 +229,10 @@ export function useCreateIdea() {
     step === 5;
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      // behavior: "smooth",
+    });
   };
 
   const goNext = () => {
@@ -397,10 +400,18 @@ export function useCreateIdea() {
     setTurnstileToken(null);
   };
 
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight - 100,
+      behavior: "smooth",
+    });
+  };
+
   const handleSelectCategory = (categoryId: string) => {
     setSelectedCategoryId(categoryId);
     setSelectedProblemId(null);
     setCustomProblemLabel("");
+    scrollToBottom();
   };
 
   return {

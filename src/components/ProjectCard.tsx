@@ -6,11 +6,13 @@ import type { Project } from "@/src/services/type";
 import FavButton from "./FavButton";
 import dayjs from "dayjs";
 import th from "dayjs/locale/th";
+import { CATEGORY_BORDER_COLORS } from "../constants/createIdea/components/ReviewStep";
 
 interface ProjectCardProps {
   project: Project;
   likes?: number;
   type?: "exist" | "propose";
+  categoryId: string;
 }
 
 const BUDGET_YEARS: Array<{ year: number; key: keyof Project }> = [
@@ -50,6 +52,7 @@ export default function ProjectCard({
   project,
   likes = 0,
   type = "exist",
+  categoryId,
 }: ProjectCardProps) {
   const [expanded, setExpanded] = useState(false);
   const budgets = BUDGET_YEARS.map(({ year, key }) => ({
@@ -60,7 +63,10 @@ export default function ProjectCard({
   const maxBudget = Math.max(...budgets.map((item) => item.value), 0);
   dayjs.locale(th);
   return (
-    <article className="rounded-[10px] border-2 border-blue-20 bg-white p-4 wv-ibmplexlooped">
+    <article
+      className={`rounded-[10px] border-2 ${categoryId ? `` : "border-blue-20"} bg-white p-4 wv-ibmplexlooped `}
+      style={{ borderColor: CATEGORY_BORDER_COLORS[categoryId] }}
+    >
       <header className="flex items-start justify-between gap-3">
         <h3 className="wv-b4 wv-bold text-black">{project.project ?? "-"}</h3>
         <FavButton
@@ -87,7 +93,10 @@ export default function ProjectCard({
       )} */}
 
       {totalBudget > 0 && (
-        <p className="mt-3 wv-b5 text-blue-30">
+        <p
+          className={`mt-3 wv-b5 ${categoryId ? `` : "text-blue-30"}`}
+          style={{ color: CATEGORY_BORDER_COLORS[categoryId] }}
+        >
           งบประมาณรวม 5 ปี{" "}
           <span className="wv-bold">{formatBaht(totalBudget)}</span> บาท
         </p>
@@ -167,7 +176,10 @@ export default function ProjectCard({
 
           {totalBudget > 0 && (
             <div className="mt-4">
-              <p className="mb-2 wv-b6 wv-bold text-blue-30">
+              <p
+                className={`mb-2 wv-b6 wv-bold ${categoryId ? `` : "text-blue-30"}`}
+                style={{ color: CATEGORY_BORDER_COLORS[categoryId] }}
+              >
                 งบประมาณรายปี (บาท)
               </p>
               <div className="flex h-28 gap-1">
@@ -183,13 +195,19 @@ export default function ProjectCard({
                       className="flex flex-1 flex-col items-center justify-end gap-1"
                     >
                       {hasValue && (
-                        <span className="wv-b7 text-blue-30 whitespace-nowrap">
+                        <span
+                          className={`wv-b7 ${categoryId ? `` : "text-blue-30"} whitespace-nowrap`}
+                          style={{ color: CATEGORY_BORDER_COLORS[categoryId] }}
+                        >
                           {formatBaht(value)}
                         </span>
                       )}
                       <div
-                        className={`w-full rounded-sm bg-blue-20 maincategory__job`}
-                        style={{ height: `${heightPct}%` }}
+                        className={`w-full rounded-sm ${categoryId ? `` : "bg-blue-20"} maincategory__job`}
+                        style={{
+                          backgroundColor: CATEGORY_BORDER_COLORS[categoryId],
+                          height: `${heightPct}%`,
+                        }}
                       />
                     </div>
                   );
