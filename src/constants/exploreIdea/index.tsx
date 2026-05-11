@@ -27,8 +27,19 @@ const ExploreIdea = () => {
     setProjects(Array.isArray(data) ? data : []);
   };
   useEffect(() => {
-    getGoalsFunction();
-    getProjectsFunction();
+    let active = true;
+
+    getGoals().then((data) => {
+      if (active) setGoals(Array.isArray(data) ? data : []);
+    });
+
+    getProjects().then((data) => {
+      if (active) setProjects(Array.isArray(data) ? data : []);
+    });
+
+    return () => {
+      active = false;
+    };
   }, []);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const projectsWithCreator = projects.filter(

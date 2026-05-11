@@ -50,16 +50,31 @@ const ProjectIdea = () => {
     if (!category) {
       return;
     }
-    getGoalsFunction();
-    getProjectsFunction();
+    let active = true;
+
+    getGoalsByCategory(category).then((data) => {
+      if (active) {
+        setGoals(Array.isArray(data) ? data : []);
+        setLoadedCategory(category);
+      }
+    });
+
+    getProjectsByCategory(category).then((data) => {
+      if (active) setProjects(Array.isArray(data) ? data : []);
+    });
+
     getProject()
       .then((data) => {
-        setProjectsSheet(Array.isArray(data) ? data : []);
+        if (active) setProjectsSheet(Array.isArray(data) ? data : []);
       })
       .catch((error) => {
         console.error("Failed to load projects", error);
-        setProjectsSheet([]);
+        if (active) setProjectsSheet([]);
       });
+
+    return () => {
+      active = false;
+    };
   }, [category]);
 
   const goalOptions = useMemo(
