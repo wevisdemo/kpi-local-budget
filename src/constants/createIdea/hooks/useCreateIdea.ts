@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ideaCategories } from "../data";
 import { PROPOSE_NEW_PROBLEM, type CreateIdeaStep } from "../types";
 import { getProject } from "@/src/lib/getProject";
@@ -36,6 +36,46 @@ export function useCreateIdea() {
 
   const consentId = useCookieConsentStore((state) => state.consentId);
   const favorites = useFavoritesStore((state) => state.favorites);
+
+  const isPoppingRef = useRef(false);
+  const didInitHistoryRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const baseState =
+      (window.history.state as Record<string, unknown> | null) ?? {};
+    const merged = { ...baseState, createIdeaStep: step };
+
+    if (!didInitHistoryRef.current) {
+      didInitHistoryRef.current = true;
+      window.history.replaceState(merged, "");
+      return;
+    }
+
+    if (isPoppingRef.current) {
+      isPoppingRef.current = false;
+      return;
+    }
+
+    window.history.pushState(merged, "");
+  }, [step]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handlePopState = (event: PopStateEvent) => {
+      const target = (event.state as { createIdeaStep?: unknown } | null)
+        ?.createIdeaStep;
+      if (typeof target === "number" && target >= 1 && target <= 5) {
+        isPoppingRef.current = true;
+        setStep(target as CreateIdeaStep);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -145,6 +185,7 @@ export function useCreateIdea() {
             project: name,
             goal_ai: record.goal ?? targetGoal,
             budget_70: Number(record.budget),
+            timestamp: record.timestamp ?? "",
             vote_count: record.vote_count ?? 0,
             type: record.creator_id != null ? "propose" : "exist",
           });
@@ -187,12 +228,17 @@ export function useCreateIdea() {
     (step === 4 && Boolean(turnstileToken)) ||
     step === 5;
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const goNext = () => {
     if (!isStepValid || step >= 5) {
       return;
     }
 
     setStep((prev) => (prev + 1) as CreateIdeaStep);
+    scrollToTop();
   };
 
   const goBack = () => {
@@ -200,7 +246,14 @@ export function useCreateIdea() {
       return;
     }
 
+    if (typeof window !== "undefined") {
+      window.history.back();
+      scrollToTop();
+      return;
+    }
+
     setStep((prev) => (prev - 1) as CreateIdeaStep);
+    scrollToTop();
   };
 
   const handleSubmitIdea = async () => {

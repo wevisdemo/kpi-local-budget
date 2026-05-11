@@ -45,7 +45,9 @@ export default function CreateIdeaContent() {
           <div className="flex flex-col gap-[20px]">
             <div className="flex flex-col items-center justify-center gap-[5px]">
               <h1 className="wv-h5 wv-ibmplexlooped wv-bold text-black text-center">
-                คุณอยากเห็น{currentSite.subtext} พัฒนาในเรื่องไหน ?
+                คุณอยากเห็น
+                <br className="md:hidden block" /> {currentSite.subtext}{" "}
+                <br className="md:hidden block" /> พัฒนาในเรื่องไหน ?
               </h1>
               <p className="wv-b4 wv-ibmplexlooped text-gray-40 text-center">
                 ทุกไอเดียที่คุณ &apos;ปั้น&apos; จะถูกรวบรวมและพัฒนาโดยทีมงาน
@@ -58,7 +60,7 @@ export default function CreateIdeaContent() {
             </div>
             {step === 1 && (
               <div className="mt-5 flex flex-col items-center justify-center gap-[5px]">
-                <h1 className="wv-h6 wv-ibmplexlooped text-black">
+                <h1 className="wv-h6 wv-ibmplexlooped text-black text-center">
                   เลือกประเด็นที่คุณต้องการให้ความเห็น
                 </h1>
                 <p className="wv-b5 wv-ibmplexlooped text-gray-30">

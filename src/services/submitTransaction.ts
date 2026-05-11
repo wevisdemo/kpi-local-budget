@@ -1,12 +1,15 @@
-import { Transaction } from "./type";
+import { ProjectTransaction, GoalTransaction } from "./type";
 
-const TRANSACTION_ENDPOINT =
-  "https://tornjak.punchup.world/kpi-local/Transaction";
+// const TRANSACTION_ENDPOINT =
+//   "https://tornjak.punchup.world/kpi-local/Transaction";
 const PROJECT_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Project";
 const GOAL_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Goal";
 const CATEGORY_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Category";
 const BATCH_ENDPOINT = "https://tornjak.punchup.world/batch/kpi-local/";
-
+const GOAL_TRANSACTION_ENDPOINT =
+  "https://tornjak.punchup.world/kpi-local/Goal_Like";
+const PROJECT_TRANSACTION_ENDPOINT =
+  "https://tornjak.punchup.world/kpi-local/Project_Like";
 export interface BatchRequest {
   path: string;
   method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
@@ -98,32 +101,32 @@ export function formatTransactionTimestamp(date: Date = new Date()): string {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
-export async function submitTransaction(
-  payload: SubmitTransactionPayload,
-  token: string,
-): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  console.log("token:", token);
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
+// export async function submitTransaction(
+//   payload: SubmitTransactionPayload,
+//   token: string,
+// ): Promise<void> {
+//   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+//   console.log("token:", token);
+//   if (!turnstileSiteKey) {
+//     throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
+//   }
 
-  const response = await fetch(TRANSACTION_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": token,
-    },
-    body: JSON.stringify(payload),
-  });
+//   const response = await fetch(TRANSACTION_ENDPOINT, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "cf-turnstile-response": token,
+//     },
+//     body: JSON.stringify(payload),
+//   });
 
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(
-      `Failed to submit transaction (${response.status}): ${text}`,
-    );
-  }
-}
+//   if (!response.ok) {
+//     const text = await response.text().catch(() => "");
+//     throw new Error(
+//       `Failed to submit transaction (${response.status}): ${text}`,
+//     );
+//   }
+// }
 
 export interface SubmitProjectResponse {
   Id: string | number;
@@ -382,105 +385,110 @@ export async function linkProjectToGoal(
 }
 
 export async function addFavProject(
-  projectId: string | number,
-  vote_count: number,
-): Promise<void> {
+  token: string,
+  user_id: string,
+  timestamp: string,
+): Promise<ProjectTransaction | null> {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   if (!turnstileSiteKey) {
     throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
   }
-  const response = await fetch(`${PROJECT_ENDPOINT}/${projectId}`, {
-    method: "PATCH",
+  const response = await fetch(`${PROJECT_TRANSACTION_ENDPOINT}`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
+      "cf-turnstile-response": token,
+      "cf-turnstile-cache-ms": "10000",
     },
-    body: JSON.stringify({ vote_count: Number(vote_count) + 1 }),
+    body: JSON.stringify({ user_id: user_id, timestamp: timestamp }),
   });
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`Failed to add fav project (${response.status}): ${text}`);
+  }
 
+  const data = (await response
+    .json()
+    .catch(() => null)) as ProjectTransaction | null;
+
+  return data;
+}
+
+export async function removeFavProject(
+  token: string,
+  projectId: string | number,
+) {
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  if (!turnstileSiteKey) {
+    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
+  }
+  const response = await fetch(`${PROJECT_TRANSACTION_ENDPOINT}/${projectId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "cf-turnstile-response": token,
+      "cf-turnstile-cache-ms": "10000",
+    },
+  });
   if (!response.ok) {
     const text = await response.text().catch(() => "");
     throw new Error(`Failed to add fav project (${response.status}): ${text}`);
   }
 }
 
-export async function removeFavProject(
-  projectId: string | number,
-  vote_count: number,
-): Promise<void> {
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (!turnstileSiteKey) {
-    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
-  }
-  const response = await fetch(`${PROJECT_ENDPOINT}/${projectId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
-    },
-    body: JSON.stringify({ vote_count: vote_count }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(
-      `Failed to remove fav project (${response.status}): ${text}`,
-    );
-  }
-}
-
-export async function addFavProjectTransaction(
+export async function removeFavGoalTransaction(
   token: string,
-  goal?: string,
-  project?: string,
-  user_id?: string,
-  timestamp?: string,
+  goalId: string | number,
+  likeId: string | number,
 ): Promise<void> {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   if (!turnstileSiteKey) {
     throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
   }
-  const response = await fetch(`${TRANSACTION_ENDPOINT}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": token,
+  const response = await fetch(
+    `${GOAL_ENDPOINT}/${goalId}/hm/vote_count/${likeId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "cf-turnstile-response": token,
+        "cf-turnstile-cache-ms": "10000",
+      },
     },
-    body: JSON.stringify({
-      user_id: user_id,
-      timestamp: timestamp,
-      goal: goal ?? "",
-      project: project ?? "",
-    }),
-  });
+  );
 
   if (!response.ok) {
     const text = await response.text().catch(() => "");
     throw new Error(
-      `Failed to remove fav project (${response.status}): ${text}`,
+      `Failed to remove fav project transaction (${response.status}): ${text}`,
     );
   }
 }
 
 export async function removeFavProjectTransaction(
   token: string,
-  rowId: string | number,
+  projectId: string | number,
+  likeId: string | number,
 ): Promise<void> {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   if (!turnstileSiteKey) {
     throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
   }
-  const response = await fetch(`${TRANSACTION_ENDPOINT}/${rowId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      "cf-turnstile-response": token,
+  const response = await fetch(
+    `${PROJECT_ENDPOINT}/${projectId}/hm/vote_count/${likeId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "cf-turnstile-response": token,
+        "cf-turnstile-cache-ms": "10000",
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     const text = await response.text().catch(() => "");
@@ -492,8 +500,8 @@ export async function removeFavProjectTransaction(
 
 export async function getTransactionsByUserId(
   user_id: string,
-): Promise<Transaction[]> {
-  const url = new URL(TRANSACTION_ENDPOINT);
+): Promise<GoalTransaction[]> {
+  const url = new URL(GOAL_TRANSACTION_ENDPOINT);
   url.searchParams.set("where", `(user_id,eq,${user_id})`);
   url.searchParams.set("limit", "1000");
 
@@ -507,8 +515,8 @@ export async function getTransactionsByUserId(
   }
 
   const data = (await response.json()) as
-    | Transaction[]
-    | { list?: Transaction[] }
+    | GoalTransaction[]
+    | { list?: GoalTransaction[] }
     | null;
 
   const list = Array.isArray(data)
@@ -518,4 +526,95 @@ export async function getTransactionsByUserId(
       : [];
 
   return list;
+}
+export async function getProjectTransactionsByUserId(
+  user_id: string,
+): Promise<ProjectTransaction[]> {
+  const url = new URL(PROJECT_TRANSACTION_ENDPOINT);
+  url.searchParams.set("where", `(user_id,eq,${user_id})`);
+  url.searchParams.set("limit", "1000");
+
+  const response = await fetch(url.toString());
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(
+      `Failed to fetch transactions (${response.status}): ${text}`,
+    );
+  }
+
+  const data = (await response.json()) as
+    | ProjectTransaction[]
+    | { list?: ProjectTransaction[] }
+    | null;
+
+  const list = Array.isArray(data)
+    ? data
+    : data && Array.isArray(data.list)
+      ? data.list
+      : [];
+
+  return list;
+}
+
+export async function linkLikeToGoal(
+  goalId: string | number,
+  likeId: string | number,
+  token: string,
+): Promise<void> {
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  if (!turnstileSiteKey) {
+    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
+  }
+
+  const response = await fetch(
+    `${GOAL_ENDPOINT}/${goalId}/hm/vote_count/${likeId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "cf-turnstile-response": token,
+        "cf-turnstile-cache-ms": "10000",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(
+      `Failed to link like to goal (${response.status}): ${text}`,
+    );
+  }
+}
+
+export async function linkLikeToProject(
+  projectId: string | number,
+  likeId: string | number,
+  token: string,
+): Promise<void> {
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  if (!turnstileSiteKey) {
+    throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
+  }
+
+  const response = await fetch(
+    `${PROJECT_ENDPOINT}/${projectId}/hm/vote_count/${likeId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "cf-turnstile-response": token,
+        "cf-turnstile-cache-ms": "10000",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(
+      `Failed to link like to project (${response.status}): ${text}`,
+    );
+  }
 }

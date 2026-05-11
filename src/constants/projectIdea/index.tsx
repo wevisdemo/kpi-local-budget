@@ -35,29 +35,23 @@ const ProjectIdea = () => {
     0,
   );
 
+  const getGoalsFunction = async () => {
+    const data = await getGoalsByCategory(category ?? "");
+    setGoals(Array.isArray(data) ? data : []);
+    setLoadedCategory(category);
+  };
+
+  const getProjectsFunction = async () => {
+    const data = await getProjectsByCategory(category ?? "");
+    setProjects(Array.isArray(data) ? data : []);
+  };
+
   useEffect(() => {
     if (!category) {
       return;
     }
-    getGoalsByCategory(category)
-      .then((data) => {
-        setGoals(Array.isArray(data) ? data : []);
-      })
-      .catch((error) => {
-        console.error("Failed to load goals", error);
-        setGoals([]);
-      })
-      .finally(() => {
-        setLoadedCategory(category);
-      });
-    getProjectsByCategory(category)
-      .then((data) => {
-        setProjects(Array.isArray(data) ? data : []);
-      })
-      .catch((error) => {
-        console.error("Failed to load projects", error);
-        setProjects([]);
-      });
+    getGoalsFunction();
+    getProjectsFunction();
     getProject()
       .then((data) => {
         setProjectsSheet(Array.isArray(data) ? data : []);
@@ -158,7 +152,7 @@ const ProjectIdea = () => {
                 className="w-fit"
                 rightIcon={null}
                 onClick={() => {
-                  router.push(`${basePath}/explore-idea`);
+                  router.push(`/explore-idea`);
                 }}
               >
                 ภาพรวมไอเดีย
@@ -189,6 +183,10 @@ const ProjectIdea = () => {
                   key={project.project_id}
                   project={project}
                   likes={project.vote_count ?? 0}
+                  onRefetch={() => {
+                    getProjectsFunction();
+                    getGoalsFunction();
+                  }}
                 />
               ))}
             </div>

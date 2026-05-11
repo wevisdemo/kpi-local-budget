@@ -3,19 +3,18 @@
 import Image from "next/image";
 import { useState, type ButtonHTMLAttributes, useEffect } from "react";
 import { useFavoritesStore } from "../stores/useFavoritesStore";
-import type { Project } from "../services/type";
+import type { Project, ProjectTransaction } from "../services/type";
 import {
   addFavProject,
-  addFavProjectTransaction,
   formatTransactionTimestamp,
-  getTransactionsByUserId,
+  getProjectTransactionsByUserId,
+  linkLikeToProject,
   removeFavProject,
   removeFavProjectTransaction,
 } from "../services/submitTransaction";
 import Button from "./Button";
 import { useCookieConsentStore } from "../stores/useCookieConsentStore";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { Transaction } from "../services/type";
 
 interface FavButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -27,6 +26,8 @@ interface FavButtonProps extends Omit<
   selected?: boolean;
   defaultSelected?: boolean;
   onChange?: (selected: boolean) => void;
+  onRefetch?: () => void;
+  isStep?: boolean;
 }
 
 export default function FavButton({
@@ -37,6 +38,8 @@ export default function FavButton({
   defaultSelected = false,
   onChange,
   className = "",
+  onRefetch,
+  isStep = false,
   ...rest
 }: FavButtonProps) {
   const storeSelected = useFavoritesStore((state) =>
@@ -50,15 +53,15 @@ export default function FavButton({
   const consentId = useCookieConsentStore((state) => state.consentId);
   const [token, setToken] = useState<string | null>(null);
   const userId = consentId ?? "";
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<ProjectTransaction[]>([]);
 
   const projectTransaction = transactions.find(
-    (transaction) => transaction.project === project?.project,
+    (transaction) => transaction.Project?.project === project?.project,
   );
 
   useEffect(() => {
     if (confirmOpen && userId) {
-      getTransactionsByUserId(userId).then(setTransactions);
+      getProjectTransactionsByUserId(userId).then(setTransactions);
     }
   }, [confirmOpen]);
 
@@ -96,26 +99,33 @@ export default function FavButton({
       ? storeSelected
       : internalSelected;
 
-  const displayCount = !isControlled && isSelected ? count + 1 : count;
+  const displayCount =
+    !isControlled && isSelected && isStep ? count + 1 : count;
 
   const applyChange = async () => {
     if (project?.project_id) {
       if (isSelected) {
-        await removeFavProject(project.project_id, project.vote_count ?? 0);
         await removeFavProjectTransaction(
           token ?? "",
+          project.project_id,
           projectTransaction?.Id ?? "",
         );
+        await removeFavProject(token ?? "", projectTransaction?.Id ?? "");
       } else {
-        await addFavProject(project.project_id, displayCount ?? 0);
-        await addFavProjectTransaction(
+        const likeId = await addFavProject(
           token ?? "",
-          "",
-          project.project,
           userId ?? "",
           timestamp,
         );
+        await linkLikeToProject(
+          project.project_id,
+          likeId?.Id ?? "",
+          token ?? "",
+        );
       }
+    }
+    if (isStep === false) {
+      onRefetch?.();
     }
     const next = !isSelected;
     if (useStore && id) {
@@ -149,7 +159,7 @@ export default function FavButton({
           width={24}
           height={24}
           aria-hidden="true"
-          className="transition-transform group-hover:scale-110"
+          className="transition-transform group-hover:scale-110 max-w-fit"
         />
         <span className="wv-b5 wv-bold leading-none text-pink-30 wv-ibmplexlooped">
           {displayCount}

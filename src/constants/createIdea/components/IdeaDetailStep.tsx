@@ -135,7 +135,7 @@ export default function IdeaDetailStep({
       {matchedProjects.length > 0 && (
         <div className="space-y-3 pt-4">
           <div className="space-y-2.5 justify-center items-center flex flex-col">
-            <h3 className="wv-b4 pb-2 wv-ibmplexlooped text-black flex items-center gap-1.5 flex-wrap">
+            <h3 className="wv-b4 pb-2 wv-ibmplexlooped text-black flex items-center gap-1.5 flex-wrap justify-center">
               <span>หรือกด</span>
               <Image
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon/heart-check.svg`}
@@ -145,7 +145,7 @@ export default function IdeaDetailStep({
               />
               <span>สนับสนุนโครงการที่เกี่ยวข้องกับเป้าหมายนี้</span>
             </h3>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 justify-center">
               <CountPill
                 count={existingProjects.length}
                 label="สิ่งที่กำลังจะทำอยู่แล้ว"

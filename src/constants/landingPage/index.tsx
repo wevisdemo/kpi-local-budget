@@ -23,13 +23,14 @@ export default function LandingPage() {
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-0">
             <LottieAnimation />
           </div>
-          <div className="relative z-10 flex flex-col items-center justify-center">
+          <div className="relative z-0 flex flex-col items-center justify-center">
             <p className="wv-b4 text-black wv-ibmplexlooped px-5 bg-yellow-10 rounded-full w-fit ">
               {currentSite.subtitle}
             </p>
             <div className="mt-10 text-center">
               <p className="wv-h4 wv-ibmplexlooped wv-bold text-white">
-                ลานชุมชน คนปั้นเมือง
+                ลานชุมชน <br className="md:hidden block" />
+                คนปั้นเมือง
               </p>
               <p className="wv-b3 text-white wv-ibmplexlooped">
                 ชวนล้อมวง ระดมความคิด กำหนดทิศ &apos;งบประมาณท้องถิ่น&apos;
@@ -41,7 +42,7 @@ export default function LandingPage() {
           <div
             className="col-span-2 md:col-span-1"
             onClick={() => {
-              router.push(`${basePath}/create-idea`);
+              router.push(`/create-idea`);
             }}
           >
             <button className="group bg-teal-20 md:px-[60px] px-[40px] py-[40px] flex flex-col justify-between h-full w-full">
@@ -50,7 +51,9 @@ export default function LandingPage() {
                   ปั้นไอเดีย เปลี่ยนเมือง
                 </p>
                 <p className="wv-b3 wv-ibmplexlooped text-black text-left">
-                  คุณอยากเห็นการพัฒนาแบบไหน (ใช้เวลา 5-10 นาที)
+                  คุณอยากเห็นการพัฒนาแบบไหน
+                  <br />
+                  (ใช้เวลา 5-10 นาที)
                 </p>
               </div>
               <div className="flex items-center justify-end ">
@@ -70,7 +73,7 @@ export default function LandingPage() {
             <button
               className="group bg-yellow-20 md:px-[60px] px-[40px] py-[40px] flex flex-col justify-between h-full w-full"
               onClick={() => {
-                router.push(`${basePath}/explore-idea`);
+                router.push(`/explore-idea`);
               }}
             >
               <div className="flex flex-col gap-2.5 items-start">
@@ -78,7 +81,8 @@ export default function LandingPage() {
                   สำรวจไอเดีย
                 </p>
                 <p className="wv-b3 wv-ibmplexlooped text-black text-left">
-                  สำรวจเพื่อ ‘สนับสนุน’ ไอเดียจากเพื่อนในท้องถิ่นคุณ
+                  สำรวจเพื่อ ‘สนับสนุน’ <br className="md:hidden block" />
+                  ไอเดียจากเพื่อนในท้องถิ่นคุณ
                 </p>
               </div>
               <div className="flex items-center justify-end ">
@@ -98,7 +102,7 @@ export default function LandingPage() {
             <button
               className="group bg-gray-10 md:px-[60px] px-[40px] py-[40px] flex flex-col justify-between h-full w-full"
               onClick={() => {
-                router.push(`${basePath}/plan`);
+                router.push(`/plan`);
               }}
             >
               <div className="flex flex-col gap-2.5 items-start">
@@ -168,7 +172,9 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-[5px]">
                 <p className="wv-b2 wv-ibmplexlooped text-black wv-bold">
-                  เข้าร่วมกิจกรรม &quot;ลานชุมชน คนปั้นเมือง&quot;
+                  เข้าร่วมกิจกรรม
+                  <br />
+                  &quot;ลานชุมชน คนปั้นเมือง&quot;
                 </p>
                 <p className="wv-b4 wv-ibmplexlooped text-black">
                   เปลี่ยนจาก &quot;แค่มาฟังนโยบาย&quot; เป็น &quot;เวทีร่วมคิด
@@ -197,7 +203,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-[5px]">
                 <p className="wv-b2 wv-ibmplexlooped text-black wv-bold">
-                  แลกเปลี่ยนความเห็นกับนักนโยบายมืออาขีพ
+                  แลกเปลี่ยนความเห็น <br /> กับนักนโยบายมืออาชีพ
                 </p>
                 <p className="wv-b4 wv-ibmplexlooped text-black">
                   มาร่วมสวมบทบาท &quot;นักปั้นเมือง&quot;
@@ -224,12 +230,14 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-[5px]">
                 <p className="wv-b2 wv-ibmplexlooped text-black wv-bold">
-                  เสียงของคุณ คืออำนาจในการสร้างเมือง
+                  เสียงของคุณ คืออำนาจ
+                  <br />
+                  ในการสร้างเมือง
                 </p>
                 <p className="wv-b4 wv-ibmplexlooped text-black">
                   การคัดเลือกโครงการในท้ายที่สุด
                   จะถูกนำกลับมาทำเป็นรายงานข้อเสนอแนะเชิงนโยบายโดยสถาบันพระปกเกล้า
-                  เพื่อส่งมอบต่อไปให้พื้นที่ของคุณ ข้อมูลชุดนี้จะทำให้อปท.
+                  เพื่อส่งมอบต่อไปให้พื้นที่ของคุณ ข้อมูลชุดนี้จะทำให้ อปท.{" "}
                   มีแนวทางในการจัดทำงบประมาณแบบมีส่วนร่วมในอนาคต
                   และยังเป็นข้อเสนอแนะที่จะมีผลโดยตรงต่อการจัดทำแผนพัฒนาท้องถิ่นปี
                   2570-2575
@@ -248,7 +256,9 @@ export default function LandingPage() {
             เว็บไซต์นี้พัฒนาขึ้นเพื่อเปิดข้อมูลงบประมาณท้องถิ่นให้ประชาชนเข้าถึงได้ง่าย
             และเปิดช่องทางให้ประชาชนมีส่วนร่วมแสดงความคิดเห็นต่อการจัดสรรงบประมาณในพื้นที่ของตน
             ข้อมูลทั้งหมดรวบรวมจากเอกสารราชการและรายงานที่เกี่ยวข้อง
-            ภายใต้ข้อจำกัดที่ทีมงานไม่สามารถรับประกันความครบถ้วนในทุกกรณี
+            ภายใต้ข้อจำกัดที่
+            <br className="md:block hidden" />
+            ทีมงานไม่สามารถรับประกันความครบถ้วนในทุกกรณี
             หากพบข้อผิดพลาดหรือต้องการสอบถาม ติดต่อได้ที่
             <br />
             <a

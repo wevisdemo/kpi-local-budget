@@ -1,11 +1,13 @@
 const GOAL_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Goal";
 const GOAL_ENDPOINT_SORT =
   "https://tornjak.punchup.world/kpi-local/Goal?sort=-vote_count";
-const TRANSACTION_ENDPOINT =
-  "https://tornjak.punchup.world/kpi-local/Transaction";
+// const TRANSACTION_ENDPOINT =
+//   "https://tornjak.punchup.world/kpi-local/Transaction";
 const PROJECT_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Project";
+const GOAL_TRANSACTION_ENDPOINT =
+  "https://tornjak.punchup.world/kpi-local/Goal_Like";
 import { ProjectRecord } from "./submitTransaction";
-import type { Goal, ProjectNocoDb, Transaction } from "./type";
+import type { Goal, GoalTransaction, ProjectNocoDb, Transaction } from "./type";
 
 export async function getGoals(): Promise<Goal[]> {
   const response = await fetch(GOAL_ENDPOINT_SORT);
@@ -26,27 +28,27 @@ export async function getGoals(): Promise<Goal[]> {
   return list.filter((goal) => goal.hidden !== true);
 }
 
-export async function getTransactions(): Promise<Transaction[]> {
-  const response = await fetch(TRANSACTION_ENDPOINT);
+// export async function getTransactions(): Promise<Transaction[]> {
+//   const response = await fetch(TRANSACTION_ENDPOINT);
 
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(`Failed to fetch goals (${response.status}): ${text}`);
-  }
+//   if (!response.ok) {
+//     const text = await response.text().catch(() => "");
+//     throw new Error(`Failed to fetch goals (${response.status}): ${text}`);
+//   }
 
-  const data = (await response.json()) as
-    | Transaction[]
-    | { list?: Transaction[] }
-    | null;
+//   const data = (await response.json()) as
+//     | Transaction[]
+//     | { list?: Transaction[] }
+//     | null;
 
-  const list = Array.isArray(data)
-    ? data
-    : data && Array.isArray(data.list)
-      ? data.list
-      : [];
+//   const list = Array.isArray(data)
+//     ? data
+//     : data && Array.isArray(data.list)
+//       ? data.list
+//       : [];
 
-  return list;
-}
+//   return list;
+// }
 
 export async function getProjects(): Promise<ProjectNocoDb[]> {
   const response = await fetch(PROJECT_ENDPOINT);
@@ -68,42 +70,50 @@ export async function getProjects(): Promise<ProjectNocoDb[]> {
 
   return list.filter((project) => project.hidden !== true);
 }
-export async function addFavGoal(goalId: string | number, vote_count: number) {
+export async function addFavGoal(
+  token: string,
+  user_id: string,
+  timestamp: string,
+): Promise<GoalTransaction | null> {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   if (!turnstileSiteKey) {
     throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
   }
-  const response = await fetch(`${GOAL_ENDPOINT}/${goalId}`, {
-    method: "PATCH",
+  const response = await fetch(`${GOAL_TRANSACTION_ENDPOINT}`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
+      "cf-turnstile-response": token,
+      "cf-turnstile-cache-ms": "10000",
     },
-    body: JSON.stringify({ vote_count: Number(vote_count) }),
+    body: JSON.stringify({ user_id: user_id, timestamp: timestamp }),
   });
   if (!response.ok) {
     const text = await response.text().catch(() => "");
     throw new Error(`Failed to add fav project (${response.status}): ${text}`);
   }
+
+  const data = (await response
+    .json()
+    .catch(() => null)) as GoalTransaction | null;
+
+  return data;
 }
 
-export async function removeFavGoal(
-  goalId: string | number,
-  vote_count: number,
-) {
+export async function removeFavGoal(token: string, goalId: string | number) {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   if (!turnstileSiteKey) {
     throw new Error("Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY");
   }
-  const response = await fetch(`${GOAL_ENDPOINT}/${goalId}`, {
-    method: "PATCH",
+  const response = await fetch(`${GOAL_TRANSACTION_ENDPOINT}/${goalId}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      "cf-turnstile-response": turnstileSiteKey,
+      "cf-turnstile-response": token,
+      "cf-turnstile-cache-ms": "10000",
     },
-    body: JSON.stringify({ vote_count: vote_count }),
   });
   if (!response.ok) {
     const text = await response.text().catch(() => "");

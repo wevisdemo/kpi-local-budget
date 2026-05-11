@@ -9,6 +9,7 @@ import { TagVariant } from "./Tag";
 interface ProjectCardIdeaProps {
   project: Project;
   likes?: number;
+  onRefetch?: () => void;
 }
 
 const BUDGET_YEARS: Array<{ year: number; key: keyof Project }> = [
@@ -47,6 +48,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 export default function ProjectCardIdea({
   project,
   likes = 0,
+  onRefetch,
 }: ProjectCardIdeaProps) {
   const [expanded, setExpanded] = useState(false);
   const budgets = BUDGET_YEARS.map(({ year, key }) => ({
@@ -63,6 +65,7 @@ export default function ProjectCardIdea({
           id={project.project_id}
           count={Number(likes)}
           project={project}
+          onRefetch={onRefetch}
         />
       </header>
 
@@ -106,7 +109,7 @@ export default function ProjectCardIdea({
               {project.strategy && (
                 <Detail label="ยุทธศาสตร์" value={project.strategy} />
               )}
-              {project.plan && <Detail label="แนวทาง" value={project.plan} />}
+              {project.plan && <Detail label="แผนงาน" value={project.plan} />}
             </div>
           )}
 

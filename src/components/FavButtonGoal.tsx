@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { useEffect, useState, type ButtonHTMLAttributes } from "react";
 import { useFavoritesStore } from "../stores/useFavoritesStore";
-import type { Goal, Transaction } from "../services/type";
+import type { Goal, GoalTransaction } from "../services/type";
 import { addFavGoal, removeFavGoal } from "../services/exploreIdea";
 import Button from "./Button";
 import {
-  addFavProjectTransaction,
   formatTransactionTimestamp,
   getTransactionsByUserId,
-  removeFavProjectTransaction,
+  removeFavGoalTransaction,
+  linkLikeToGoal,
 } from "../services/submitTransaction";
 import { useCookieConsentStore } from "../stores/useCookieConsentStore";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -25,6 +25,7 @@ interface FavButtonGoalProps extends Omit<
   selected?: boolean;
   defaultSelected?: boolean;
   onChange?: (selected: boolean) => void;
+  onRefetch?: () => void;
 }
 
 export default function FavButtonGoal({
@@ -35,6 +36,7 @@ export default function FavButtonGoal({
   defaultSelected = false,
   onChange,
   className = "",
+  onRefetch,
   ...rest
 }: FavButtonGoalProps) {
   const storeSelected = useFavoritesStore((state) =>
@@ -48,10 +50,10 @@ export default function FavButtonGoal({
   const consentId = useCookieConsentStore((state) => state.consentId);
   const [token, setToken] = useState<string | null>(null);
   const userId = consentId ?? "";
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<GoalTransaction[]>([]);
 
   const goalTransaction = transactions.find(
-    (transaction) => transaction.goal === goal?.goal,
+    (transaction) => transaction.goal?.goal === goal?.goal,
   );
 
   useEffect(() => {
@@ -69,24 +71,24 @@ export default function FavButtonGoal({
       ? storeSelected
       : internalSelected;
 
-  const displayCount = !isControlled && isSelected ? count + 1 : count;
+  const displayCount = !isControlled && isSelected ? count : count;
 
-  const applyChange = () => {
+  const applyChange = async () => {
     if (goal?.Id) {
       if (isSelected) {
-        removeFavGoal(goal.Id, goal.vote_count ?? 0);
-        removeFavProjectTransaction(token ?? "", goalTransaction?.Id ?? "");
-      } else {
-        addFavGoal(goal.Id, Number(goal.vote_count ?? 0) + 1);
-        addFavProjectTransaction(
+        await removeFavGoalTransaction(
           token ?? "",
-          goal.goal ?? "",
-          "",
-          userId ?? "",
-          timestamp,
+          goal.Id,
+          goalTransaction?.Id ?? "",
         );
+        await removeFavGoal(token ?? "", goalTransaction?.Id ?? "");
+      } else {
+        const likeId = await addFavGoal(token ?? "", userId ?? "", timestamp);
+        await linkLikeToGoal(goal.Id, likeId?.Id ?? "", token ?? "");
       }
     }
+    onRefetch?.();
+
     const next = !isSelected;
     if (useStore && id) {
       toggleFavorite(id);

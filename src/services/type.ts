@@ -10,6 +10,7 @@ export interface Goal {
 }
 
 export interface Project {
+  timestamp?: string;
   project_id?: string;
   strategy?: string;
   plan?: string;
@@ -47,4 +48,24 @@ export interface ProjectNocoDb {
   timestamp?: string;
   vote_count?: number;
   hidden?: boolean;
+}
+
+export interface GoalTransaction {
+  Id?: string | number;
+  user_id?: string;
+  timestamp?: string;
+  goal?: {
+    Id: string | number;
+    goal: string;
+  };
+}
+
+export interface ProjectTransaction {
+  Id?: string | number;
+  user_id?: string;
+  timestamp?: string;
+  Project?: {
+    Id: string | number;
+    project: string;
+  };
 }

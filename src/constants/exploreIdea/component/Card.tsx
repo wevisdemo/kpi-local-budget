@@ -13,6 +13,7 @@ interface CardProps {
   onProjectsClick?: (goal: Goal) => void;
   className?: string;
   category: IdeaCategory;
+  onRefetch?: () => void;
 }
 
 const PAGE_SIZE = 5;
@@ -22,6 +23,7 @@ const Card = ({
   onProjectsClick,
   className = "",
   category,
+  onRefetch,
 }: CardProps) => {
   const [page, setPage] = useState(1);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -112,6 +114,7 @@ const Card = ({
                 id={goalId}
                 goal={item}
                 count={Number(item.vote_count ?? 0)}
+                onRefetch={onRefetch}
               />
               <button
                 type="button"

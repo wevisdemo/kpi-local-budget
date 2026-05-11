@@ -18,23 +18,17 @@ const ExploreIdea = () => {
   const fillterCategoryGoals = activeCategory
     ? [activeCategory]
     : ideaCategories;
+  const getGoalsFunction = async () => {
+    const data = await getGoals();
+    setGoals(Array.isArray(data) ? data : []);
+  };
+  const getProjectsFunction = async () => {
+    const data = await getProjects();
+    setProjects(Array.isArray(data) ? data : []);
+  };
   useEffect(() => {
-    getGoals()
-      .then((data) => {
-        setGoals(Array.isArray(data) ? data : []);
-      })
-      .catch((error) => {
-        console.error("Failed to load goals", error);
-        setGoals([]);
-      });
-    getProjects()
-      .then((data) => {
-        setProjects(Array.isArray(data) ? data : []);
-      })
-      .catch((error) => {
-        console.error("Failed to load projects", error);
-        setProjects([]);
-      });
+    getGoalsFunction();
+    getProjectsFunction();
   }, []);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const projectsWithCreator = projects.filter(
@@ -136,13 +130,13 @@ const ExploreIdea = () => {
               <div className="flex items-start justify-between gap-4">
                 <div className="text-gray-50">
                   <p className="wv-b6 wv-bold">
-                    {existingProjectPercent.toFixed(1)}%
+                    {proposedProjectPercent.toFixed(1)}%
                   </p>
                   <p className="wv-b6">สิ่งที่กำลังจะทำอยู่แล้ว</p>
                 </div>
                 <div className="text-right text-green-50">
                   <p className="wv-b6 wv-bold">
-                    {proposedProjectPercent.toFixed(1)}%
+                    {existingProjectPercent.toFixed(1)}%
                   </p>
                   <p className="wv-b6">ไอเดียใหม่จากเพื่อนบ้าน</p>
                 </div>
@@ -150,13 +144,13 @@ const ExploreIdea = () => {
               <div className="flex h-[20px] w-full overflow-hidden border border-gray-30 bg-white">
                 <div
                   className="bg-gray-20-80"
-                  style={{ width: `${existingProjectPercent}%` }}
-                  aria-label={`สิ่งที่กำลังจะทำอยู่แล้ว ${existingProjectPercent.toFixed(1)}%`}
+                  style={{ width: `${proposedProjectPercent}%` }}
+                  aria-label={`สิ่งที่กำลังจะทำอยู่แล้ว ${proposedProjectPercent.toFixed(1)}%`}
                 />
                 <div
                   className="bg-green-10-80"
-                  style={{ width: `${proposedProjectPercent}%` }}
-                  aria-label={`ไอเดียใหม่จากเพื่อนบ้าน ${proposedProjectPercent.toFixed(1)}%`}
+                  style={{ width: `${existingProjectPercent}%` }}
+                  aria-label={`ไอเดียใหม่จากเพื่อนบ้าน ${existingProjectPercent.toFixed(1)}%`}
                 />
               </div>
             </div>
@@ -190,7 +184,12 @@ const ExploreIdea = () => {
         </div>
         <div className="grid grid-cols-1 gap-2.5 md:grid-cols-3">
           {fillterCategoryGoals.map((category) => (
-            <Card key={category.id} goal={goals} category={category} />
+            <Card
+              key={category.id}
+              goal={goals}
+              category={category}
+              onRefetch={getGoalsFunction}
+            />
           ))}
         </div>
       </div>

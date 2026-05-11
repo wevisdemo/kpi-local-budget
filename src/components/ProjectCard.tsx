@@ -4,6 +4,8 @@ import { useState } from "react";
 import Tag from "./Tag";
 import type { Project } from "@/src/services/type";
 import FavButton from "./FavButton";
+import dayjs from "dayjs";
+import th from "dayjs/locale/th";
 
 interface ProjectCardProps {
   project: Project;
@@ -56,6 +58,7 @@ export default function ProjectCard({
   }));
   const totalBudget = budgets.reduce((sum, item) => sum + item.value, 0);
   const maxBudget = Math.max(...budgets.map((item) => item.value), 0);
+  dayjs.locale(th);
   return (
     <article className="rounded-[10px] border-2 border-blue-20 bg-white p-4 wv-ibmplexlooped">
       <header className="flex items-start justify-between gap-3">
@@ -64,6 +67,7 @@ export default function ProjectCard({
           id={project.project_id}
           count={Number(likes)}
           project={project}
+          isStep={true}
         />
       </header>
 
@@ -89,16 +93,25 @@ export default function ProjectCard({
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={() => setExpanded((prev) => !prev)}
-        aria-expanded={expanded}
-        className={`${expanded ? "border-b pb-2.5" : ""} mt-3 flex w-full items-center gap-1.5 border-gray-20 pt-2.5 wv-b6 text-gray-40 hover:text-gray-50 cursor-pointer`}
-      >
-        <ChevronIcon open={expanded} />
-        <span className="underline">{expanded ? "ย่อ" : "ดูรายละเอียด"}</span>
-      </button>
+      {type === "propose" && (
+        <div className="mt-1 wv-b6 text-gray-30">
+          <p className="">
+            วันที่เสนอ: {dayjs(project.timestamp).format("DD MMM YYYY")}
+          </p>
+        </div>
+      )}
 
+      {type === "exist" && (
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          aria-expanded={expanded}
+          className={`${expanded ? "border-b pb-2.5" : ""} mt-3 flex w-full items-center gap-1.5 border-gray-20 pt-2.5 wv-b6 text-gray-40 hover:text-gray-50 cursor-pointer`}
+        >
+          <ChevronIcon open={expanded} />
+          <span className="underline">{expanded ? "ย่อ" : "ดูรายละเอียด"}</span>
+        </button>
+      )}
       {expanded && (
         <div className="mt-3 p-3">
           <p className="mb-3 wv-b6 text-gray-40">รายละเอียดตามเอกสารต้นฉบับ</p>
@@ -108,7 +121,7 @@ export default function ProjectCard({
               {project.strategy && (
                 <Detail label="ยุทธศาสตร์" value={project.strategy} />
               )}
-              {project.plan && <Detail label="แนวทาง" value={project.plan} />}
+              {project.plan && <Detail label="แผนงาน" value={project.plan} />}
             </div>
           )}
 

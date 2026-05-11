@@ -55,35 +55,37 @@ export default function ProblemStep({
             ยังไม่มีเป้าหมายในประเด็นนี้
           </p>
         ) : (
-          problems.map((problem, index) => {
-            const goal = problem.goal_ai?.trim() ?? "";
-            const isSelected = selectedProblemId === goal;
+          problems
+            .sort((a, b) => (a.type === "propose" ? 1 : -1))
+            .map((problem, index) => {
+              const goal = problem.goal_ai?.trim() ?? "";
+              const isSelected = selectedProblemId === goal;
 
-            return (
-              <button
-                key={problem.project_id ?? `${goal}-${index}`}
-                type="button"
-                onClick={() => onSelectProblem(goal)}
-                className={`w-full rounded-[10px] border p-5 text-left transition maincategory__${categoryId} ${
-                  isSelected ? "border-zinc-900 border-2" : ""
-                }`}
-              >
-                <div className="flex flex-col gap-[10px]">
-                  <p className="wv-b3 wv-bold wv-ibmplexlooped text-white">
-                    {goal}
-                  </p>
-                  <Tag
-                    variant={problem.type === "propose" ? "propose" : "exist"}
-                    size="small"
-                  >
-                    {problem.type === "propose"
-                      ? "ไอเดียใหม่"
-                      : "สิ่งที่กำลังจะทำอยู่แล้ว"}
-                  </Tag>
-                </div>
-              </button>
-            );
-          })
+              return (
+                <button
+                  key={problem.project_id ?? `${goal}-${index}`}
+                  type="button"
+                  onClick={() => onSelectProblem(goal)}
+                  className={`w-full rounded-[10px] border p-5 text-left transition maincategory__${categoryId} ${
+                    isSelected ? "border-zinc-900 border-2" : ""
+                  }`}
+                >
+                  <div className="flex flex-col gap-[10px]">
+                    <p className="wv-b3 wv-bold wv-ibmplexlooped text-white">
+                      {goal}
+                    </p>
+                    <Tag
+                      variant={problem.type === "propose" ? "propose" : "exist"}
+                      size="small"
+                    >
+                      {problem.type === "propose"
+                        ? "ไอเดียใหม่"
+                        : "สิ่งที่กำลังจะทำอยู่แล้ว"}
+                    </Tag>
+                  </div>
+                </button>
+              );
+            })
         )}
         {!isProposing && (
           <button

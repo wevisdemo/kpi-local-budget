@@ -196,7 +196,7 @@ function WvNavButton({
   const pathname = usePathname();
   return (
     <Link
-      className={`wv_nav-button wv-ibmplex wv-b6 ${
+      className={`wv_nav-button wv-ibmplexlooped wv-b6 ${
         dark ? "wv_nav-button--white" : "wv_nav-button--black"
       } ${active ? "wv_nav-button--active" : ""}`}
       href={href}
