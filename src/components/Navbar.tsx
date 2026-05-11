@@ -231,10 +231,10 @@ export default function Navbar() {
       >
         สำรวจไอเดีย
       </WvNavButton>
-      <WvNavButton dark active={pathname === "/plan"} href="/plan">
+      <WvNavButton dark active={pathname === "/plan"} href="#">
         สำรวจแผน
       </WvNavButton>
-      <WvNavButton dark active={pathname === "/about"} href="/about">
+      <WvNavButton dark active={pathname === "/about"} href="#">
         เกี่ยวกับเรา
       </WvNavButton>
     </WvNavbar>
