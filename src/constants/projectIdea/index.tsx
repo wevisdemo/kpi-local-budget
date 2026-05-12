@@ -14,6 +14,7 @@ import { getProjectsByCategory } from "@/src/services/exploreIdea";
 import { Project } from "@/src/services/type";
 import { getProject } from "@/src/lib/getProject";
 import ProjectCardIdea from "@/src/components/ProjectCardIdea";
+import { projectCategories } from "./data";
 
 const buildCombinedProjects = (
   projects: ProjectRecord[],
@@ -29,8 +30,7 @@ const buildCombinedProjects = (
     const sheetMatch = projectsSheet.find(
       (sheet) => sheet.project && sheet.project === item.project,
     );
-    const type: Project["type"] =
-      item.creator_id != null ? "propose" : "exist";
+    const type: Project["type"] = item.creator_id != null ? "propose" : "exist";
 
     if (sheetMatch) {
       return {
@@ -80,6 +80,10 @@ const ProjectIdea = () => {
     (acc, goal) => acc + (Number(goal.project_count) ?? 0),
     0,
   );
+
+  const color = projectCategories.find(
+    (item) => item.title === category,
+  )?.color;
 
   const getGoalsFunction = async () => {
     const data = await getGoalsByCategory(category ?? "");
@@ -184,7 +188,7 @@ const ProjectIdea = () => {
               >
                 ภาพรวมไอเดีย
               </Button>
-              <p className="wv-h6 wv-bold text-white wv-ibmplexlooped">
+              <p className="wv-h6 wv-bold text-white wv-ibmplexlooped text-balance">
                 {IdeaCategory?.title}
               </p>
               <div className="flex flex-col gap-[3px]">
@@ -214,6 +218,7 @@ const ProjectIdea = () => {
                     getProjectsFunction();
                     getGoalsFunction();
                   }}
+                  color={color ?? ""}
                 />
               ))}
             </div>

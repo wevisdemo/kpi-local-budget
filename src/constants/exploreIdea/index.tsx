@@ -187,7 +187,7 @@ const ExploreIdea = () => {
               style={{
                 borderColor: "var(--maincategory-color)",
               }}
-              className={`wv-b5 wv-ibmplexlooped maincategory__${category.id} cursor-pointer rounded-[10px] border bg-transparent! px-2.5 py-1.5 transition-colors hover:bg-gray-10! text-gray-50 ${activeCategory?.id === category.id ? "bg-white!" : ""}`}
+              className={`wv-b5 wv-ibmplexlooped maincategory__${category.id} cursor-pointer rounded-[10px] border bg-transparent! px-2.5 py-1.5 transition-colors hover:bg-gray-10! text-gray-50 ${activeCategory?.id === category.id ? "bg-white!" : ""} ${activeCategory && activeCategory?.id !== category.id ? "opacity-20" : ""}`}
             >
               {category.title}
             </button>

@@ -47,7 +47,7 @@ const Card = ({
 
   return (
     <div
-      className={`rounded-[10px] border-2  bg-white! maincategory__${category.id}`}
+      className={`flex h-full flex-col rounded-[10px] border-2  bg-white! maincategory__${category.id}`}
       style={{
         borderColor: "var(--maincategory-color)",
       }}
@@ -65,7 +65,7 @@ const Card = ({
         </h2>
       </div>
 
-      <div className="p-5 flex gap-2.5">
+      <div className="p-5 flex gap-2.5 justify-between">
         <div className="">
           <h3 className="wv-b5 wv-bold text-black wv-ibmplexlooped">
             {filteredGoals.length} เป้าหมาย
@@ -84,53 +84,55 @@ const Card = ({
         </div>
       </div>
 
-      {pagedGoals.map((item, index) => {
-        const projectCount = item.project_count ?? 0;
-        const goalId =
-          item.Id !== undefined && item.Id !== null
-            ? String(item.Id)
-            : undefined;
-        const typeTag = item.creator_id ? "propose" : "exist";
+      <div className="flex-1">
+        {pagedGoals.map((item, index) => {
+          const projectCount = item.project_count ?? 0;
+          const goalId =
+            item.Id !== undefined && item.Id !== null
+              ? String(item.Id)
+              : undefined;
+          const typeTag = item.creator_id ? "propose" : "exist";
 
-        return (
-          <article
-            key={goalId ?? `${startIndex}-${index}`}
-            className={[
-              "wv-ibmplexlooped flex items-start justify-between gap-3 border-b border-gray-20 pt-2.5 px-5 pb-5 last:border-b-0",
-              className,
-            ].join(" ")}
-          >
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <h3 className="wv-b4 text-black">{item.goal ?? "-"}</h3>
-              <Tag variant={typeTag} size="small">
-                {typeTag === "exist"
-                  ? "สิ่งที่กำลังจะทำอยู่แล้ว"
-                  : "ไอเดียใหม่จากเพื่อนบ้าน"}
-              </Tag>
-            </div>
+          return (
+            <article
+              key={goalId ?? `${startIndex}-${index}`}
+              className={[
+                "wv-ibmplexlooped flex items-start justify-between gap-3 border-b border-gray-20 pt-2.5 px-5 pb-5 last:border-b-0",
+                className,
+              ].join(" ")}
+            >
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <h3 className="wv-b4 text-black">{item.goal ?? "-"}</h3>
+                <Tag variant={typeTag} size="small">
+                  {typeTag === "exist"
+                    ? "สิ่งที่กำลังจะทำอยู่แล้ว"
+                    : "ไอเดียใหม่จากเพื่อนบ้าน"}
+                </Tag>
+              </div>
 
-            <div className="flex shrink-0 flex-col items-end justify-between gap-3 self-stretch">
-              <FavButtonGoal
-                id={goalId}
-                goal={item}
-                count={Number(item.vote_count ?? 0)}
-                onRefetch={onRefetch}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  router.push(
-                    `${basePath}/explore-idea/project?category=${category.title}&goal=${item.goal}`,
-                  )
-                }
-                className="wv-b6 wv-ibmplexlooped cursor-pointer text-gray-50 underline hover:text-black"
-              >
-                {projectCount} โครงการ
-              </button>
-            </div>
-          </article>
-        );
-      })}
+              <div className="flex shrink-0 flex-col items-end justify-between gap-3 self-stretch">
+                <FavButtonGoal
+                  id={goalId}
+                  goal={item}
+                  count={Number(item.vote_count ?? 0)}
+                  onRefetch={onRefetch}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push(
+                      `${basePath}/explore-idea/project?category=${category.title}&goal=${item.goal}`,
+                    )
+                  }
+                  className="wv-b6 wv-ibmplexlooped cursor-pointer text-gray-50 underline hover:text-black"
+                >
+                  {projectCount} โครงการ
+                </button>
+              </div>
+            </article>
+          );
+        })}
+      </div>
 
       {showPagination && (
         <div className="wv-ibmplexlooped flex items-center justify-center gap-6 border-t border-gray-20 py-3">

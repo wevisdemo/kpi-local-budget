@@ -131,7 +131,7 @@ export default function LandingPage() {
           {ideaCategories.map((category) => (
             <div
               key={category.id}
-              className={`maincategory__${category.id} lg:flex-1 flex-none`}
+              className={`maincategory__${category.id} lg:flex-1 flex-none w-[72px]`}
             >
               <Image
                 src={`${basePath}/img/${category.id}.png`}

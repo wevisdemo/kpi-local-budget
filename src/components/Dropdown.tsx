@@ -116,6 +116,7 @@ export default function Dropdown({
           <ul className="flex max-h-[320px] flex-col overflow-y-auto py-1.5">
             {options.map((option) => {
               const isSelected = selected?.value === option.value;
+              const isLast = option.value === options[options.length - 1].value;
               return (
                 <li key={option.value}>
                   <button
@@ -123,9 +124,9 @@ export default function Dropdown({
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => handleSelect(option.value)}
-                    className={`wv-b5 flex w-full cursor-pointer items-start gap-2.5 px-5 py-1.5 text-left transition-colors hover:bg-white/30 border-b border-white ${
+                    className={`wv-b5 flex w-full cursor-pointer items-start gap-2.5 px-5 py-1.5 text-left transition-colors hover:bg-white! border-b border-white ${
                       isSelected ? "wv-bold" : ""
-                    } ${open ? "bg-gray-10!" : ""}`}
+                    } ${open ? "bg-gray-10!" : ""} ${isLast ? "border-b-0" : ""}`}
                   >
                     <span aria-hidden="true" className="leading-normal ml-5">
                       •
