@@ -76,7 +76,7 @@ const Card = ({
         </div>
         <div className="">
           <a
-            href={`${basePath}/explore-idea/project?category=${category.title}`}
+            href={`${basePath}/explore-idea/project?category=${category.title}&goal=`}
             className="wv-b6 wv-bold text-gray-30 wv-ibmplexlooped underline hover:text-black"
           >
             {projectCount} โครงการ
