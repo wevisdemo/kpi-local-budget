@@ -121,7 +121,7 @@ const Card = ({
                   type="button"
                   onClick={() =>
                     router.push(
-                      `${basePath}/explore-idea/project?category=${category.title}&goal=${item.goal}`,
+                      `/explore-idea/project?category=${category.title}&goal=${item.goal}`,
                     )
                   }
                   className="wv-b6 wv-ibmplexlooped cursor-pointer text-gray-50 underline hover:text-black"
