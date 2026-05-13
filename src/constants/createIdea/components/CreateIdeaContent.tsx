@@ -36,6 +36,7 @@ export default function CreateIdeaContent() {
     goBack,
     handleSubmitIdea,
     resetFlow,
+    scrollToBottom,
   } = useCreateIdea();
 
   return (
@@ -115,6 +116,7 @@ export default function CreateIdeaContent() {
               onSelectProblem={setSelectedProblemId}
               onChangeCustomProblemLabel={setCustomProblemLabel}
               onConfirmCustomProblem={goNext}
+              scrollToBottom={scrollToBottom}
             />
           )}
 

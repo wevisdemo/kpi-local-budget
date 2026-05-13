@@ -441,6 +441,7 @@ export function useCreateIdea() {
     goBack,
     handleSubmitIdea,
     resetFlow,
+    scrollToBottom,
   };
 }
 // if (effectiveProblemLabelId) {

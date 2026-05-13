@@ -36,7 +36,17 @@ export default function CategoryStep({
               />
             </div>
             <p className="relative wv-b2 wv-bold wv-ibmplexlooped text-center z-20 text-balance">
-              {category.title}
+              {category.title === "สวัสดิการและสังคมสงเคราะห์" ? (
+                <>
+                  สวัสดิการและ
+                  <br className="md:hidden block" />
+                  สังคม
+                  <br className="md:hidden block" />
+                  สงเคราะห์
+                </>
+              ) : (
+                category.title
+              )}
             </p>
             {/* <p
               className={`mt-1 text-sm ${

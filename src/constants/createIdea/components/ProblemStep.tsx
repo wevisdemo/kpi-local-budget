@@ -15,6 +15,7 @@ interface ProblemStepProps {
   onSelectProblem: (problemId: string | null) => void;
   onChangeCustomProblemLabel: (value: string) => void;
   onConfirmCustomProblem: () => void;
+  scrollToBottom: () => void;
 }
 
 export default function ProblemStep({
@@ -26,6 +27,7 @@ export default function ProblemStep({
   onSelectProblem,
   onChangeCustomProblemLabel,
   onConfirmCustomProblem,
+  scrollToBottom,
 }: ProblemStepProps) {
   const isProposing = selectedProblemId === PROPOSE_NEW_PROBLEM;
   const trimmedCustomProblem = customProblemLabel.trim();
@@ -66,7 +68,10 @@ export default function ProblemStep({
                 <button
                   key={problem.project_id ?? `${goal}-${index}`}
                   type="button"
-                  onClick={() => onSelectProblem(goal)}
+                  onClick={() => {
+                    onSelectProblem(goal);
+                    scrollToBottom();
+                  }}
                   className={`w-full rounded-[10px] border p-5 text-left transition maincategory__${categoryId} ${
                     isSelected ? "border-zinc-900 border-2" : "border-0"
                   }`}

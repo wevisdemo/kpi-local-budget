@@ -13,7 +13,9 @@ export default function SuccessStep({ onReset }: SuccessStepProps) {
     <section className="md:max-w-[500px] mx-auto max-w-[250px] h-full pt-20 pb-20 wv-ibmplexlooped flex flex-col items-center justify-center gap-10">
       <div className="flex flex-col items-center justify-center gap-2.5">
         <p className="wv-h5 wv-bold text-black text-center">
-          ขอบคุณสำหรับไอเดีย!
+          ขอบคุณสำหรับ
+          <br className="md:hidden block" />
+          ไอเดีย!
         </p>
         <p className="wv-b4 text-gray-40 text-center">
           ความคิดเห็นของคุณถูกบันทึกแล้ว
