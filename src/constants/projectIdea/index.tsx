@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { ideaCategories } from "../createIdea/data";
 import Image from "next/image";
@@ -63,9 +63,12 @@ const buildCombinedProjects = (
 
 const ProjectIdea = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const category = searchParams.get("category");
-  const goal = searchParams.get("goal");
   const router = useRouter();
+  const [goal, setGoal] = useState<string | null>(
+    () => searchParams.get("goal") || null,
+  );
   const [goals, setGoals] = useState<Goal[]>([]);
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [projectsSheet, setProjectsSheet] = useState<Project[]>([]);
@@ -146,14 +149,18 @@ const ProjectIdea = () => {
   );
 
   const handleGoalChange = (nextGoal: string | null) => {
-    const params = new URLSearchParams(searchParams.toString());
+    setGoal(nextGoal);
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
     if (nextGoal === null) {
       params.delete("goal");
     } else {
       params.set("goal", nextGoal);
     }
     const query = params.toString();
-    router.push(query ? `?${query}` : "?");
+    const basePathPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const url = `${basePathPrefix}${pathname}${query ? `?${query}` : ""}`;
+    window.history.replaceState(null, "", url);
   };
   if (isGoalsLoading) {
     return null;

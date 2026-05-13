@@ -117,17 +117,13 @@ const Card = ({
                   count={Number(item.vote_count ?? 0)}
                   onRefetch={onRefetch}
                 />
-                <button
+                <a
                   type="button"
-                  onClick={() =>
-                    router.push(
-                      `/explore-idea/project?category=${category.title}&goal=${item.goal}`,
-                    )
-                  }
+                  href={`${basePath}/explore-idea/project?category=${category.title}&goal=${item.goal}`}
                   className="wv-b6 wv-ibmplexlooped cursor-pointer text-gray-50 underline hover:text-black"
                 >
                   {projectCount} โครงการ
-                </button>
+                </a>
               </div>
             </article>
           );

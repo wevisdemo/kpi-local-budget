@@ -68,7 +68,7 @@ export default function ProblemStep({
                   type="button"
                   onClick={() => onSelectProblem(goal)}
                   className={`w-full rounded-[10px] border p-5 text-left transition maincategory__${categoryId} ${
-                    isSelected ? "border-zinc-900 border-2" : ""
+                    isSelected ? "border-zinc-900 border-2" : "border-0"
                   }`}
                 >
                   <div className="flex flex-col gap-[10px]">
