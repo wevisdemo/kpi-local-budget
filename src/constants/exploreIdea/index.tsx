@@ -41,6 +41,7 @@ const ExploreIdea = () => {
       active = false;
     };
   }, []);
+  // console.log(goals.find((goal) => goal.category === "สาธารณสุขและสุขภาวะ"));
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const projectsWithCreator = projects.filter(
     (project): project is ProjectNocoDb & { creator_id: string } =>

@@ -22,8 +22,13 @@ const buildCombinedProjects = (
   category: string | null,
   goal: string | null,
 ): Project[] => {
+  const proposedNames = new Set(
+    projects.map((item) => item.project).filter((name): name is string => !!name),
+  );
+
   const existing: Project[] = projectsSheet
     .filter((item) => !category || item.category_ai === category)
+    .filter((item) => !item.project || !proposedNames.has(item.project))
     .map((item) => ({ ...item, type: "exist" }));
 
   const proposed: Project[] = projects.map((item) => {

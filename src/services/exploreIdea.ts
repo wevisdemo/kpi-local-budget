@@ -10,7 +10,7 @@ import { ProjectRecord } from "./submitTransaction";
 import type { Goal, GoalTransaction, ProjectNocoDb, Transaction } from "./type";
 
 export async function getGoals(): Promise<Goal[]> {
-  const response = await fetch(GOAL_ENDPOINT_SORT);
+  const response = await fetch(GOAL_ENDPOINT_SORT + "&limit=9999");
 
   if (!response.ok) {
     const text = await response.text().catch(() => "");
@@ -51,7 +51,7 @@ export async function getGoals(): Promise<Goal[]> {
 // }
 
 export async function getProjects(): Promise<ProjectNocoDb[]> {
-  const response = await fetch(PROJECT_ENDPOINT);
+  const response = await fetch(PROJECT_ENDPOINT + "?limit=9999");
 
   if (!response.ok) {
     const text = await response.text().catch(() => "");
