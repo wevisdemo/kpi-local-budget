@@ -9,6 +9,27 @@ export interface Goal {
   project_count?: number;
 }
 
+export interface GoalSheet {
+  Id?: string | number;
+  goal?: string;
+  category?: string;
+  all_budget?: number;
+  project_count?: number;
+}
+
+export interface Plan {
+  project_id?: string;
+  project?: string;
+  detail?: string;
+  budget?: number;
+  location?: string;
+  organization?: string;
+  strategy?: string;
+  substrategy?: string;
+  plan?: string;
+  deadline?: string;
+}
+
 export interface Project {
   timestamp?: string;
   project_id?: string;

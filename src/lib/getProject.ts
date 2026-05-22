@@ -39,9 +39,10 @@ const schemaMap = Object({
 });
 
 export async function getProject(): Promise<Project[]> {
-  const project = await Spreadsheet(
-    "1cg_1klqmRep5yXDrTeUybDrZQl4WgLoH_Wd_eOD3lNk",
-  ).get("แผนพัฒนาท้องถิ่น", schemaMap);
+  const project = await Spreadsheet("1XQvFG7nYAxjhie6jIvkEE3_p2If8CUga").get(
+    "แผนพัฒนาท้องถิ่น 66-70",
+    schemaMap,
+  );
 
   return project.map((item) => ({
     project_id: item.project_id,

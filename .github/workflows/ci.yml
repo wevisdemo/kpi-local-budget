@@ -46,7 +46,7 @@ jobs:
         run: pnpm tsc --noEmit
 
       - name: Build
-        run: pnpm build
+        run: pnpm build:suwankhuha
         env:
           BASE_PATH: /kpi-local-budget
           NEXT_PUBLIC_BASE_PATH: /kpi-local-budget
