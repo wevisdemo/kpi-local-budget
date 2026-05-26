@@ -6,17 +6,23 @@ import {
   createTransformer,
 } from "sheethuahua";
 import { Project } from "../services/type";
+import { currentSite } from "../config/sites";
 
-// Budget cells in the sheet are formatted with thousands separators
-// (e.g. "10,200,000"), which `asNumber()` cannot parse directly.
+// Budget cells may contain thousands separators ("10,200,000"), trailing
+// Thai annotations ("5000000 (เงินอุดหนุนเฉพาะกิจ)"), or pure text
+// ("กฎหมาย"). Extract first numeric run; cells without digits become
+// undefined so display sites can render an empty value.
 const asFormattedNumber = () =>
-  createTransformer<number>(
+  createTransformer<number | undefined>(
     (value) => {
-      const cleaned = value.replace(/,/g, "").trim();
-      if (cleaned === "") return Number.NaN;
-      return Number(cleaned);
+      const match = value.match(/[\d,]+(?:\.\d+)?/);
+      if (!match) return undefined;
+      const cleaned = match[0].replace(/,/g, "");
+      if (cleaned === "") return undefined;
+      const parsed = Number(cleaned);
+      return Number.isFinite(parsed) ? parsed : undefined;
     },
-    (value) => String(value),
+    (value) => (value === undefined ? "" : String(value)),
   );
 
 const schemaMap = Object({
@@ -39,8 +45,8 @@ const schemaMap = Object({
 });
 
 export async function getProject(): Promise<Project[]> {
-  const project = await Spreadsheet("1XQvFG7nYAxjhie6jIvkEE3_p2If8CUga").get(
-    "แผนพัฒนาท้องถิ่น 66-70",
+  const project = await Spreadsheet(currentSite.sheetId_1y).get(
+    currentSite.sheetName_1y,
     schemaMap,
   );
 

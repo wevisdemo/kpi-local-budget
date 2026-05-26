@@ -4,6 +4,11 @@ export interface SiteConfig {
   subtext: string;
   link: string;
   planLink: string;
+  nocoDb: string;
+  sheetId_1y: string;
+  sheetName_1y: string;
+  sheetId_1y_5: string;
+  sheetName_1y_5: string;
 }
 
 export const sites: Record<string, SiteConfig> = {
@@ -13,6 +18,11 @@ export const sites: Record<string, SiteConfig> = {
     subtext: "เทศบาลบางคูวัด",
     link: "https://bangkhuwat.kpi-local.com",
     planLink: "https://bangkhuwat.kpi-local.com/plan",
+    nocoDb: "Bangkhuwat",
+    sheetId_1y: "1n-z7KJ1L1pvFNopvr5WgqezWFiPRnzOE",
+    sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
+    sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y_5: "แผนดำเนินงาน",
   },
   suwankhuha: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -20,6 +30,11 @@ export const sites: Record<string, SiteConfig> = {
     subtext: "เทศบาลสุวรรณคูหา",
     link: "https://drive.google.com/file/d/1Zu1nUyzVZw2EHjC-SIDGd5n-qu1fVDxC/view?usp=sharing",
     planLink: "https://suwankhuha.kpi-local.com/plan",
+    nocoDb: "Suwankhuha",
+    sheetId_1y: "1XQvFG7nYAxjhie6jIvkEE3_p2If8CUga",
+    sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
+    sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y_5: "แผนดำเนินงาน",
   },
   site3: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -27,6 +42,11 @@ export const sites: Record<string, SiteConfig> = {
     subtext: "คุณอยากเห็นเทศบาล________ พัฒนาในเรื่องไหน ?",
     link: "https://site3.kpi-local.com",
     planLink: "https://site3.kpi-local.com/plan",
+    nocoDb: "Site3",
+    sheetId_1y: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y: "แผนดำเนินงาน",
+    sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y_5: "แผนดำเนินงาน",
   },
   site4: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -34,6 +54,11 @@ export const sites: Record<string, SiteConfig> = {
     subtext: "คุณอยากเห็นเทศบาล________ พัฒนาในเรื่องไหน ?",
     link: "https://site4.kpi-local.com",
     planLink: "https://site4.kpi-local.com/plan",
+    nocoDb: "Site4",
+    sheetId_1y: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y: "แผนดำเนินงาน",
+    sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y_5: "แผนดำเนินงาน",
   },
   site5: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -41,6 +66,11 @@ export const sites: Record<string, SiteConfig> = {
     subtext: "คุณอยากเห็นเทศบาล________ พัฒนาในเรื่องไหน ?",
     link: "https://site5.kpi-local.com",
     planLink: "https://site5.kpi-local.com/plan",
+    nocoDb: "Site5",
+    sheetId_1y: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y: "แผนดำเนินงาน",
+    sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
+    sheetName_1y_5: "แผนดำเนินงาน",
   },
 };
 

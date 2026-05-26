@@ -219,6 +219,8 @@ const LocalDevelopmentTab = () => {
   const totalProjects = uniqueProjectLines.size;
   const totalGoals = uniqueGoalLines.size;
 
+  console.log(projects);
+
   return (
     <div className="w-full min-h-screen">
       <div className="max-w-[1040px] mx-auto lg:px-0 flex flex-col gap-2.5">

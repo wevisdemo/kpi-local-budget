@@ -1,11 +1,10 @@
-const GOAL_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Goal";
-const GOAL_ENDPOINT_SORT =
-  "https://tornjak.punchup.world/kpi-local/Goal?sort=-vote_count";
+import { currentSite } from "../config/sites";
+const GOAL_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Goal_${currentSite.nocoDb}`;
+const GOAL_ENDPOINT_SORT = `https://tornjak.punchup.world/kpi-local/Goal_${currentSite.nocoDb}?sort=-vote_count`;
 // const TRANSACTION_ENDPOINT =
 //   "https://tornjak.punchup.world/kpi-local/Transaction";
-const PROJECT_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Project";
-const GOAL_TRANSACTION_ENDPOINT =
-  "https://tornjak.punchup.world/kpi-local/Goal_Like";
+const PROJECT_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Project_${currentSite.nocoDb}`;
+const GOAL_TRANSACTION_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Goal_Like_${currentSite.nocoDb}`;
 import { ProjectRecord } from "./submitTransaction";
 import type { Goal, GoalTransaction, ProjectNocoDb, Transaction } from "./type";
 

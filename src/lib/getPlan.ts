@@ -6,6 +6,7 @@ import {
   createTransformer,
 } from "sheethuahua";
 import { Plan } from "../services/type";
+import { currentSite } from "../config/sites";
 
 // Budget cells in the sheet are formatted with thousands separators
 // (e.g. "10,200,000"), which `asNumber()` cannot parse directly.
@@ -33,9 +34,10 @@ const schemaMap = Object({
 });
 
 export async function getPlanSheet(): Promise<Plan[]> {
-  const plan = await Spreadsheet(
-    "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
-  ).get("แผนดำเนินงาน", schemaMap);
+  const plan = await Spreadsheet(currentSite.sheetId_1y_5).get(
+    currentSite.sheetName_1y_5,
+    schemaMap,
+  );
 
   return plan.map((item) => ({
     project_id: item.project_id,

@@ -1,15 +1,13 @@
 import { ProjectTransaction, GoalTransaction } from "./type";
-
+import { currentSite } from "../config/sites";
 // const TRANSACTION_ENDPOINT =
 //   "https://tornjak.punchup.world/kpi-local/Transaction";
-const PROJECT_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Project";
-const GOAL_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Goal";
-const CATEGORY_ENDPOINT = "https://tornjak.punchup.world/kpi-local/Category";
+const PROJECT_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Project_${currentSite.nocoDb}`;
+const GOAL_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Goal_${currentSite.nocoDb}`;
+const CATEGORY_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Category_${currentSite.nocoDb}`;
 const BATCH_ENDPOINT = "https://tornjak.punchup.world/batch/kpi-local/";
-const GOAL_TRANSACTION_ENDPOINT =
-  "https://tornjak.punchup.world/kpi-local/Goal_Like";
-const PROJECT_TRANSACTION_ENDPOINT =
-  "https://tornjak.punchup.world/kpi-local/Project_Like";
+const GOAL_TRANSACTION_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Goal_Like_${currentSite.nocoDb}`;
+const PROJECT_TRANSACTION_ENDPOINT = `https://tornjak.punchup.world/kpi-local/Project_Like_${currentSite.nocoDb}`;
 export interface BatchRequest {
   path: string;
   method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";

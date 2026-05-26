@@ -184,9 +184,9 @@ const PlanIdea = () => {
             </p>
           </div>
 
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, index) => (
             <ProjectCardIdeaPlan
-              key={project.project_id}
+              key={`${project.project_id}-${index}`}
               project={project}
               color={color ?? ""}
             />

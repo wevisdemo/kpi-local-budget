@@ -37,11 +37,11 @@ function WvNavbar({
 
   return (
     <div
-      className={`wv_navbar ${dark ? "wv_navbar--black" : "wv_navbar--white"} z-10`}
+      className={`wv_navbar ${dark ? "wv_navbar--black" : "wv_navbar--white"} z-10 py-2.5!`}
     >
       <div className="wv_navbar__logo">
         <a
-          className="wv_navbar__logo__link"
+          className="wv_navbar__logo__link items-center!"
           href={homeHref}
           aria-label="Go to WeVis.info"
         >
@@ -92,7 +92,7 @@ function WvNavbar({
           {logoAddonSrc && (
             <img
               src={logoAddonSrc}
-              className="wv_navbar__logo__addon"
+              className="md:w-[26px] w-[23px] md:h-[50px] h-[45px]"
               alt={logoAddonAlt}
               height={logoAddonHeight}
               width={logoAddonWidth}
