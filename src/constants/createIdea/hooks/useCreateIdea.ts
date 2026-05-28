@@ -346,31 +346,31 @@ export function useCreateIdea() {
         if (isProposingNewProblem) {
           if (goalId) {
             linkRequests.push({
-              path: `/Goal_${currentSite.nocoDb}/${goalId}/hm/project_count/${projectId}`,
+              path: `/${currentSite.nocoDb}_Goal/${goalId}/hm/project_count/${projectId}`,
               method: "POST",
             });
           }
 
           if (categoryId != null) {
             linkRequests.push({
-              path: `/Category_${currentSite.nocoDb}/${categoryId}/hm/project_count/${projectId}`,
+              path: `/${currentSite.nocoDb}_Category/${categoryId}/hm/project_count/${projectId}`,
               method: "POST",
             });
             if (goalId) {
               linkRequests.push({
-                path: `/Category_${currentSite.nocoDb}/${categoryId}/hm/goal_count/${goalId}`,
+                path: `/${currentSite.nocoDb}_Category/${categoryId}/hm/goal_count/${goalId}`,
                 method: "POST",
               });
             }
           }
         } else if (categoryId != null) {
           linkRequests.push({
-            path: `/Category_${currentSite.nocoDb}/${categoryId}/hm/project_count/${projectId}`,
+            path: `/${currentSite.nocoDb}_Category/${categoryId}/hm/project_count/${projectId}`,
             method: "POST",
           });
           if (effectiveProblemLabelId) {
             linkRequests.push({
-              path: `/Goal_${currentSite.nocoDb}/${effectiveProblemLabelId}/hm/project_count/${projectId}`,
+              path: `/${currentSite.nocoDb}_Goal/${effectiveProblemLabelId}/hm/project_count/${projectId}`,
               method: "POST",
             });
           }
