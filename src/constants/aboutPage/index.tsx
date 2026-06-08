@@ -1,3 +1,5 @@
+"use client";
+
 import WvButton from "@wevisdemo/ui/react/button";
 import WvButtonGroup from "@wevisdemo/ui/react/button-group";
 import WvParagraphGroup from "@wevisdemo/ui/react/paragraph-group";
