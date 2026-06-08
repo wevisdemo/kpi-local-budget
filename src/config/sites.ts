@@ -9,12 +9,13 @@ export interface SiteConfig {
   sheetName_1y: string;
   sheetId_1y_5: string;
   sheetName_1y_5: string;
+  date: string;
 }
 
 export const sites: Record<string, SiteConfig> = {
   bangkhuwat: {
     name: "ลานชุมชน คนปั้นเมือง",
-    subtitle: "เทศบาลบางคูวัด จังหวัดปทุมธานี",
+    subtitle: "เทศบาลบางคูวัด จ.ปทุมธานี",
     subtext: "เทศบาลบางคูวัด",
     link: "https://bangkhuwat.kpi-local.com",
     planLink: "https://bangkhuwat.kpi-local.com/plan",
@@ -23,10 +24,11 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
     sheetName_1y_5: "แผนดำเนินงาน",
+    date: "12 ตุลาคม 2564",
   },
   suwankhuha: {
     name: "ลานชุมชน คนปั้นเมือง",
-    subtitle: "เทศบาลสุวรรณคูหา จังหวัดหนองบัวลำภู",
+    subtitle: "เทศบาลสุวรรณคูหา จ.หนองบัวลำภู",
     subtext: "เทศบาลสุวรรณคูหา",
     link: "https://drive.google.com/file/d/1Zu1nUyzVZw2EHjC-SIDGd5n-qu1fVDxC/view?usp=sharing",
     planLink: "https://suwankhuha.kpi-local.com/plan",
@@ -35,6 +37,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
     sheetName_1y_5: "แผนดำเนินงาน",
+    date: "12 ตุลาคม 2564",
   },
   site3: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -47,6 +50,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนดำเนินงาน",
     sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
     sheetName_1y_5: "แผนดำเนินงาน",
+    date: "12 ตุลาคม 2564",
   },
   site4: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -59,6 +63,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนดำเนินงาน",
     sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
     sheetName_1y_5: "แผนดำเนินงาน",
+    date: "12 ตุลาคม 2564",
   },
   site5: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -71,6 +76,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนดำเนินงาน",
     sheetId_1y_5: "1WHEkWHXMt2ynDs_lZ_1eziYH9bNmQ4xzldTIvC65FR4",
     sheetName_1y_5: "แผนดำเนินงาน",
+    date: "12 ตุลาคม 2564",
   },
 };
 

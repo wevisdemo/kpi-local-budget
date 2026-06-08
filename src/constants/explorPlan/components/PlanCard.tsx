@@ -8,7 +8,7 @@ export function PlanCard({
   exploreLabel,
   onExplore,
 }: {
-  title: string;
+  title: string | ReactNode;
   badge: string;
   children: ReactNode;
   exploreLabel?: string;

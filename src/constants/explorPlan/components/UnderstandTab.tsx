@@ -2,12 +2,17 @@ import type { TabId } from "./types";
 import { PlanCard } from "./PlanCard";
 
 export function UnderstandTab({ goTo }: { goTo: (id: TabId) => void }) {
+  const explore = (id: TabId) => {
+    goTo(id);
+    window.scrollTo({ top: 0 });
+  };
+
   return (
     <section
       role="tabpanel"
       aria-labelledby="tab-understand"
       id="panel-understand"
-      className="flex flex-col gap-10 pt-10"
+      className="flex flex-col gap-10 pt-10 max-w-[1040px] mx-auto lg:px-0"
     >
       <header className="flex flex-col gap-3">
         <h2 className="wv-h5 wv-ibmplexlooped wv-bold text-black ">
@@ -21,8 +26,14 @@ export function UnderstandTab({ goTo }: { goTo: (id: TabId) => void }) {
       <div className="grid gap-6 lg:grid-cols-2">
         <PlanCard
           badge="5 ปี"
-          title="แผนพัฒนาท้องถิ่น 5 ปี (พ.ศ. 2566–2570)"
-          onExplore={() => goTo("local")}
+          title={
+            <>
+              <span>แผนพัฒนาท้องถิ่น 5 ปี</span>
+              <br className="md:hidden block" />
+              <span>(พ.ศ. 2566–2570)</span>
+            </>
+          }
+          onExplore={() => explore("local")}
         >
           <p className="wv-b4 wv-ibmplexlooped text-black">
             เอกสารยุทธศาสตร์ที่กำหนดกรอบงบประมาณและรายการโครงการของ อปท. ในระยะ
@@ -50,8 +61,14 @@ export function UnderstandTab({ goTo }: { goTo: (id: TabId) => void }) {
         </PlanCard>
         <PlanCard
           badge="1 ปี"
-          title="แผนดำเนินงานประจำปี งบประมาณ พ.ศ. 2569"
-          onExplore={() => goTo("action")}
+          title={
+            <>
+              <span>แผนดำเนินงานประจำปี งบประมาณ</span>
+              <br className="md:hidden block" />
+              <span>(พ.ศ. 2569)</span>
+            </>
+          }
+          onExplore={() => explore("action")}
         >
           <p className="wv-b4 wv-ibmplexlooped text-black">
             เอกสารที่แปลงแผนพัฒนาท้องถิ่น 5 ปี

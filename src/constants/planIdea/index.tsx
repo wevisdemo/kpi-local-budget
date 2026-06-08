@@ -122,7 +122,7 @@ const PlanIdea = () => {
       <div className="bg-white">
         <TabBar active={"local"} onChange={() => {}} />
       </div>
-      <div className="relative max-w-[1040px] mx-auto py-20 px-5 lg:px-0 flex flex-col gap-2.5">
+      <div className="relative max-w-[1040px] mx-auto md:py-20 py-10 px-5 lg:px-0 flex flex-col gap-2.5">
         <div className="absolute top-[40px] left-0 w-full h-full lg:top-[60px] z-0 pointer-events-none">
           <Image
             src={`${basePath}/img/${IdeaCategory?.id}.png`}
@@ -164,7 +164,7 @@ const PlanIdea = () => {
                 {filteredProjects.length} โครงการ
               </p>
               <p className="wv-b5 text-white wv-ibmplexlooped">
-                เรียงตามจำนวนคนสนับสนุน
+                เรียงตามจำนวนงบประมาณ
               </p>
             </div>
             <p className="wv-b3 text-white wv-ibmplexlooped">

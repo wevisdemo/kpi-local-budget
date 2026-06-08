@@ -96,7 +96,7 @@ const PlanProject = () => {
       <div className="bg-white">
         <TabBar active={"action"} onChange={() => {}} />
       </div>
-      <div className="relative max-w-[1040px] mx-auto py-20 px-5 lg:px-0 flex flex-col gap-2.5">
+      <div className="relative max-w-[1040px] mx-auto md:py-20 py-10 px-5 lg:px-0 flex flex-col gap-2.5">
         <div className="relative z-10 flex flex-col gap-2.5">
           <Button
             variant="secondary"
@@ -129,7 +129,7 @@ const PlanProject = () => {
                 {filteredProjects.length} โครงการ
               </p>
               <p className="wv-b5 text-white wv-ibmplexlooped">
-                เรียงตามจำนวนคนสนับสนุน
+                เรียงตามจำนวนงบประมาณ
               </p>
             </div>
             <p className="wv-b3 text-white wv-ibmplexlooped">

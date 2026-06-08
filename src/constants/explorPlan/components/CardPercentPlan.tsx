@@ -96,7 +96,7 @@ const CardPercentPlan = ({
       }}
     >
       <div
-        className={`p-5 flex items-center justify-between gap-1`}
+        className={`p-5 flex items-center justify-between gap-1 w-full`}
         style={{
           backgroundColor: color,
         }}

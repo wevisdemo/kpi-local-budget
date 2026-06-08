@@ -21,12 +21,12 @@ const ExplorePlan = () => {
   const handleTabChange = (tab: TabId) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
   return (
     <div className="bg-white">
       <TabBar active={activeTab} onChange={handleTabChange} />
-      <div className="mx-auto flex max-w-[1040px] flex-col px-5 py-10 text-black lg:px-0">
+      <div className="mx-auto flex flex-col px-5 py-10 text-black">
         <div>
           <div hidden={activeTab !== "understand"}>
             <UnderstandTab goTo={handleTabChange} />

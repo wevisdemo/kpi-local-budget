@@ -194,7 +194,17 @@ const LocalDevelopmentTab = () => {
       })
       .map((x) => x.category);
 
-    return { known, otherPct, barSegments, sortedCategories };
+    const visibleCategories = sortedCategories.filter(
+      (c) => (known[c.id] ?? 0) > 0,
+    );
+
+    return {
+      known,
+      otherPct,
+      barSegments,
+      sortedCategories,
+      visibleCategories,
+    };
   }, [projects, totalBudget]);
 
   const goalSheets = useMemo(
@@ -211,19 +221,15 @@ const LocalDevelopmentTab = () => {
     }
   }
 
-  const uniqueProjectLines = new Set<string>();
-  for (const project of projects) {
-    const trimmed = project.project?.trim();
-    if (trimmed) uniqueProjectLines.add(trimmed);
-  }
-  const totalProjects = uniqueProjectLines.size;
+  const totalProjects = projects.length;
   const totalGoals = uniqueGoalLines.size;
+  const totalObjectives = budgetPercentByCategoryId.visibleCategories.length;
 
-  console.log(projects);
+  // console.log(projects);
 
   return (
     <div className="w-full min-h-screen">
-      <div className="max-w-[1040px] mx-auto lg:px-0 flex flex-col gap-2.5">
+      <div className="max-w-[1500px] mx-auto lg:px-0 flex flex-col gap-2.5">
         <h1 className="wv-h5 wv-ibmplexlooped wv-bold text-black ">
           สำรวจแผนพัฒนาท้องถิ่น 5 ปี (พ.ศ. 2566-2570)
         </h1>
@@ -237,7 +243,7 @@ const LocalDevelopmentTab = () => {
           >
             เอกสารแผนพัฒนาท้องถิ่นฉบับแรก
           </a>{" "}
-          (เผยแพร่เมื่อ 20 สิงหาคม พ.ศ. 2566)
+          (เผยแพร่เมื่อ {currentSite.date})
         </p>
         <div className=" grid grid-cols-1 gap-2.5 md:grid-cols-2">
           <div className="rounded-[10px] bg-gray-20 p-10">
@@ -263,7 +269,7 @@ const LocalDevelopmentTab = () => {
             <p className="wv-b4 text-black">ภาพรวม</p>
             <div className="flex justify-between items-center">
               <div className="wv-bold">
-                <p className="wv-h6 ">11</p>
+                <p className="wv-h6 ">{totalObjectives}</p>
                 <p className="wv-b3">ประเด็น</p>
               </div>
               <div className="wv-bold">
@@ -296,33 +302,56 @@ const LocalDevelopmentTab = () => {
             หมายเหตุ: คำนวณสัดส่วนจากงบประมาณรวม 5 ปี
           </p>
           <div className="flex flex-row items-stretch gap-2.5 md:flex-col">
-            <div className="w-[50px] min-h-[120px] shrink-0 self-stretch overflow-hidden md:h-[50px] md:min-h-0 md:w-full md:self-auto">
+            <div className="w-[50px] min-h-[120px] shrink-0 self-stretch overflow-visible md:h-[50px] md:min-h-0 md:w-full md:self-auto">
               <div className="flex h-full w-full flex-col md:flex-row">
-                {budgetPercentByCategoryId.barSegments.map((seg) =>
-                  seg.categoryId ? (
-                    <div
+                {budgetPercentByCategoryId.barSegments.map((seg, i) => {
+                  const rightHalf =
+                    i >= budgetPercentByCategoryId.barSegments.length / 2;
+                  const tipPos = rightHalf
+                    ? "md:left-auto md:right-0"
+                    : "md:left-0 md:right-auto";
+                  const category = seg.categoryId
+                    ? ideaCategories.find((c) => c.id === seg.categoryId)
+                    : null;
+                  const isActive = Boolean(
+                    category && activeCategory?.id === category.id,
+                  );
+                  const isDimmed = activeCategory !== null && !isActive;
+                  return (
+                    <button
                       key={seg.key}
-                      className={`maincategory__${seg.categoryId} h-(--seg-pct) min-h-px w-full shrink-0 md:h-full md:w-(--seg-pct) md:min-w-px`}
+                      type="button"
+                      disabled={!category}
+                      onClick={() => {
+                        if (!category) return;
+                        setActiveCategory(isActive ? null : category);
+                      }}
+                      className={`group/seg relative h-(--seg-pct) min-h-px w-full shrink-0 border-0 p-0 md:h-full md:w-(--seg-pct) md:min-w-px hover:border-2 hover:border-black ${seg.categoryId ? `maincategory__${seg.categoryId}` : "bg-gray-30"} ${category ? "cursor-pointer" : "cursor-default"} transition-opacity ${isDimmed ? "opacity-20" : ""}`}
                       style={
                         { "--seg-pct": `${seg.pct}%` } as React.CSSProperties
                       }
-                      title={`${seg.title} ${seg.pct}%`}
-                    />
-                  ) : (
-                    <div
-                      key={seg.key}
-                      className="h-(--seg-pct) min-h-px w-full shrink-0 bg-gray-30 md:h-full md:w-(--seg-pct) md:min-w-px"
-                      style={
-                        { "--seg-pct": `${seg.pct}%` } as React.CSSProperties
-                      }
-                      title={`${seg.title} ${seg.pct}%`}
-                    />
-                  ),
-                )}
+                    >
+                      <div
+                        className={`pointer-events-none absolute left-full top-0 ml-2 z-50 hidden bg-black px-4 py-3 text-white shadow-lg group-hover/seg:block md:top-full md:ml-0 md:mt-2 md:translate-x-0 ${tipPos} w-[275px] max-w-[90vw]`}
+                      >
+                        <p className="wv-b2 wv-ibmplexlooped wv-bold">
+                          {seg.title}
+                        </p>
+                        <div className="wv-b5 wv-ibmplexlooped flex items-center gap-1">
+                          <p>{seg.pct}%</p>
+
+                          <p className="text-gray-30">
+                            ({formatBaht(seg.amount)} ล้านบาท)
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
             <div className="flex flex-wrap gap-2.5">
-              {budgetPercentByCategoryId.sortedCategories.map((category) => {
+              {budgetPercentByCategoryId.visibleCategories.map((category) => {
                 const sharePct =
                   budgetPercentByCategoryId.known[category.id] ?? 0;
                 return (
@@ -337,7 +366,7 @@ const LocalDevelopmentTab = () => {
                     style={{
                       borderColor: "var(--maincategory-color)",
                     }}
-                    className={`wv-b5 wv-ibmplexlooped maincategory__${category.id} cursor-pointer rounded-[10px] border bg-transparent! px-2.5 py-1.5 transition-colors hover:bg-gray-10! text-gray-50 ${activeCategory?.id === category.id ? "bg-white!" : ""} ${activeCategory && activeCategory?.id !== category.id ? "opacity-20" : ""}`}
+                    className={`text-left wv-b5 wv-ibmplexlooped maincategory__${category.id} cursor-pointer rounded-[10px] border bg-transparent! px-2.5 py-1.5 transition-colors hover:bg-gray-10! text-gray-50 ${activeCategory?.id === category.id ? "bg-white!" : ""} ${activeCategory && activeCategory?.id !== category.id ? "opacity-20" : ""}`}
                   >
                     <span
                       className="wv-bold"
@@ -359,7 +388,7 @@ const LocalDevelopmentTab = () => {
         <div className="grid grid-cols-1 gap-2.5 md:grid-cols-3 mt-5">
           {(activeCategory
             ? fillterCategoryGoals
-            : budgetPercentByCategoryId.sortedCategories
+            : budgetPercentByCategoryId.visibleCategories
           ).map((category) => (
             <CardPercent
               key={category.id}
@@ -417,7 +446,7 @@ const LocalDevelopmentTab = () => {
               <div>
                 <p>
                   เอกสารแผนพัฒนาท้องถิ่น 5 ปี (พ.ศ. 2566-2570) ฉบับแรก
-                  จัดโครงการตาม ยุทธศาสตร์และแผนงาน
+                  จัดโครงการตามยุทธศาสตร์และแผนงาน
                   ซึ่งมีภาษาที่ซับซ้อนและเข้าใจยากสำหรับประชาชนทั่วไป
                 </p>
                 <span>
@@ -425,7 +454,7 @@ const LocalDevelopmentTab = () => {
                   ได้แก่
                   <ul className="list-disc pl-[2ch]">
                     <li>
-                      <b>ประเด็น</b>: ะดับภาพรวม มีจำนวนไม่มาก
+                      <b>ประเด็น</b>: ระดับภาพรวม มีจำนวนไม่มาก
                       และสะท้อนทิศทางหลักของการพัฒนา
                     </li>
                     <li>
@@ -462,7 +491,7 @@ const LocalDevelopmentTab = () => {
                   จากนั้นให้ AI จับคู่ “เป้าหมาย” ที่ได้จากขั้นตอนก่อนหน้า
                   เข้ากับประเด็นที่เหมาะสม
                 </p>
-                <b>3. ตรวจสอบและปรับแก้ผลลัพท์โดยผู้จัดทำ</b>
+                <b>3. ตรวจสอบและปรับแก้ผลลัพธ์โดยผู้จัดทำ</b>
               </div>
             </div>
           </div>

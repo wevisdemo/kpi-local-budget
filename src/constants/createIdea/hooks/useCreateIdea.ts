@@ -297,7 +297,7 @@ export function useCreateIdea() {
       if (ideaTitle) {
         projectRequestIndex = createRequests.length;
         createRequests.push({
-          path: `/Project_${currentSite.nocoDb}`,
+          path: `/${currentSite.nocoDb}_Project`,
           method: "POST",
           body: {
             project: ideaTitle,
@@ -313,7 +313,7 @@ export function useCreateIdea() {
         if (isProposingNewProblem) {
           goalRequestIndex = createRequests.length;
           createRequests.push({
-            path: `/Goal_${currentSite.nocoDb}`,
+            path: `/${currentSite.nocoDb}_Goal`,
             method: "POST",
             body: {
               goal: effectiveProblemLabel,

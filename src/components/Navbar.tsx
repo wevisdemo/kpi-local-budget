@@ -101,11 +101,11 @@ function WvNavbar({
             />
           )}
         </a>
-        <div className="flex h-full px-2.5 items-center gap-0 lg:flex-row flex-col lg:gap-2.5">
-          <span className="wv-b3 wv-bold text-green-20 wv-ibmplexlooped">
+        <div className="flex h-full px-2.5 items-start md:items-center flex-col lg:flex-row gap-0.5 lg:gap-2.5">
+          <span className="wv-b3 wv-bold text-green-20 wv-ibmplexlooped whitespace-nowrap">
             {currentSite.name}
           </span>
-          <span className="wv-b6 text-green-40 wv-ibmplexlooped leading-1!">
+          <span className="wv-b6 text-green-30 wv-ibmplexlooped leading-tight truncate">
             {currentSite.subtitle}
           </span>
         </div>

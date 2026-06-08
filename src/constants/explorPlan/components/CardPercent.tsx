@@ -25,13 +25,20 @@ const CardPercent = ({
 }: CardProps) => {
   const [page, setPage] = useState(1);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const filteredGoals = useMemo(() => {
+  const { filteredGoals, totalBudget } = useMemo(() => {
     const rows = goals.filter((item) => item.category === category.title);
-    return [...rows].sort((a, b) => {
-      const byProjects = (b.project_count ?? 0) - (a.project_count ?? 0);
-      if (byProjects !== 0) return byProjects;
-      return (b.all_budget ?? 0) - (a.all_budget ?? 0);
+    const totalBudget = rows.reduce(
+      (acc, goal) => acc + (Number(goal.all_budget) ?? 0),
+      0,
+    );
+    const sorted = [...rows].sort((a, b) => {
+      const pctA =
+        totalBudget > 0 ? ((a.all_budget ?? 0) / totalBudget) * 100 : 0;
+      const pctB =
+        totalBudget > 0 ? ((b.all_budget ?? 0) / totalBudget) * 100 : 0;
+      return pctB - pctA;
     });
+    return { filteredGoals: sorted, totalBudget };
   }, [goals, category.title]);
   const totalPages = Math.max(1, Math.ceil(filteredGoals.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -103,9 +110,6 @@ const CardPercent = ({
       <div className="flex-1">
         {pagedGoals.map((item, index) => {
           const projectCount = item.project_count ?? 0;
-          const totalBudget = goals
-            .filter((goal) => goal.category === category.title)
-            .reduce((acc, goal) => acc + (Number(goal.all_budget) ?? 0), 0);
           const percentage =
             totalBudget > 0 ? ((item.all_budget ?? 0) / totalBudget) * 100 : 0;
           const goalId =
@@ -121,7 +125,7 @@ const CardPercent = ({
                 className,
               ].join(" ")}
             >
-              <div className="flex min-w-0 justify-between items-center">
+              <div className="flex min-w-0 justify-between items-center w-full">
                 <h3 className="wv-b4 text-black text-balance">
                   {item.goal ?? "-"}
                 </h3>

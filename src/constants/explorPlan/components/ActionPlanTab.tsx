@@ -185,7 +185,7 @@ const ActionPlanTab = () => {
 
   return (
     <div className="w-full min-h-screen">
-      <div className="max-w-[1040px] mx-auto lg:px-0 flex flex-col gap-2.5">
+      <div className="max-w-[1500px] mx-auto lg:px-0 flex flex-col gap-2.5">
         <h1 className="wv-h5 wv-ibmplexlooped wv-bold text-black ">
           สำรวจแผนดำเนินงานประจำปีงบประมาณ พ.ศ. 2569
         </h1>
@@ -199,7 +199,7 @@ const ActionPlanTab = () => {
           >
             แผนดำเนินงานฉบับแก้ไขล่าสุด
           </a>{" "}
-          (เผยแพร่เมื่อ 20 สิงหาคม พ.ศ. 2566)
+          (เผยแพร่เมื่อ {currentSite.date})
         </p>
         <div className=" grid grid-cols-1 gap-2.5 md:grid-cols-2">
           <div className="rounded-[10px] bg-gray-20 p-10">
@@ -244,21 +244,53 @@ const ActionPlanTab = () => {
             หมายเหตุ: คำนวณสัดส่วนจากงบประมาณรวม
           </p>
           <div className="flex flex-row items-stretch gap-2.5 md:flex-col">
-            <div className="w-[50px] min-h-[120px] shrink-0 self-stretch overflow-hidden md:h-[50px] md:min-h-0 md:w-full md:self-auto">
+            <div className="w-[50px] min-h-[120px] shrink-0 self-stretch overflow-visible md:h-[50px] md:min-h-0 md:w-full md:self-auto">
               <div className="flex h-full w-full flex-col md:flex-row">
-                {budgetPercentByCategoryId.barSegments.map((seg) => (
-                  <div
-                    key={seg.key}
-                    className="h-(--seg-pct) min-h-px w-full shrink-0 md:h-full md:w-(--seg-pct) md:min-w-px"
-                    style={
-                      {
-                        "--seg-pct": `${seg.pct}%`,
-                        backgroundColor: seg.color,
-                      } as React.CSSProperties
-                    }
-                    title={`${seg.title} ${seg.pct}%`}
-                  />
-                ))}
+                {budgetPercentByCategoryId.barSegments.map((seg, i) => {
+                  const rightHalf =
+                    i >= budgetPercentByCategoryId.barSegments.length / 2;
+                  const category = seg.categoryId
+                    ? budgetPercentByCategoryId.sortedCategories.find(
+                        (c) => c.id === seg.categoryId,
+                      )
+                    : null;
+                  const isActive = Boolean(
+                    category && activeCategory?.id === category.id,
+                  );
+                  const isDimmed = activeCategory !== null && !isActive;
+                  return (
+                    <button
+                      key={seg.key}
+                      type="button"
+                      disabled={!category}
+                      onClick={() => {
+                        if (!category) return;
+                        setActiveCategory(isActive ? null : category);
+                      }}
+                      className={`group/seg relative h-(--seg-pct) min-h-px w-full shrink-0 border-0 p-0 md:h-full md:w-(--seg-pct) md:min-w-px hover:border-2 hover:border-black ${category ? "cursor-pointer" : "cursor-default"} transition-opacity ${isDimmed ? "opacity-20" : ""}`}
+                      style={
+                        {
+                          "--seg-pct": `${seg.pct}%`,
+                          backgroundColor: seg.color,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <div
+                        className={`pointer-events-none absolute left-full top-0 ml-2 z-50 hidden bg-black px-4 py-3 text-white shadow-lg group-hover/seg:block md:top-full md:ml-0 md:mt-2 md:translate-x-0 ${rightHalf ? "md:left-auto md:right-0" : "md:left-0 md:right-auto"} w-[275px] max-w-[90vw]`}
+                      >
+                        <p className="wv-b2 wv-ibmplexlooped wv-bold ">
+                          {seg.title}
+                        </p>
+                        <p className="wv-b5 wv-ibmplexlooped ">
+                          <span className="wv-bold">{seg.pct}%</span>{" "}
+                          <span className="text-gray-30">
+                            ({formatBaht(seg.amount)} ล้านบาท)
+                          </span>
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
             <div className="flex flex-wrap gap-2.5">
@@ -278,7 +310,7 @@ const ActionPlanTab = () => {
                     style={{
                       borderColor: category.color,
                     }}
-                    className={`wv-b5 wv-ibmplexlooped cursor-pointer rounded-[10px] border bg-transparent! px-2.5 py-1.5 transition-colors hover:bg-gray-10! text-gray-50 ${isActive ? "bg-white!" : ""} ${isDimmed ? "opacity-20" : ""}`}
+                    className={`text-left wv-b5 wv-ibmplexlooped cursor-pointer rounded-[10px] border bg-transparent! px-2.5 py-1.5 transition-colors hover:bg-gray-10! text-gray-50 ${isActive ? "bg-white!" : ""} ${isDimmed ? "opacity-20" : ""}`}
                   >
                     <span
                       className="wv-bold"
