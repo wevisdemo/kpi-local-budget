@@ -278,10 +278,10 @@ const ActionPlanTab = () => {
                       <div
                         className={`pointer-events-none absolute left-full top-0 ml-2 z-50 hidden bg-black px-4 py-3 text-white shadow-lg group-hover/seg:block md:top-full md:ml-0 md:mt-2 md:translate-x-0 ${rightHalf ? "md:left-auto md:right-0" : "md:left-0 md:right-auto"} w-[275px] max-w-[90vw]`}
                       >
-                        <p className="wv-b2 wv-ibmplexlooped wv-bold ">
+                        <p className="wv-b2 wv-ibmplexlooped wv-bold text-left">
                           {seg.title}
                         </p>
-                        <p className="wv-b5 wv-ibmplexlooped ">
+                        <p className="wv-b5 wv-ibmplexlooped text-left">
                           <span className="wv-bold">{seg.pct}%</span>{" "}
                           <span className="text-gray-30">
                             ({formatBaht(seg.amount)} ล้านบาท)

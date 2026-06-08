@@ -334,7 +334,7 @@ const LocalDevelopmentTab = () => {
                       <div
                         className={`pointer-events-none absolute left-full top-0 ml-2 z-50 hidden bg-black px-4 py-3 text-white shadow-lg group-hover/seg:block md:top-full md:ml-0 md:mt-2 md:translate-x-0 ${tipPos} w-[275px] max-w-[90vw]`}
                       >
-                        <p className="wv-b2 wv-ibmplexlooped wv-bold">
+                        <p className="wv-b2 wv-ibmplexlooped wv-bold text-left">
                           {seg.title}
                         </p>
                         <div className="wv-b5 wv-ibmplexlooped flex items-center gap-1">
