@@ -117,7 +117,7 @@ export default function ProjectCardPlan({
           {project.deadline && (
             <Detail
               className="mt-3"
-              label="ผลที่คาดว่าจะได้รับ"
+              label="ดำเนินการแล้วเสร็จ"
               value={project.deadline}
             />
           )}

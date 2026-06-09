@@ -101,7 +101,7 @@ const CardPercentPlan = ({
           backgroundColor: color,
         }}
       >
-        <h2 className="wv-b5 wv-ibmplexlooped wv-bold text-white text-balance">
+        <h2 className="wv-b5 wv-ibmplexlooped wv-bold text-white text-balance  w-[70%]">
           {category.title}
         </h2>
 

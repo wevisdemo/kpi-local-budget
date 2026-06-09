@@ -136,7 +136,7 @@ const CardPercent = ({
                     className="wv-b2 wv-ibmplexlooped wv-bold"
                     style={{ color: "var(--maincategory-color)" }}
                   >
-                    {goalPercentage.toFixed(2)}%
+                    {goalPercentage.toFixed(1)}%
                   </p>
                   <a
                     href={`${basePath}/explore-plan/project?category=${category.title}&goal=${item.goal}`}
