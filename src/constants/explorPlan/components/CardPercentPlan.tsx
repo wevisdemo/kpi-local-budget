@@ -144,9 +144,9 @@ const CardPercentPlan = ({
       <div className="flex-1">
         {pagedGoals.map((item, index) => {
           const rowProjectCount = item.projectCount;
-          const percentage =
+          const rowPercentage =
             totalCategoryBudget > 0
-              ? (item.budget / totalCategoryBudget) * 100
+              ? (item.budget / totalCategoryBudget) * percentage
               : 0;
 
           return (
@@ -166,7 +166,7 @@ const CardPercentPlan = ({
                     className="wv-b2 wv-ibmplexlooped wv-bold"
                     style={{ color: color }}
                   >
-                    {percentage.toFixed(1)}%
+                    {rowPercentage.toFixed(1)}%
                   </p>
                   <a
                     href={`${basePath}/explore-plan/plan?category=${category.title}&goal=${encodeURIComponent(item.substrategy)}`}
@@ -186,14 +186,14 @@ const CardPercentPlan = ({
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={Math.round(
-                  Math.min(100, Math.max(0, percentage)),
+                  Math.min(100, Math.max(0, rowPercentage)),
                 )}
-                aria-label={`${percentage.toFixed(2)}% ของงบเป้าหมาย`}
+                aria-label={`${rowPercentage.toFixed(2)}% ของงบเป้าหมาย`}
               >
                 <div
                   className="h-full"
                   style={{
-                    width: `${Math.min(100, Math.max(0, percentage))}%`,
+                    width: `${Math.min(100, Math.max(0, rowPercentage))}%`,
                     backgroundColor: color,
                   }}
                 />

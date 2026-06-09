@@ -110,8 +110,10 @@ const CardPercent = ({
       <div className="flex-1">
         {pagedGoals.map((item, index) => {
           const projectCount = item.project_count ?? 0;
-          const percentage =
-            totalBudget > 0 ? ((item.all_budget ?? 0) / totalBudget) * 100 : 0;
+          const goalPercentage =
+            totalBudget > 0
+              ? ((item.all_budget ?? 0) / totalBudget) * percentage
+              : 0;
           const goalId =
             item.Id !== undefined && item.Id !== null
               ? String(item.Id)
@@ -134,7 +136,7 @@ const CardPercent = ({
                     className="wv-b2 wv-ibmplexlooped wv-bold"
                     style={{ color: "var(--maincategory-color)" }}
                   >
-                    {percentage.toFixed(2)}%
+                    {goalPercentage.toFixed(2)}%
                   </p>
                   <a
                     href={`${basePath}/explore-plan/project?category=${category.title}&goal=${item.goal}`}
@@ -150,14 +152,14 @@ const CardPercent = ({
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={Math.round(
-                  Math.min(100, Math.max(0, percentage)),
+                  Math.min(100, Math.max(0, goalPercentage)),
                 )}
-                aria-label={`${percentage.toFixed(2)}% ของงบเป้าหมาย`}
+                aria-label={`${goalPercentage.toFixed(2)}% ของงบเป้าหมาย`}
               >
                 <div
                   className="h-full"
                   style={{
-                    width: `${Math.min(100, Math.max(0, percentage))}%`,
+                    width: `${Math.min(100, Math.max(0, goalPercentage))}%`,
                     backgroundColor: "var(--maincategory-color)",
                   }}
                 />
