@@ -68,7 +68,7 @@ const CardPercent = ({
           backgroundImage: `url(${basePath}/img/${category.id}.png)`,
         }}
       >
-        <h2 className="wv-b5 wv-ibmplexlooped wv-bold text-white">
+        <h2 className="wv-b5 wv-ibmplexlooped wv-bold text-white text-balance">
           {category.title}
         </h2>
 

@@ -187,7 +187,10 @@ const ActionPlanTab = () => {
     <div className="w-full min-h-screen">
       <div className="max-w-[1500px] mx-auto lg:px-0 flex flex-col gap-2.5">
         <h1 className="wv-h5 wv-ibmplexlooped wv-bold text-black ">
-          สำรวจแผนดำเนินงานประจำปีงบประมาณ พ.ศ. 2569
+          สำรวจแผนดำเนินงาน
+          <br className="md:hidden block" />
+          ประจำปีงบประมาณ <br className="md:hidden block" />
+          พ.ศ. 2569
         </h1>
         <p className="wv-b4 wv-ibmplexlooped text-gray-50 ">
           ใช้ข้อมูลจาก
@@ -198,8 +201,9 @@ const ActionPlanTab = () => {
             className="underline hover:text-black"
           >
             แผนดำเนินงานฉบับแก้ไขล่าสุด
+            <br className="md:hidden block" />
           </a>{" "}
-          (เผยแพร่เมื่อ {currentSite.date})
+          (เผยแพร่เมื่อ {currentSite.acion_date})
         </p>
         <div className=" grid grid-cols-1 gap-2.5 md:grid-cols-2">
           <div className="rounded-[10px] bg-gray-20 p-10">

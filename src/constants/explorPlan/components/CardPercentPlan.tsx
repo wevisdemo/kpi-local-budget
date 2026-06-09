@@ -101,7 +101,7 @@ const CardPercentPlan = ({
           backgroundColor: color,
         }}
       >
-        <h2 className="wv-b5 wv-ibmplexlooped wv-bold text-white">
+        <h2 className="wv-b5 wv-ibmplexlooped wv-bold text-white text-balance">
           {category.title}
         </h2>
 
@@ -166,7 +166,7 @@ const CardPercentPlan = ({
                     className="wv-b2 wv-ibmplexlooped wv-bold"
                     style={{ color: color }}
                   >
-                    {percentage.toFixed(2)}%
+                    {percentage.toFixed(1)}%
                   </p>
                   <a
                     href={`${basePath}/explore-plan/plan?category=${category.title}&goal=${encodeURIComponent(item.substrategy)}`}

@@ -143,13 +143,15 @@ const PlanProject = () => {
             </p>
           </div>
 
-          {filteredProjects.map((project) => (
-            <ProjectCardPlan
-              key={project.project_id}
-              project={project}
-              color={color ?? ""}
-            />
-          ))}
+          {filteredProjects
+            .sort((a, b) => (b.budget ?? 0) - (a.budget ?? 0))
+            .map((project) => (
+              <ProjectCardPlan
+                key={project.project_id}
+                project={project}
+                color={color ?? ""}
+              />
+            ))}
         </div>
       </div>
     </div>

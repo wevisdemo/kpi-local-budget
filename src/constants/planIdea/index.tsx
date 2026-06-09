@@ -40,6 +40,16 @@ function projectMatchesGoal(project: Project, goal: string): boolean {
   return lines.includes(goal);
 }
 
+function getProjectTotalBudget(project: Project): number {
+  return (
+    (project.budget_70 ?? 0) +
+    (project.budget_69 ?? 0) +
+    (project.budget_68 ?? 0) +
+    (project.budget_67 ?? 0) +
+    (project.budget_66 ?? 0)
+  );
+}
+
 const PlanIdea = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -170,13 +180,7 @@ const PlanIdea = () => {
             <p className="wv-b3 text-white wv-ibmplexlooped">
               {formatBaht(
                 filteredProjects.reduce(
-                  (acc, project) =>
-                    acc +
-                    (project.budget_70 ?? 0) +
-                    (project.budget_69 ?? 0) +
-                    (project.budget_68 ?? 0) +
-                    (project.budget_67 ?? 0) +
-                    (project.budget_66 ?? 0),
+                  (acc, project) => acc + getProjectTotalBudget(project),
                   0,
                 ),
               )}{" "}
@@ -184,13 +188,17 @@ const PlanIdea = () => {
             </p>
           </div>
 
-          {filteredProjects.map((project, index) => (
-            <ProjectCardIdeaPlan
-              key={`${project.project_id}-${index}`}
-              project={project}
-              color={color ?? ""}
-            />
-          ))}
+          {filteredProjects
+            .sort(
+              (a, b) => getProjectTotalBudget(b) - getProjectTotalBudget(a),
+            )
+            .map((project, index) => (
+              <ProjectCardIdeaPlan
+                key={`${project.project_id}-${index}`}
+                project={project}
+                color={color ?? ""}
+              />
+            ))}
         </div>
       </div>
     </div>

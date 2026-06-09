@@ -49,7 +49,14 @@ export default function ProjectCardPlan({
       style={{ borderColor: color }}
     >
       <header className="flex items-start justify-between gap-3">
-        <h3 className="wv-b4 wv-bold text-black">{project.project ?? "-"}</h3>
+        <div>
+          <h3 className="wv-b4 wv-bold text-black">{project.project ?? "-"}</h3>
+          {project.substrategy && (
+            <div className="mt-1 wv-b5 text-gray-40">
+              <p className="">กลยุทธ์: {project.substrategy}</p>
+            </div>
+          )}
+        </div>
         <div className="flex flex-col items-end flex-1">
           <p className="wv-b2 wv-bold wv-ibmplexlooped" style={{ color }}>
             {formatBahtLib(totalBudget)}
@@ -62,12 +69,6 @@ export default function ProjectCardPlan({
           </p>
         </div>
       </header>
-
-      {project.substrategy && (
-        <div className="mt-1 wv-b5 text-gray-40">
-          <p className="">กลยุทธ์: {project.substrategy}</p>
-        </div>
-      )}
 
       <button
         type="button"
@@ -148,12 +149,14 @@ function Detail({
   return (
     <div className={className}>
       <p
-        className={`wv-b6 wv-bold ${color ? `text-[${color}]!` : "text-black "}`}
+        className={`wv-b6 wv-bold `}
+        style={{ color: color ? color : "black" }}
       >
         {label}
       </p>
       <p
-        className={`mt-0.5 wv-b6 whitespace-pre-line ${color ? `text-[${color}]!` : "text-gray-50 "}`}
+        className={`mt-0.5 wv-b6 whitespace-pre-line `}
+        style={{ color: color ? color : "black" }}
       >
         {value}
       </p>

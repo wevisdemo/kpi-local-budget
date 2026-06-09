@@ -62,7 +62,14 @@ export default function ProjectCardIdeaPlan({
       style={{ borderColor: color }}
     >
       <header className="flex items-start justify-between gap-3">
-        <h3 className="wv-b4 wv-bold text-black">{project.project ?? "-"}</h3>
+        <div>
+          <h3 className="wv-b4 wv-bold text-black">{project.project ?? "-"}</h3>
+          {project.goal_ai && (
+            <div className="mt-1 wv-b5 text-gray-40">
+              <p className="">{project.goal_ai}</p>
+            </div>
+          )}
+        </div>
         <div className="flex flex-col items-end flex-1">
           <p className="wv-b2 wv-bold wv-ibmplexlooped" style={{ color }}>
             {formatBahtLib(totalBudget)}
@@ -75,12 +82,6 @@ export default function ProjectCardIdeaPlan({
           </p>
         </div>
       </header>
-
-      {project.goal_ai && (
-        <div className="mt-1 wv-b5 text-gray-40">
-          <p className="">{project.goal_ai}</p>
-        </div>
-      )}
 
       {project.type === "propose" && (
         <div className="mt-1 wv-b6 text-gray-30">

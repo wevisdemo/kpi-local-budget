@@ -102,7 +102,7 @@ export default function LandingPage() {
             <button
               className="group bg-gray-10 md:px-[60px] px-[40px] py-[40px] flex flex-col justify-between h-full w-full"
               onClick={() => {
-                router.push(`/plan`);
+                router.push(`/explore-plan`);
               }}
             >
               <div className="flex flex-col gap-2.5 items-start">
