@@ -28,8 +28,13 @@ const ExplorePlan = () => {
     setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
-    window.history.replaceState(null, "", `${path}?${params.toString()}`);
+    window.history.replaceState(
+      null,
+      "",
+      `${basePath}${path}?${params.toString()}`,
+    );
   };
   return (
     <div className="bg-white">
