@@ -5,23 +5,30 @@ import { TabBar } from "./components/TabBar";
 import type { TabId } from "./components/types";
 import { UnderstandTab } from "./components/UnderstandTab";
 import LocalDevelopmentTab from "./components/LocalDevelopmentTab";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const TAB_IDS: readonly TabId[] = ["understand", "local", "action"];
+
+const resolveTab = (value: string | null): TabId =>
+  TAB_IDS.includes(value as TabId) ? (value as TabId) : "understand";
 
 const ExplorePlan = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const router = useRouter();
-  const tabParam = searchParams.get("tab");
-  const activeTab: TabId = TAB_IDS.includes(tabParam as TabId)
-    ? (tabParam as TabId)
-    : "understand";
+  const [activeTab, setActiveTab] = useState<TabId>(() =>
+    resolveTab(searchParams.get("tab")),
+  );
+
+  useEffect(() => {
+    setActiveTab(resolveTab(searchParams.get("tab")));
+  }, [searchParams]);
 
   const handleTabChange = (tab: TabId) => {
+    setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
   };
   return (
     <div className="bg-white">
