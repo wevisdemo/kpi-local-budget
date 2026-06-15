@@ -28,7 +28,8 @@ const ExplorePlan = () => {
     setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
-    window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+    const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
+    window.history.replaceState(null, "", `${path}?${params.toString()}`);
   };
   return (
     <div className="bg-white">
