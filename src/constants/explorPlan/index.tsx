@@ -24,17 +24,27 @@ const ExplorePlan = () => {
     setActiveTab(resolveTab(searchParams.get("tab")));
   }, [searchParams]);
 
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setActiveTab(resolveTab(params.get("tab")));
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
   const handleTabChange = (tab: TabId) => {
     setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
-    window.history.replaceState(
-      null,
-      "",
-      `${basePath}${path}?${params.toString()}`,
-    );
+    const url = `${basePath}${path}?${params.toString()}`;
+    if (tab === "understand") {
+      window.history.replaceState(null, "", url);
+    } else {
+      window.history.pushState(null, "", url);
+    }
   };
   return (
     <div className="bg-white">

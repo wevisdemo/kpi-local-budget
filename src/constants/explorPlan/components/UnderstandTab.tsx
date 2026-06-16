@@ -28,9 +28,10 @@ export function UnderstandTab({ goTo }: { goTo: (id: TabId) => void }) {
           badge="5 ปี"
           title={
             <>
-              <span>แผนพัฒนาท้องถิ่น 5 ปี</span>
-              <br className="md:hidden block" />
-              <span>(พ.ศ. 2566–2570)</span>
+              <span>
+                แผนพัฒนาท้องถิ่น <br className="md:block hidden" />5 ปี
+              </span>
+              <br className="md:hidden block" /> <span>(พ.ศ. 2566–2570)</span>
             </>
           }
           onExplore={() => explore("local")}
@@ -64,8 +65,7 @@ export function UnderstandTab({ goTo }: { goTo: (id: TabId) => void }) {
           title={
             <>
               <span>แผนดำเนินงานประจำปี งบประมาณ</span>
-              <br className="md:hidden block" />
-              <span>(พ.ศ. 2569)</span>
+              <br className="md:hidden block" /> <span>(พ.ศ. 2569)</span>
             </>
           }
           onExplore={() => explore("action")}
