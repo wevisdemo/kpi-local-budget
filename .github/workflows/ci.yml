@@ -61,12 +61,13 @@ jobs:
           mkdir -p dist/${{ matrix.site }}
           cp -r out/* dist/${{ matrix.site }}/
 
-      - name: Upload artifact
+      - name: Upload site artifact
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: site-${{ matrix.site }}
           path: dist/${{ matrix.site }}
+          retention-days: 1
 
   deploy:
     name: Deploy to GitHub Pages
@@ -78,6 +79,26 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Download site artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: site-*
+          path: dist
+
+      - name: Combine sites
+        run: |
+          mkdir -p _site
+          for dir in dist/site-*; do
+            site="${dir#dist/site-}"
+            mkdir -p "_site/$site"
+            cp -r "$dir"/. "_site/$site/"
+          done
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
