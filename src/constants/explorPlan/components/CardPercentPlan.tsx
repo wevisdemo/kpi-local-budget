@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { Plan } from "@/src/services/type";
 import { PlanStrategyCategory } from "./ActionPlanTab";
 import { usePlanColorStore } from "@/src/stores/usePlanColorStore";
+import { basePath } from "@/src/lib/basePath";
 
 interface CardProps {
   planSheets: Plan[];
@@ -29,7 +30,6 @@ const CardPercentPlan = ({
   color,
 }: CardProps) => {
   const [page, setPage] = useState(1);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const setCategoryColor = usePlanColorStore((state) => state.setColor);
   const rememberCategoryColor = () => {
     setCategoryColor(category.title, color);

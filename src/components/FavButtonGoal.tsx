@@ -14,6 +14,7 @@ import {
 } from "../services/submitTransaction";
 import { useCookieConsentStore } from "../stores/useCookieConsentStore";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { basePath } from "@/src/lib/basePath";
 
 interface FavButtonGoalProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -123,7 +124,6 @@ export default function FavButtonGoal({
     };
   }, [confirmOpen]);
 
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const iconSrc = isSelected
     ? `${basePath}/icon/heart-pink-check.svg`
     : `${basePath}/icon/heart-pink.svg`;

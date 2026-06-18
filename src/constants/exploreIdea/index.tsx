@@ -8,6 +8,7 @@ import type { Goal, ProjectNocoDb } from "@/src/services/type";
 import { getGoals, getProjects } from "@/src/services/exploreIdea";
 import { IdeaCategory } from "../createIdea/types";
 import Image from "next/image";
+import { basePath } from "@/src/lib/basePath";
 
 const ExploreIdea = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -42,7 +43,6 @@ const ExploreIdea = () => {
     };
   }, []);
   // console.log(goals.find((goal) => goal.category === "สาธารณสุขและสุขภาวะ"));
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const projectsWithCreator = projects.filter(
     (project): project is ProjectNocoDb & { creator_id: string } =>
       Boolean(project.creator_id),

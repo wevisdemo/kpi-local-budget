@@ -8,6 +8,7 @@ import { IdeaCategory } from "../../createIdea/types";
 import { ideaCategories } from "../../createIdea/data";
 import { getProject } from "@/src/lib/getProject";
 import { currentSite } from "@/src/config/sites";
+import { basePath } from "@/src/lib/basePath";
 import { formatBaht } from "@/src/lib/formatBath";
 import CardPercent from "./CardPercent";
 
@@ -116,8 +117,6 @@ const LocalDevelopmentTab = () => {
       document.removeEventListener("keydown", onKey);
     };
   }, [methodologyModalOpen]);
-
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
   const totalBudget = projects.reduce(
     (acc, project) => acc + projectFiveYearBudget(project),

@@ -3,6 +3,7 @@ import type { Project } from "@/src/services/type";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORY_BORDER_COLORS } from "./ReviewStep";
+import { basePath } from "@/src/lib/basePath";
 
 const IDEA_MAX_LENGTH = 150;
 
@@ -147,7 +148,7 @@ export default function IdeaDetailStep({
             <h3 className="wv-b4 pb-2 wv-ibmplexlooped text-black flex items-center gap-1.5 flex-wrap justify-center">
               <span>หรือกด</span>
               <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon/heart-check.svg`}
+                src={`${basePath}/icon/heart-check.svg`}
                 alt="heart"
                 width={16}
                 height={16}

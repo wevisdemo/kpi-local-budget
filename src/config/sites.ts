@@ -1,5 +1,7 @@
 export interface SiteConfig {
   name: string;
+  title: string;
+  description: string;
   subtitle: string;
   subtext: string;
   link: string;
@@ -16,6 +18,9 @@ export interface SiteConfig {
 export const sites: Record<string, SiteConfig> = {
   bangkhuwat: {
     name: "ลานชุมชน คนปั้นเมือง",
+    title: "ลานชุมชน คนปั้นเมือง เทศบาลเมืองบางคูวัด",
+    description:
+      "แพลตฟอร์มดิจิทัลของ ‘เทศบาลเมืองบางคูวัด’ ที่ให้ประชาชนเข้าถึง ติดตาม และส่วนร่วมในการกำหนดทิศ 'งบประมาณท้องถิ่น’ พัฒนาร่วมกันโดยสถาบันพระปกเกล้าและ WeVis",
     subtitle: "เทศบาลบางคูวัด จ.ปทุมธานี",
     subtext: "เทศบาลบางคูวัด",
     link: "https://docs.google.com/spreadsheets/d/1CwI9EYojVAuyVRI90rqouIyLvbqRReFg/edit?usp=sharing&ouid=109634311828671480416&rtpof=true&sd=true",
@@ -31,6 +36,9 @@ export const sites: Record<string, SiteConfig> = {
   },
   suwankhuha: {
     name: "ลานชุมชน คนปั้นเมือง",
+    title: "ลานชุมชน คนปั้นเมือง เทศบาลตำบลสุวรรณคูหา",
+    description:
+      "แพลตฟอร์มดิจิทัลของ ‘เทศบาลตำบลสุวรรณคูหา’ ที่ให้ประชาชนเข้าถึง ติดตาม และส่วนร่วมในการกำหนดทิศ 'งบประมาณท้องถิ่น’ พัฒนาร่วมกันโดยสถาบันพระปกเกล้าและ WeVis",
     subtitle: "เทศบาลสุวรรณคูหา จ.หนองบัวลำภู",
     subtext: "เทศบาลสุวรรณคูหา",
     link: "https://drive.google.com/file/d/1Zu1nUyzVZw2EHjC-SIDGd5n-qu1fVDxC/view?usp=sharing",
@@ -46,6 +54,9 @@ export const sites: Record<string, SiteConfig> = {
   },
   cherngtalay: {
     name: "ลานชุมชน คนปั้นเมือง",
+    title: "ลานชุมชน คนปั้นเมือง อบต.เชิงทะเล",
+    description:
+      "แพลตฟอร์มดิจิทัลของ ‘อบต.เชิงทะเล’ ที่ให้ประชาชนเข้าถึง ติดตาม และส่วนร่วมในการกำหนดทิศ 'งบประมาณท้องถิ่น’ พัฒนาร่วมกันโดยสถาบันพระปกเกล้าและ WeVis",
     subtitle: "อบต.เชิงทะเล จ.ภูเก็ต",
     subtext: "อบต.เชิงทะเล",
     link: "https://drive.google.com/file/d/1yYeuWEvbXqeUqy2TiCC6-h8pREuL7OH4/view?usp=sharing",
@@ -60,6 +71,9 @@ export const sites: Record<string, SiteConfig> = {
   },
   lamphun: {
     name: "ลานชุมชน คนปั้นเมือง",
+    title: "ลานชุมชน คนปั้นเมือง อบจ.ลำพูน",
+    description:
+      "แพลตฟอร์มดิจิทัลของ ‘อบจ.ลำพูน’ ที่ให้ประชาชนเข้าถึง ติดตาม และส่วนร่วมในการกำหนดทิศ 'งบประมาณท้องถิ่น’ พัฒนาร่วมกันโดยสถาบันพระปกเกล้าและ WeVis",
     subtitle: "อบจ.ลำพูน จ.ลำพูน",
     subtext: "อบจ.ลำพูน",
     link: "https://drive.google.com/file/d/1MHbUm6z3F1EM63isbam_cVumHFhcc6KW/view?usp=sharing",
@@ -75,6 +89,9 @@ export const sites: Record<string, SiteConfig> = {
   },
   bangrakphatthana: {
     name: "ลานชุมชน คนปั้นเมือง",
+    title: "ลานชุมชน คนปั้นเมือง เทศบาลเมืองบางรักพัฒนา",
+    description:
+      "แพลตฟอร์มดิจิทัลของ ‘เทศบาลเมืองบางรักพัฒนา’ ที่ให้ประชาชนเข้าถึง ติดตาม และส่วนร่วมในการกำหนดทิศ 'งบประมาณท้องถิ่น’ พัฒนาร่วมกันโดยสถาบันพระปกเกล้าและ WeVis",
     subtitle: "เทศบาลบางรักพัฒนา จ.นนทบุรี",
     subtext: "เทศบาลบางรักพัฒนา",
     link: "https://drive.google.com/file/d/108dDiUCQOM32KBVhZBLbUnL6aOxOZ5PC/view?usp=sharing",

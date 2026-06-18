@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { GoalSheet } from "@/src/services/type";
 import { IdeaCategory } from "../../createIdea/types";
+import { basePath } from "@/src/lib/basePath";
 
 interface CardProps {
   goals: GoalSheet[];
@@ -24,7 +25,6 @@ const CardPercent = ({
   percentage,
 }: CardProps) => {
   const [page, setPage] = useState(1);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const { filteredGoals, totalBudget } = useMemo(() => {
     const rows = goals.filter((item) => item.category === category.title);
     const totalBudget = rows.reduce(

@@ -2,11 +2,11 @@
 import Image from "next/image";
 import { ideaCategories } from "../createIdea/data";
 import { currentSite } from "@/src/config/sites";
+import { basePath } from "@/src/lib/basePath";
 import { useRouter } from "next/navigation";
 import LottieAnimation from "./components/LottieAnimation";
 
 export default function LandingPage() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const router = useRouter();
   return (
     <div className="flex flex-col flex-1 bg-zinc-50 h-full">

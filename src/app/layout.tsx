@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CookieConsent from "../components/CookieConsent";
+import { currentSite } from "../config/sites";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KPI Local",
-  description: "KPI Local",
+  title: currentSite.title,
+  description: currentSite.description,
 };
 
 export default function RootLayout({

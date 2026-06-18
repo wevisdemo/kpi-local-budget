@@ -7,6 +7,7 @@ import { UnderstandTab } from "./components/UnderstandTab";
 import LocalDevelopmentTab from "./components/LocalDevelopmentTab";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { basePath } from "@/src/lib/basePath";
 
 const TAB_IDS: readonly TabId[] = ["understand", "local", "action"];
 
@@ -37,7 +38,6 @@ const ExplorePlan = () => {
     setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
     const url = `${basePath}${path}?${params.toString()}`;
     if (tab === "understand") {

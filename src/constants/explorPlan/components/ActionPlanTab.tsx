@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { Plan } from "@/src/services/type";
 import Image from "next/image";
 import { currentSite } from "@/src/config/sites";
+import { basePath } from "@/src/lib/basePath";
 import { formatBaht } from "@/src/lib/formatBath";
 import { getPlanSheet } from "@/src/lib/getPlan";
 import { colorPlan } from "./types";
@@ -59,8 +60,6 @@ const ActionPlanTab = () => {
       document.removeEventListener("keydown", onKey);
     };
   }, [methodologyModalOpen]);
-
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
   const totalBudget = planSheets.reduce(
     (acc, plan) => acc + (plan.budget ?? 0),

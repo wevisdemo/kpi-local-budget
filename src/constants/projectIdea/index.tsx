@@ -15,6 +15,7 @@ import { Project } from "@/src/services/type";
 import { getProject } from "@/src/lib/getProject";
 import ProjectCardIdea from "@/src/components/ProjectCardIdea";
 import { projectCategories } from "./data";
+import { basePath } from "@/src/lib/basePath";
 
 const buildCombinedProjects = (
   projects: ProjectRecord[],
@@ -82,8 +83,6 @@ const ProjectIdea = () => {
   const isGoalsLoading = !!category && loadedCategory !== category;
 
   const IdeaCategory = ideaCategories.find((item) => item.title === category);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
   const projectCount = goals.reduce(
     (acc, goal) => acc + (Number(goal.project_count) ?? 0),
     0,
@@ -163,8 +162,7 @@ const ProjectIdea = () => {
       params.set("goal", nextGoal);
     }
     const query = params.toString();
-    const basePathPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-    const url = `${basePathPrefix}${pathname}${query ? `?${query}` : ""}`;
+    const url = `${basePath}${pathname}${query ? `?${query}` : ""}`;
     window.history.replaceState(null, "", url);
   };
   if (isGoalsLoading) {
@@ -254,7 +252,7 @@ const ProjectIdea = () => {
                 className="w-fit"
                 leftIcon={null}
                 onClick={() => {
-                  router.push(`${basePath}/create-idea`);
+                  router.push(`/create-idea`);
                 }}
               >
                 ปั้นไอเดีย

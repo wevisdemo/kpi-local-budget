@@ -1,4 +1,5 @@
 import { Turnstile } from "@marsidev/react-turnstile";
+import { basePath } from "@/src/lib/basePath";
 
 export const CATEGORY_BORDER_COLORS: Record<string, string> = {
   education: "#ff8000",
@@ -32,7 +33,6 @@ export default function ReviewStep({
   onTurnstileVerify,
 }: ReviewStepProps) {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   // console.log("turnstileSiteKey:", turnstileSiteKey);
   return (
     <div className="flex flex-col gap-3">

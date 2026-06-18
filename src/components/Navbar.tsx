@@ -3,6 +3,7 @@
 import "@wevisdemo/ui/styles/navbar.css";
 import { useState, type ReactNode } from "react";
 import { currentSite } from "@/src/config/sites";
+import { basePath } from "@/src/lib/basePath";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -212,7 +213,7 @@ export default function Navbar() {
     <WvNavbar
       dark
       logoAddonPlus
-      logoAddonSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/img/logo.svg`}
+      logoAddonSrc={`${basePath}/img/logo.svg`}
     >
       <WvNavButton dark active={pathname === "/"} href="/">
         หน้าหลัก

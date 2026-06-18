@@ -10,6 +10,7 @@ import { getProject } from "@/src/lib/getProject";
 import { projectCategories } from "./data";
 import ProjectCardIdeaPlan from "@/src/components/ProjectCardIdeaPlan";
 import { formatBaht } from "@/src/lib/formatBath";
+import { basePath } from "@/src/lib/basePath";
 import { TabBar } from "./components/TabBar";
 
 function categoryIdFromCategoryAi(
@@ -59,8 +60,6 @@ const PlanIdea = () => {
   const [projectsSheet, setProjectsSheet] = useState<Project[]>([]);
 
   const IdeaCategory = ideaCategories.find((item) => item.title === category);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
   const color = projectCategories.find(
     (item) => item.title === category,
   )?.color;

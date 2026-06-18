@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { IdeaCategory } from "../types";
+import { basePath } from "@/src/lib/basePath";
 
 interface CategoryStepProps {
   categories: IdeaCategory[];
@@ -16,7 +17,6 @@ export default function CategoryStep({
     <section className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
       {categories.map((category) => {
         const isSelected = selectedCategoryId === category.id;
-        const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
         return (
           <button
             key={category.id}

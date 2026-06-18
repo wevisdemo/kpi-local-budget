@@ -7,6 +7,7 @@ import Tag from "@/src/components/Tag";
 import type { Goal } from "@/src/services/type";
 import { IdeaCategory } from "../../createIdea/types";
 import { useRouter } from "next/navigation";
+import { basePath } from "@/src/lib/basePath";
 
 interface CardProps {
   goal: Goal[];
@@ -26,7 +27,6 @@ const Card = ({
   onRefetch,
 }: CardProps) => {
   const [page, setPage] = useState(1);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const filteredGoals = useMemo(
     () => goal.filter((item) => item.category === category.title),
     [goal, category.title],
