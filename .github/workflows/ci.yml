@@ -19,6 +19,9 @@ jobs:
   ci:
     name: Lint, Type Check & Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        site: [bangkhuwat, suwankhuha, cherngtalay, lamphun, bangrakphatthana]
 
     steps:
       - name: Checkout
@@ -46,17 +49,24 @@ jobs:
         run: pnpm tsc --noEmit
 
       - name: Build
-        run: pnpm build:suwankhuha
+        run: pnpm build:${{ matrix.site }}
         env:
+          NEXT_PUBLIC_SITE: ${{ matrix.site }}
           BASE_PATH: /kpi-local-budget
           NEXT_PUBLIC_BASE_PATH: /kpi-local-budget
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
+
+      - name: Prepare folder
+        run: |
+          mkdir -p dist/${{ matrix.site }}
+          cp -r out/* dist/${{ matrix.site }}/
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          name: site-${{ matrix.site }}
+          path: dist/${{ matrix.site }}
 
   deploy:
     name: Deploy to GitHub Pages
