@@ -61,16 +61,16 @@ jobs:
           mkdir -p dist/${{ matrix.site }}
           cp -r out/* dist/${{ matrix.site }}/
 
-      - name: Upload site artifact
+      - name: Upload stagging artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
-          name: site-${{ matrix.site }}
+          name: stagging-${{ matrix.site }}
           path: dist/${{ matrix.site }}
           retention-days: 1
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy to Stagging
     needs: ci
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -82,14 +82,14 @@ jobs:
       - name: Download site artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: site-*
+          pattern: stagging-*
           path: dist
 
       - name: Combine sites
         run: |
           mkdir -p _site
-          for dir in dist/site-*; do
-            site="${dir#dist/site-}"
+          for dir in dist/stagging-*; do
+            site="${dir#dist/stagging-}"
             mkdir -p "_site/$site"
             cp -r "$dir"/. "_site/$site/"
           done

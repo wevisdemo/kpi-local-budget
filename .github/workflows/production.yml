@@ -49,14 +49,51 @@ jobs:
         run: pnpm build:${{ matrix.site }}
         env:
           NEXT_PUBLIC_SITE: ${{ matrix.site }}
-          BASE_PATH: /kpi-local-budget
-          NEXT_PUBLIC_BASE_PATH: /kpi-local-budget
+          BASE_PATH: /
+          NEXT_PUBLIC_BASE_PATH: /
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
 
       - name: Prepare folder
         run: |
           mkdir -p dist/${{ matrix.site }}
           cp -r out/* dist/${{ matrix.site }}/
+
+      - name: rsync to production server
+        uses: burnett01/rsync-deployments@v8
+        with:
+          switches: -avzr --delete
+          path: dist/*
+          remote_path: ${{ secrets.REMOTE_PATH }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+
+      - name: Upload site artifact production
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-${{ matrix.site }}
+          path: dist/${{ matrix.site }}
+          retention-days: 1
+
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download site artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: production-*
+          path: dist
+
+      - name: Combine sites
+        run: |
+          mkdir -p _site
+          for dir in dist/production-*; do
+            site="${dir#dist/production-}"
+            mkdir -p "_site/$site"
+            cp -r "$dir"/. "_site/$site/"
+          done
 
       - name: rsync to production server
         uses: burnett01/rsync-deployments@v8
