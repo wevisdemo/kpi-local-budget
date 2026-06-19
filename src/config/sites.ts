@@ -31,7 +31,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "1TLMrqReysWk2pPrBQrq9Zoz6dTNt11cM",
     sheetName_1y_5: "2569",
-    date: "ตุลาคม 2568",
+    date: "ตุลาคม 2564",
     acion_date: "ตุลาคม 2568",
   },
   suwankhuha: {
@@ -67,7 +67,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetId_1y_5: "15Z0gGvmAEya6hePFWvAxKaYP1AUAcCQj",
     sheetName_1y_5: "2569",
     date: "15 ตุลาคม 2564",
-    acion_date: "15 ตุลาคม 2568",
+    acion_date: "ตุลาคม 2568",
   },
   lamphun: {
     name: "ลานชุมชน คนปั้นเมือง",
