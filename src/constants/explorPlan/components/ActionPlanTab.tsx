@@ -193,15 +193,18 @@ const ActionPlanTab = () => {
         </h1>
         <p className="wv-b4 wv-ibmplexlooped text-gray-50 ">
           ใช้ข้อมูลจาก
-          <a
-            href={currentSite.planLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-black"
-          >
-            แผนดำเนินงานฉบับแก้ไขล่าสุด
-            <br className="md:hidden block" />
-          </a>{" "}
+          {currentSite.planLink ? (
+            <a
+              href={currentSite.planLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-black"
+            >
+              แผนดำเนินงานฉบับแก้ไขล่าสุด
+            </a>
+          ) : (
+            <span>แผนดำเนินงานฉบับแก้ไขล่าสุด</span>
+          )}{" "}
           (เผยแพร่เมื่อ {currentSite.acion_date})
         </p>
         <div className=" grid grid-cols-1 gap-2.5 md:grid-cols-2">
@@ -233,7 +236,7 @@ const ActionPlanTab = () => {
                 <p className="wv-b3">กลยุทธ์</p>
               </div>
               <div className="wv-bold">
-                <p className="wv-h6">{totalProjects}</p>
+                <p className="wv-h6">{planSheets.length}</p>
                 <p className="wv-b3">โครงการ</p>
               </div>
             </div>

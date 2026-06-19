@@ -16,6 +16,15 @@ interface CardProps {
 
 const PAGE_SIZE = 5;
 
+function substrategyLines(substrategy?: string): string[] {
+  return (
+    substrategy
+      ?.split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean) ?? []
+  );
+}
+
 type SubStrategySummary = {
   substrategy: string;
   budget: number;
@@ -37,29 +46,30 @@ const CardPercentPlan = ({
   const filteredGoals = useMemo((): SubStrategySummary[] => {
     const bySubStrategy = new Map<
       string,
-      { budget: number; projects: Set<string> }
+      { budget: number; projectCount: number }
     >();
 
     for (const plan of planSheets) {
       if (plan.strategy !== category.title) continue;
-      const name = plan.substrategy?.trim();
-      if (!name) continue;
+      const names = substrategyLines(plan.substrategy);
+      if (names.length === 0) continue;
 
-      const entry = bySubStrategy.get(name) ?? {
-        budget: 0,
-        projects: new Set<string>(),
-      };
-      entry.budget += plan.budget ?? 0;
-      const projectName = plan.project?.trim();
-      if (projectName) entry.projects.add(projectName);
-      bySubStrategy.set(name, entry);
+      for (const name of names) {
+        const entry = bySubStrategy.get(name) ?? {
+          budget: 0,
+          projectCount: 0,
+        };
+        entry.budget += plan.budget ?? 0;
+        entry.projectCount += 1;
+        bySubStrategy.set(name, entry);
+      }
     }
 
     return [...bySubStrategy.entries()]
-      .map(([substrategy, { budget, projects }]) => ({
+      .map(([substrategy, { budget, projectCount }]) => ({
         substrategy,
         budget,
-        projectCount: projects.size,
+        projectCount,
       }))
       .sort((a, b) => b.budget - a.budget);
   }, [planSheets, category.title]);
@@ -73,15 +83,10 @@ const CardPercentPlan = ({
   const goNext = () => setPage((p) => Math.min(totalPages, p + 1));
   const totalSubStrategy = filteredGoals.length;
 
-  const projectCount = useMemo(() => {
-    const projects = new Set<string>();
-    for (const plan of planSheets) {
-      if (plan.strategy !== category.title) continue;
-      const trimmed = plan.project?.trim();
-      if (trimmed) projects.add(trimmed);
-    }
-    return projects.size;
-  }, [planSheets, category.title]);
+  const projectCount = useMemo(
+    () => planSheets.filter((plan) => plan.strategy === category.title).length,
+    [planSheets, category.title],
+  );
 
   const totalCategoryBudget = useMemo(
     () => filteredGoals.reduce((acc, item) => acc + item.budget, 0),
@@ -157,7 +162,7 @@ const CardPercentPlan = ({
                 className,
               ].join(" ")}
             >
-              <div className="flex min-w-0 justify-between items-center">
+              <div className="flex min-w-0 justify-between items-center w-full">
                 <h3 className="wv-b4 text-black text-balance">
                   {item.substrategy}
                 </h3>
@@ -166,7 +171,7 @@ const CardPercentPlan = ({
                     className="wv-b2 wv-ibmplexlooped wv-bold"
                     style={{ color: color }}
                   >
-                    {rowPercentage.toFixed(1)}%
+                    {rowPercentage.toFixed(2)}%
                   </p>
                   <a
                     href={`${basePath}/explore-plan/plan?category=${category.title}&goal=${encodeURIComponent(item.substrategy)}`}

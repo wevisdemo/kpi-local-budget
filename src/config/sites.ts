@@ -31,8 +31,8 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "1TLMrqReysWk2pPrBQrq9Zoz6dTNt11cM",
     sheetName_1y_5: "2569",
-    date: "12 ตุลาคม 2564",
-    acion_date: "ตุลาคม 2564",
+    date: "ตุลาคม 2568",
+    acion_date: "ตุลาคม 2568",
   },
   suwankhuha: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -49,7 +49,7 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "14wpljGB5w-x_FoCkuRtVcIOnYN1jDsll",
     sheetName_1y_5: "2569",
-    date: "12 ตุลาคม 2564",
+    date: "12 ตุลาคม 2568",
     acion_date: "15 ตุลาคม 2568",
   },
   cherngtalay: {
@@ -66,8 +66,8 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "15Z0gGvmAEya6hePFWvAxKaYP1AUAcCQj",
     sheetName_1y_5: "2569",
-    date: "12 ตุลาคม 2564",
-    acion_date: "15 ตุลาคม 2564",
+    date: "15 ตุลาคม 2564",
+    acion_date: "15 ตุลาคม 2568",
   },
   lamphun: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -84,8 +84,8 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "1BHjS8UWpE_Z5zd0P0625llEn41Iw75Ey",
     sheetName_1y_5: "2569",
-    date: "ตุลาคม 2564",
-    acion_date: "15 ตุลาคม 2564",
+    date: "ตุลาคม 2568",
+    acion_date: "15 ตุลาคม 2568",
   },
   bangrakphatthana: {
     name: "ลานชุมชน คนปั้นเมือง",
@@ -101,8 +101,8 @@ export const sites: Record<string, SiteConfig> = {
     sheetName_1y: "แผนพัฒนาท้องถิ่น 66-70",
     sheetId_1y_5: "133H1i8jgn2xuSnliSksNiEvkFGbKFDQ7",
     sheetName_1y_5: "2569",
-    date: "20 ตุลาคม 2564",
-    acion_date: "ตุลาคม 2564",
+    date: "20 ตุลาคม 2568",
+    acion_date: "ตุลาคม 2568",
   },
 };
 
