@@ -55,6 +55,7 @@ jobs:
           NEXT_PUBLIC_SITE: ${{ matrix.site }}
           BASE_PATH: /kpi-local-budget
           NEXT_PUBLIC_BASE_PATH: /kpi-local-budget
+          NEXT_PUBLIC_SITE_URL: https://wevisdemo.github.io
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
 
       - name: Prepare folder

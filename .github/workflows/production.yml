@@ -49,6 +49,7 @@ jobs:
         run: pnpm build:${{ matrix.site }}
         env:
           NEXT_PUBLIC_SITE: ${{ matrix.site }}
+          NEXT_PUBLIC_SITE_URL: https://localbudget.wevis.info/
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
 
       - name: Prepare folder
