@@ -99,7 +99,7 @@ const CardPercent = ({
         </div>
         <div className="">
           <a
-            href={`${basePath}/explore-plan/project?category=${category.title}&goal=`}
+            href={`${basePath}/explore-plan/project/?category=${category.title}&goal=`}
             className="wv-b6 wv-bold text-gray-30 wv-ibmplexlooped underline hover:text-black"
           >
             {projectCount} โครงการ
@@ -139,7 +139,7 @@ const CardPercent = ({
                     {goalPercentage.toFixed(2)}%
                   </p>
                   <a
-                    href={`${basePath}/explore-plan/project?category=${category.title}&goal=${item.goal}`}
+                    href={`${basePath}/explore-plan/project/?category=${category.title}&goal=${item.goal}`}
                     className="wv-b6 wv-ibmplexlooped text-gray-40 underline"
                   >
                     {projectCount} โครงการ

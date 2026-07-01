@@ -105,7 +105,7 @@ const PlanProject = () => {
             className="w-fit"
             rightIcon={null}
             onClick={() => {
-              router.push(`/explore-plan?tab=action`);
+              router.push(`/explore-plan/?tab=action`);
             }}
           >
             ภาพรวมแผน

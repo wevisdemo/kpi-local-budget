@@ -149,7 +149,7 @@ const PlanIdea = () => {
             className="w-fit"
             rightIcon={null}
             onClick={() => {
-              router.push(`/explore-plan?tab=local`);
+              router.push(`/explore-plan/?tab=local`);
             }}
           >
             ภาพรวมแผน

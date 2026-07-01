@@ -137,7 +137,7 @@ const CardPercentPlan = ({
         </div>
         <div className="">
           <a
-            href={`${basePath}/explore-plan/plan?category=${category.title}&goal=`}
+            href={`${basePath}/explore-plan/plan/?category=${category.title}&goal=`}
             onClick={rememberCategoryColor}
             className="wv-b6 wv-bold text-gray-30 wv-ibmplexlooped underline hover:text-black"
           >
@@ -174,7 +174,7 @@ const CardPercentPlan = ({
                     {rowPercentage.toFixed(2)}%
                   </p>
                   <a
-                    href={`${basePath}/explore-plan/plan?category=${category.title}&goal=${encodeURIComponent(item.substrategy)}`}
+                    href={`${basePath}/explore-plan/plan/?category=${category.title}&goal=${encodeURIComponent(item.substrategy)}`}
                     onClick={rememberCategoryColor}
                     className="wv-b6 wv-ibmplexlooped text-gray-40 underline"
                   >
