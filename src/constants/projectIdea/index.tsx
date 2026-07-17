@@ -24,7 +24,9 @@ const buildCombinedProjects = (
   goal: string | null,
 ): Project[] => {
   const proposedNames = new Set(
-    projects.map((item) => item.project).filter((name): name is string => !!name),
+    projects
+      .map((item) => item.project)
+      .filter((name): name is string => !!name),
   );
 
   const existing: Project[] = projectsSheet
@@ -151,6 +153,8 @@ const ProjectIdea = () => {
     category,
     goal,
   );
+
+  console.log(combinedProjects, category, goal, projects);
 
   const handleGoalChange = (nextGoal: string | null) => {
     setGoal(nextGoal);

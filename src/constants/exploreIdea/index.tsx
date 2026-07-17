@@ -135,9 +135,7 @@ const ExploreIdea = () => {
               <div className="rounded-[10px] bg-yellow-20 p-10 flex flex-col gap-2.5 wv-ibmplexlooped">
                 <p className="wv-b3 text-black">ภาพรวม</p>
                 <div className="flex gap-1.5 items-center">
-                  <p className="wv-h6 wv-bold text-black">
-                    {goals.filter((goal) => goal.creator_id !== null).length}
-                  </p>
+                  <p className="wv-h6 wv-bold text-black">{goals.length}</p>
                   <p className="wv-b3 text-black">เป้าหมาย</p>
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -169,12 +167,7 @@ const ExploreIdea = () => {
                   </div>
                 </div>
                 <div className="flex gap-1.5 items-center">
-                  <p className="wv-h6 wv-bold text-black">
-                    {
-                      projects.filter((project) => project.creator_id !== null)
-                        .length
-                    }
-                  </p>
+                  <p className="wv-h6 wv-bold text-black">{projects.length}</p>
                   <p className="wv-b3 text-black">โครงการ</p>
                 </div>
                 {projects.filter((project) => project.creator_id !== null)

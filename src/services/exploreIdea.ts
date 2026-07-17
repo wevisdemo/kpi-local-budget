@@ -126,7 +126,7 @@ export async function getProjectsByCategory(
   const url = new URL(PROJECT_ENDPOINT);
   url.searchParams.set("where", `(Category,eq,${category})`);
 
-  const response = await fetch(url.toString());
+  const response = await fetch(url.toString() + "&limit=9999");
 
   if (!response.ok) {
     const text = await response.text().catch(() => "");
