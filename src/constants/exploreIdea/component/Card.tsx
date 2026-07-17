@@ -4,14 +4,14 @@ import { useMemo, useState } from "react";
 
 import FavButtonGoal from "@/src/components/FavButtonGoal";
 import Tag from "@/src/components/Tag";
-import type { Goal } from "@/src/services/type";
+import type { Goal, ProjectNocoDb } from "@/src/services/type";
 import { IdeaCategory } from "../../createIdea/types";
 import { useRouter } from "next/navigation";
 import { basePath } from "@/src/lib/basePath";
 
 interface CardProps {
   goal: Goal[];
-  onProjectsClick?: (goal: Goal) => void;
+  projects: ProjectNocoDb[];
   className?: string;
   category: IdeaCategory;
   onRefetch?: () => void;
@@ -21,7 +21,7 @@ const PAGE_SIZE = 5;
 
 const Card = ({
   goal,
-  onProjectsClick,
+  projects,
   className = "",
   category,
   onRefetch,
@@ -41,7 +41,14 @@ const Card = ({
   const goPrev = () => setPage((p) => Math.max(1, p - 1));
   const goNext = () => setPage((p) => Math.min(totalPages, p + 1));
   const projectCount = filteredGoals.reduce(
-    (acc, goal) => acc + (Number(goal.project_count) ?? 0),
+    (acc, goal) =>
+      acc +
+      projects.filter(
+        (project) =>
+          project.goal === goal.goal &&
+          (Boolean(project.creator_id) ||
+            Number(project.vote_count ?? 0) > 0),
+      ).length,
     0,
   );
 
@@ -86,7 +93,11 @@ const Card = ({
 
       <div className="flex-1">
         {pagedGoals.map((item, index) => {
-          const projectCount = item.project_count ?? 0;
+          const projectCount = projects.filter(
+            (project) =>
+              project.goal === item.goal &&
+              (Boolean(project.creator_id) || Number(project.vote_count ?? 0) > 0),
+          ).length;
           const goalId =
             item.Id !== undefined && item.Id !== null
               ? String(item.Id)

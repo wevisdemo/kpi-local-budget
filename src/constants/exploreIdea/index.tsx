@@ -50,10 +50,14 @@ const ExploreIdea = () => {
     (project): project is ProjectNocoDb & { creator_id: string } =>
       Boolean(project.creator_id),
   );
-  const totalAnswers = projectsWithCreator.length;
-  const totalPeople = new Set(
-    projectsWithCreator.map((project) => project.creator_id),
-  ).size;
+  const goalsWithCreator = goals.filter(
+    (goal): goal is Goal & { creator_id: string } => Boolean(goal.creator_id),
+  );
+  const totalAnswers = projectsWithCreator.length + goalsWithCreator.length;
+  const totalPeople = new Set([
+    ...projectsWithCreator.map((project) => project.creator_id),
+    ...goalsWithCreator.map((goal) => goal.creator_id),
+  ]).size;
   const totalProposedGoals = goals.filter((goal) =>
     Boolean(goal.creator_id),
   ).length;
@@ -93,6 +97,10 @@ const ExploreIdea = () => {
     projects.length > 0 ? (totalExistingProjects / sumProjects) * 100 : 0;
   const proposedProjectPercent =
     projects.length > 0 ? (totalProposedProjectsLike / sumProjects) * 100 : 0;
+
+  const newGoals = goals.filter(
+    (goal) => (goal.vote_count ?? 0) > 0 || goal.creator_id,
+  );
 
   return (
     <>
@@ -255,9 +263,10 @@ const ExploreIdea = () => {
               {fillterCategoryGoals.map((category) => (
                 <Card
                   key={category.id}
-                  goal={goals}
+                  goal={newGoals}
                   category={category}
                   onRefetch={getGoalsFunction}
+                  projects={projects}
                 />
               ))}
             </div>

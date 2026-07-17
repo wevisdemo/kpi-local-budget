@@ -32,32 +32,40 @@ const buildCombinedProjects = (
   const existing: Project[] = projectsSheet
     .filter((item) => !category || item.category_ai === category)
     .filter((item) => !item.project || !proposedNames.has(item.project))
+    .filter((item) => item.vote_count != null && item.vote_count > 0)
     .map((item) => ({ ...item, type: "exist" }));
 
-  const proposed: Project[] = projects.map((item) => {
-    const sheetMatch = projectsSheet.find(
-      (sheet) => sheet.project && sheet.project === item.project,
-    );
-    const type: Project["type"] = item.creator_id != null ? "propose" : "exist";
+  const proposed: Project[] = projects
+    .filter(
+      (item) =>
+        (item.vote_count != null && item.vote_count > 0) ||
+        item.creator_id != null,
+    )
+    .map((item) => {
+      const sheetMatch = projectsSheet.find(
+        (sheet) => sheet.project && sheet.project === item.project,
+      );
+      const type: Project["type"] =
+        item.creator_id != null ? "propose" : "exist";
 
-    if (sheetMatch) {
+      if (sheetMatch) {
+        return {
+          ...sheetMatch,
+          project_id: item.Id != null ? String(item.Id) : sheetMatch.project_id,
+          vote_count: Number(item.vote_count ?? 0),
+          type,
+        };
+      }
+
       return {
-        ...sheetMatch,
-        project_id: item.Id != null ? String(item.Id) : sheetMatch.project_id,
+        project_id: item.Id != null ? String(item.Id) : undefined,
+        project: item.project,
+        goal_ai: item.goal,
+        budget_70: Number(item.budget),
         vote_count: Number(item.vote_count ?? 0),
         type,
       };
-    }
-
-    return {
-      project_id: item.Id != null ? String(item.Id) : undefined,
-      project: item.project,
-      goal_ai: item.goal,
-      budget_70: Number(item.budget),
-      vote_count: Number(item.vote_count ?? 0),
-      type,
-    };
-  });
+    });
 
   const all = [...existing, ...proposed];
 
@@ -217,7 +225,7 @@ const ProjectIdea = () => {
               </div>
               <div className="flex flex-col ">
                 <p className="wv-b3 wv-bold text-white wv-ibmplexlooped">
-                  {combinedProjects.length || projectCount} โครงการ
+                  {combinedProjects.length || 0} โครงการ
                 </p>
                 <p className="wv-b5 text-white wv-ibmplexlooped">
                   เรียงตามจำนวนคนสนับสนุน

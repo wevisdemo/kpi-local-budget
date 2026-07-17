@@ -37,6 +37,7 @@ export function useCreateIdea() {
 
   const consentId = useCookieConsentStore((state) => state.consentId);
   const favorites = useFavoritesStore((state) => state.favorites);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const isPoppingRef = useRef(false);
   const didInitHistoryRef = useRef(false);
@@ -278,17 +279,17 @@ export function useCreateIdea() {
         : null;
       const categoryId = category?.Id;
 
+      const likeRequestIndex = 0;
       const createRequests: BatchRequest[] = [
-        // {
-        //   path: "/Transaction",
-        //   method: "POST",
-        //   body: {
-        //     user_id: userId,
-        //     timestamp,
-        //     goal: effectiveProblemLabel || "",
-        //     project: ideaTitle || "",
-        //   },
-        // },
+        {
+          path: `/${currentSite.nocoDb}_Goal_Like`,
+          method: "POST",
+          body: {
+            user_id: userId,
+            timestamp,
+            goal: effectiveProblemLabel || "",
+          },
+        },
       ];
 
       let projectRequestIndex: number | null = null;
@@ -339,8 +340,18 @@ export function useCreateIdea() {
 
       const projectId = extractId(projectRequestIndex);
       const goalId = extractId(goalRequestIndex);
+      const likeId = extractId(likeRequestIndex);
+
+      const targetGoalId = (goalId ?? effectiveProblemLabelId) || null;
 
       const linkRequests: BatchRequest[] = [];
+
+      if (likeId && targetGoalId) {
+        linkRequests.push({
+          path: `/${currentSite.nocoDb}_Goal/${targetGoalId}/hm/vote_count/${likeId}`,
+          method: "POST",
+        });
+      }
 
       if (ideaTitle && projectId) {
         if (isProposingNewProblem) {
@@ -380,6 +391,11 @@ export function useCreateIdea() {
       if (linkRequests.length > 0) {
         await submitBatch(linkRequests, token);
       }
+
+      if (likeId && targetGoalId) {
+        toggleFavorite(targetGoalId);
+      }
+
       setStep(5);
     } catch (error) {
       console.error("Failed to submit idea", error);
