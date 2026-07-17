@@ -154,7 +154,7 @@ const ProjectIdea = () => {
     goal,
   );
 
-  console.log(combinedProjects, category, goal, projects);
+  // console.log(combinedProjects, category, goal, projects);
 
   const handleGoalChange = (nextGoal: string | null) => {
     setGoal(nextGoal);
