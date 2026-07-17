@@ -41,6 +41,9 @@ export default function SuccessStep({ onReset }: SuccessStepProps) {
           theme="dark"
           leftIcon={null}
           className="w-full"
+          onClick={() => {
+            router.push(`/explore-plan`);
+          }}
         >
           สำรวจแผน
         </Button>
