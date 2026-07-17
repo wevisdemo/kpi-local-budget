@@ -57,22 +57,42 @@ const ExploreIdea = () => {
   const totalProposedGoals = goals.filter((goal) =>
     Boolean(goal.creator_id),
   ).length;
-  const totalExistingGoals = Math.max(goals.length - totalProposedGoals, 0);
+  //goals that have vote_count > 0 and creator_id is null
+  const totalProposedGoalsLike = goals.filter(
+    (goal) => (goal.vote_count ?? 0) > 0 && !goal.creator_id,
+  ).length;
+  //sum of totalProposedGoals and totalProposedGoalsLike
+  const sumGoals = totalProposedGoals + totalProposedGoalsLike;
+  // const totalExistingGoals = Math.max(goals.length - totalProposedGoals, 0);
+  // const existingGoalPercent =
+  //   goals.length > 0 ? (totalExistingGoals / goals.length) * 100 : 0;
+  // const proposedGoalPercent =
+  //   goals.length > 0 ? (totalProposedGoals / goals.length) * 100 : 0;
   const existingGoalPercent =
-    goals.length > 0 ? (totalExistingGoals / goals.length) * 100 : 0;
+    goals.length > 0 ? (totalProposedGoalsLike / sumGoals) * 100 : 0;
   const proposedGoalPercent =
-    goals.length > 0 ? (totalProposedGoals / goals.length) * 100 : 0;
+    goals.length > 0 ? (totalProposedGoals / sumGoals) * 100 : 0;
   const totalExistingProjects = projects.filter((project) =>
     Boolean(project.creator_id),
   ).length;
-  const totalProposedProjects = Math.max(
-    projects.length - totalExistingProjects,
-    0,
-  );
+  //projects that have vote_count > 0 and creator_id is null
+  const totalProposedProjectsLike = projects.filter(
+    (project) => (project.vote_count ?? 0) > 0 && !project.creator_id,
+  ).length;
+  //sum of totalProposedProjects and totalProposedProjectsLike
+  const sumProjects = totalExistingProjects + totalProposedProjectsLike;
+  // const totalProposedProjects = Math.max(
+  //   projects.length - totalExistingProjects,
+  //   0,
+  // );
+  // const existingProjectPercent =
+  //   projects.length > 0 ? (totalExistingProjects / projects.length) * 100 : 0;
+  // const proposedProjectPercent =
+  //   projects.length > 0 ? (totalProposedProjects / projects.length) * 100 : 0;
   const existingProjectPercent =
-    projects.length > 0 ? (totalExistingProjects / projects.length) * 100 : 0;
+    projects.length > 0 ? (totalExistingProjects / sumProjects) * 100 : 0;
   const proposedProjectPercent =
-    projects.length > 0 ? (totalProposedProjects / projects.length) * 100 : 0;
+    projects.length > 0 ? (totalProposedProjectsLike / sumProjects) * 100 : 0;
 
   return (
     <>
@@ -135,7 +155,7 @@ const ExploreIdea = () => {
               <div className="rounded-[10px] bg-yellow-20 p-10 flex flex-col gap-2.5 wv-ibmplexlooped">
                 <p className="wv-b3 text-black">ภาพรวม</p>
                 <div className="flex gap-1.5 items-center">
-                  <p className="wv-h6 wv-bold text-black">{goals.length}</p>
+                  <p className="wv-h6 wv-bold text-black">{sumGoals}</p>
                   <p className="wv-b3 text-black">เป้าหมาย</p>
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -167,7 +187,7 @@ const ExploreIdea = () => {
                   </div>
                 </div>
                 <div className="flex gap-1.5 items-center">
-                  <p className="wv-h6 wv-bold text-black">{projects.length}</p>
+                  <p className="wv-h6 wv-bold text-black">{sumProjects}</p>
                   <p className="wv-b3 text-black">โครงการ</p>
                 </div>
                 {projects.filter((project) => project.creator_id !== null)
