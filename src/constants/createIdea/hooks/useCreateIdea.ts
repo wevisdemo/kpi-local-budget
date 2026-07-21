@@ -295,6 +295,22 @@ export function useCreateIdea() {
       let projectRequestIndex: number | null = null;
       let goalRequestIndex: number | null = null;
 
+      if (isProposingNewProblem) {
+        goalRequestIndex = createRequests.length;
+        createRequests.push({
+          path: `/${currentSite.nocoDb}_Goal`,
+          method: "POST",
+          body: {
+            goal: effectiveProblemLabel,
+            category: selectedCategory?.title ?? "",
+            creator_id: userId,
+            timestamp,
+            vote_count: 0,
+            hidden: false,
+          },
+        });
+      }
+
       if (ideaTitle) {
         projectRequestIndex = createRequests.length;
         createRequests.push({
@@ -310,22 +326,6 @@ export function useCreateIdea() {
             hidden: false,
           },
         });
-
-        if (isProposingNewProblem) {
-          goalRequestIndex = createRequests.length;
-          createRequests.push({
-            path: `/${currentSite.nocoDb}_Goal`,
-            method: "POST",
-            body: {
-              goal: effectiveProblemLabel,
-              category: selectedCategory?.title ?? "",
-              creator_id: userId,
-              timestamp,
-              vote_count: 0,
-              hidden: false,
-            },
-          });
-        }
       }
 
       const createResults = await submitBatch(createRequests, token);
@@ -353,6 +353,13 @@ export function useCreateIdea() {
         });
       }
 
+      if (isProposingNewProblem && goalId && categoryId != null) {
+        linkRequests.push({
+          path: `/${currentSite.nocoDb}_Category/${categoryId}/hm/goal_count/${goalId}`,
+          method: "POST",
+        });
+      }
+
       if (ideaTitle && projectId) {
         if (isProposingNewProblem) {
           if (goalId) {
@@ -367,12 +374,6 @@ export function useCreateIdea() {
               path: `/${currentSite.nocoDb}_Category/${categoryId}/hm/project_count/${projectId}`,
               method: "POST",
             });
-            if (goalId) {
-              linkRequests.push({
-                path: `/${currentSite.nocoDb}_Category/${categoryId}/hm/goal_count/${goalId}`,
-                method: "POST",
-              });
-            }
           }
         } else if (categoryId != null) {
           linkRequests.push({
