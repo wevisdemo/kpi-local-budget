@@ -22,6 +22,7 @@ const buildCombinedProjects = (
   projectsSheet: Project[],
   category: string | null,
   goal: string | null,
+  goals: Goal[],
 ): Project[] => {
   const proposedNames = new Set(
     projects
@@ -69,7 +70,19 @@ const buildCombinedProjects = (
 
   const all = [...existing, ...proposed];
 
-  if (!goal) return all;
+  const goalTexts = new Set(
+    goals
+      .filter((g) => (Number(g.vote_count ?? 0) > 0) || Boolean(g.creator_id))
+      .map((g) => g.goal)
+      .filter((g): g is string => !!g),
+  );
+
+  if (!goal) {
+    return all.filter((item) => {
+      const goalText = item.goal_ai ?? item.goal_original ?? "";
+      return goalTexts.has(goalText);
+    });
+  }
 
   return all.filter((item) => {
     const goalText = item.goal_ai ?? item.goal_original ?? "";
@@ -147,7 +160,11 @@ const ProjectIdea = () => {
   const goalOptions = useMemo(
     () =>
       goals
-        .filter((item) => item.goal)
+        .filter(
+          (item) =>
+            item.goal &&
+            ((Number(item.vote_count ?? 0) > 0) || Boolean(item.creator_id)),
+        )
         .map((item) => ({
           value: item.goal as string,
           label: item.goal as string,
@@ -160,6 +177,7 @@ const ProjectIdea = () => {
     projectsSheet,
     category,
     goal,
+    goals,
   );
 
   // console.log(combinedProjects, category, goal, projects);
