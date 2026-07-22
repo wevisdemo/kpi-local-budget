@@ -68,11 +68,14 @@ const buildCombinedProjects = (
       };
     });
 
-  const all = [...existing, ...proposed];
+  const all = [
+    ...existing.sort((a, b) => (b.vote_count ?? 0) - (a.vote_count ?? 0)),
+    ...proposed.sort((a, b) => (b.vote_count ?? 0) - (a.vote_count ?? 0)),
+  ];
 
   const goalTexts = new Set(
     goals
-      .filter((g) => (Number(g.vote_count ?? 0) > 0) || Boolean(g.creator_id))
+      .filter((g) => Number(g.vote_count ?? 0) > 0 || Boolean(g.creator_id))
       .map((g) => g.goal)
       .filter((g): g is string => !!g),
   );
@@ -163,7 +166,7 @@ const ProjectIdea = () => {
         .filter(
           (item) =>
             item.goal &&
-            ((Number(item.vote_count ?? 0) > 0) || Boolean(item.creator_id)),
+            (Number(item.vote_count ?? 0) > 0 || Boolean(item.creator_id)),
         )
         .map((item) => ({
           value: item.goal as string,
